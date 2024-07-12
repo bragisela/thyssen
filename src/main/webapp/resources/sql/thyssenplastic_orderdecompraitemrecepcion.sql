@@ -1,0 +1,56 @@
+-- MySQL dump 10.13  Distrib 8.0.32, for Win64 (x86_64)
+--
+-- Host: localhost    Database: thyssenplastic
+-- ------------------------------------------------------
+-- Server version	5.7.37-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `orderdecompraitemrecepcion`
+--
+
+DROP TABLE IF EXISTS `orderdecompraitemrecepcion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `orderdecompraitemrecepcion` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `idOrdenDeCompraItem` int(11) DEFAULT NULL,
+  `fechaRecepcion` datetime DEFAULT NULL,
+  `cantidadRecepcionada` int(11) DEFAULT NULL,
+  `lote` varchar(45) DEFAULT NULL,
+  `idUsuarioRecepcion` int(11) DEFAULT NULL,
+  `refenciaAdministrativa` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `orderdecompraitemrecepcion`
+--
+
+LOCK TABLES `orderdecompraitemrecepcion` WRITE;
+/*!40000 ALTER TABLE `orderdecompraitemrecepcion` DISABLE KEYS */;
+INSERT INTO `orderdecompraitemrecepcion` VALUES (1,4,'2023-02-02 12:00:00',50,'L1234',2,NULL),(2,4,'2023-02-01 14:00:00',20,'L12345',2,NULL),(5,4,'2023-02-03 13:00:00',30,'L123456',2,NULL),(6,2,'2023-02-03 11:00:00',60,'L1234',2,NULL),(7,2,'2023-02-03 10:00:00',50,'L12345',2,NULL),(8,3,'2023-02-04 17:26:23',10,'L1234',2,NULL),(9,3,'2023-02-04 17:31:50',20,'L12345',2,NULL),(10,3,'2023-02-04 17:39:04',30,'L123456',2,NULL),(11,6,'2023-02-07 16:58:12',10,'L1234',2,NULL),(12,6,'2023-02-07 17:02:16',90,'L123456',2,NULL),(13,7,'2023-02-07 17:08:32',60,'L1234',2,NULL),(14,8,'2023-02-09 09:49:01',30,'L1234',2,NULL),(15,8,'2023-02-09 09:49:14',20,'L123456',2,NULL),(16,9,'2023-02-09 09:50:24',30,'L1234567',2,NULL),(17,3,'2023-02-16 13:45:03',150,'L1234567',2,NULL),(18,11,'2023-02-16 16:34:39',30,'L1234',2,NULL),(19,12,'2023-02-16 16:46:53',100,'L1234',2,NULL),(20,13,'2023-03-18 12:32:13',10,NULL,2,NULL),(21,13,'2023-03-18 12:32:23',50,'L12',2,NULL),(22,13,'2023-03-18 12:45:17',25,NULL,2,'REF 1'),(23,14,'2023-03-18 13:26:22',10,'L1234',2,'REF 1');
+/*!40000 ALTER TABLE `orderdecompraitemrecepcion` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2023-11-07  9:32:37

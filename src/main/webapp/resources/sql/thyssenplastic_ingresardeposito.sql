@@ -1,0 +1,57 @@
+-- MySQL dump 10.13  Distrib 8.0.32, for Win64 (x86_64)
+--
+-- Host: localhost    Database: thyssenplastic
+-- ------------------------------------------------------
+-- Server version	5.7.37-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `ingresardeposito`
+--
+
+DROP TABLE IF EXISTS `ingresardeposito`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `ingresardeposito` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fechaAlta` datetime DEFAULT NULL,
+  `idBobina` int(11) DEFAULT NULL,
+  `idBulto` int(11) DEFAULT NULL,
+  `idPallet` int(11) DEFAULT NULL,
+  `idDeposito` int(11) DEFAULT NULL,
+  `tipo` varchar(45) DEFAULT NULL,
+  `idUsuarioAlta` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ingresardeposito`
+--
+
+LOCK TABLES `ingresardeposito` WRITE;
+/*!40000 ALTER TABLE `ingresardeposito` DISABLE KEYS */;
+INSERT INTO `ingresardeposito` VALUES (1,'2023-03-28 21:13:29',NULL,5,NULL,61,NULL,1),(2,'2023-03-28 21:15:54',NULL,NULL,5,63,NULL,1),(3,'2023-03-31 16:00:11',NULL,6,NULL,61,NULL,1),(4,'2023-06-21 09:40:22',NULL,NULL,6,62,NULL,2),(5,'2023-06-21 09:40:42',NULL,NULL,6,61,NULL,2),(6,'2023-06-21 09:41:13',NULL,5,NULL,64,NULL,2),(7,'2023-06-21 09:41:30',NULL,5,NULL,63,NULL,2);
+/*!40000 ALTER TABLE `ingresardeposito` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2023-11-07  9:32:32
