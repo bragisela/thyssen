@@ -202,7 +202,7 @@
                                                         href="/thyssenplastic/remitoDetalle/${remito.pk}"
                                                         data-toggle="tooltip" data-placement="top" title="Items"></a>
                                                 </c:if>                                                                                                                                                            
-                                                <c:if test = "${rol == 'oficina' && operacion == 'alta' && remito.canDelete == 'false' && remito.estado == 'Nuevo'}">
+                                                <c:if test = "${rol == 'oficina' && operacion == 'alta' && remito.estado == 'Nuevo'}">
                                                     <a class="nav-link active fa fa-clock-o fa-lg"
                                                         href="/thyssenplastic/remito/setStatusOpenRemito/${remito.pk}"
                                                         data-toggle="tooltip" data-placement="top" title="Cambiar a estado Abierto"></a>
@@ -217,7 +217,7 @@
                                                 
                                                 <c:if test = "${rol == 'oficina' && operacion == 'alta' && remito.estado == 'Abierto' && (remito.cantidadTotalBaja >= remito.cantidadTotal)}">
                                                     <a class="nav-link active fa fa-clock-o fa-lg"
-                                                       href="#" onclick="cerrarRemito(${remito.pk})"
+                                                       onclick="cerrarRemito(${remito.pk})"
                                                         data-toggle="tooltip" data-placement="top" title="Cambiar a estado Cerrado"></a>
                                                 </c:if>
                                             </td>

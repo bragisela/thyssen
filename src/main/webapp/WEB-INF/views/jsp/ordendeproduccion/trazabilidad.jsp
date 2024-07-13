@@ -323,8 +323,21 @@
                                                 </div>                                                        
                                             </c:if>     
                                             
-                                            <p>&nbsp;</p>                                                   
+                                             <p>&nbsp;</p>
                                             
+                                            <div class="form-row row">
+                                                <ol class="breadcrumb mb-1 mt-1">
+                                                    <li class="breadcrumb-item" style="font-size: 16px; color:#00733e">Está en Deposito:</li>
+                                                    <c:choose>
+                                                        <c:when test="${estaEnDeposito == 'true'}">Si</c:when>
+                                                        <c:otherwise>No</c:otherwise>
+                                                    </c:choose>
+                                                </ol>
+                                            </div>
+
+                                            
+                                            <p>&nbsp;</p>                                                   
+
                                             <c:if test = "${displayRemito == 'true'}">
                                                 <div class="form-row row">
                                                     <ol class="breadcrumb mb-1 mt-1">
@@ -370,8 +383,10 @@
                                                     </div>                                                    
                                                 </div>                                                        
                                             </c:if>   
+
                                             
-                                            <p>&nbsp;</p>                                                   
+                                            
+                                             <p>&nbsp;</p> 
                                             
                                             <c:if test = "${displayHojaDeRuta == 'true'}">
                                                 <div class="form-row row">

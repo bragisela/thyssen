@@ -180,6 +180,7 @@ public class TrazabilidadController {
         model.addAttribute("displayBulto","false");
         model.addAttribute("displayPallet","false");
         model.addAttribute("displayRemito","false");
+        model.addAttribute("estaEnDeposito","false");
         
         if(letra.equalsIgnoreCase("L")) {
             //ORDEN DE PRODUCCION
@@ -260,6 +261,10 @@ public class TrazabilidadController {
             
             model.addAttribute("displayBobina","true");
             
+            if ((bobina.getIdRemito() == null) && (bobina.getIdDeposito() != null)) {
+                    model.addAttribute("estaEnDeposito","true");
+                }
+            
             setDatosOrdenDeProduccion(trazabilidadForm, ordenDeProduccion, cliente, articulo, articuloFichaTecnica, userService);            
             setDatosBobina(trazabilidadForm, bobina, userService);            
             
@@ -278,8 +283,8 @@ public class TrazabilidadController {
                         setDatosPallet(trazabilidadForm, pallet, userService, ordenDeProduccionPalletBultoService, ordenDeProduccionBultoService);                                    
                     }
                 }
-             
-                RemitoDetalleService remitoDetalleService = new RemitoDetalleServiceImpl();
+               
+               
 //                RemitoDetalleModel remitoDetalle = remitoDetalleService.getByBulto(bulto.getId());
 //                if(remitoDetalle != null) {
 //                    RemitoService remitoService = new RemitoServiceImpl();
@@ -304,6 +309,32 @@ public class TrazabilidadController {
                                 
             }
             
+            RemitoDetalleService remitoDetalleService = new RemitoDetalleServiceImpl();
+                RemitoDetalleModel remitoDetalle = remitoDetalleService.getByPk(bobina.getIdRemito());
+
+                if(remitoDetalle != null) {
+                     RemitoService remitoService = new RemitoServiceImpl();
+                     RemitoModel remito = remitoService.getByPk(remitoDetalle.getIdRemito());
+                     
+                     if(remito != null) {
+                        model.addAttribute("displayRemito","true");
+                        setDatosRemito(trazabilidadForm, remito, userService);
+                        
+                        
+                         HojaDeRutaDetalleService hojaDeRutaDetalleService = new HojaDeRutaDetalleServiceImpl();
+                        HojaDeRutaDetalleModel hojaDeRutaDetalle = hojaDeRutaDetalleService.getByRemito(bobina.getIdRemito());
+                        if(hojaDeRutaDetalle != null) {
+                            HojaDeRutaService hojaDeRutaService = new HojaDeRutaServiceImpl();
+                            HojaDeRutaModel hojaDeRuta = hojaDeRutaService.getByPk(hojaDeRutaDetalle.getIdHojaDeRuta());
+                            if(hojaDeRuta != null) {
+                                model.addAttribute("displayHojaDeRuta","true");
+                                setDatosHojaDeRuta(trazabilidadForm, hojaDeRuta, userService);
+                            }
+                        }
+                     }
+                
+                }
+            
         } else if(letra.equalsIgnoreCase("R")) {
             //BULTO
             OrdenDeProduccionBultoModel bulto = ordenDeProduccionBultoService.getByCode(searchText);
@@ -313,6 +344,10 @@ public class TrazabilidadController {
             
                 return modelAndView;                
             }             
+            
+            if ((bulto.getIdRemito() == null) && (bulto.getIdDeposito() != null)) {
+                    model.addAttribute("estaEnDeposito","true");
+                }
             
             model.addAttribute("displayBulto","true");
             setDatosBulto(trazabilidadForm, bulto, userService, tipoService);
@@ -364,8 +399,33 @@ public class TrazabilidadController {
                     setDatosPallet(trazabilidadForm, pallet, userService, ordenDeProduccionPalletBultoService, ordenDeProduccionBultoService);                                    
                 }
             }
+            
+             RemitoDetalleService remitoDetalleService = new RemitoDetalleServiceImpl();
+                RemitoDetalleModel remitoDetalle = remitoDetalleService.getByPk(bulto.getIdRemito());
+                if(remitoDetalle != null) {
+                     RemitoService remitoService = new RemitoServiceImpl();
+                     RemitoModel remito = remitoService.getByPk(remitoDetalle.getIdRemito());
+                     if(remito != null) {
+                        model.addAttribute("displayRemito","true");
+                        setDatosRemito(trazabilidadForm, remito, userService);
                         
-            RemitoDetalleService remitoDetalleService = new RemitoDetalleServiceImpl();
+                 
+                    HojaDeRutaDetalleService hojaDeRutaDetalleService = new HojaDeRutaDetalleServiceImpl();
+                    HojaDeRutaDetalleModel hojaDeRutaDetalle = hojaDeRutaDetalleService.getByRemito(bulto.getIdRemito());
+                    if(hojaDeRutaDetalle != null) {
+                        HojaDeRutaService hojaDeRutaService = new HojaDeRutaServiceImpl();
+                        HojaDeRutaModel hojaDeRuta = hojaDeRutaService.getByPk(hojaDeRutaDetalle.getIdHojaDeRuta());
+                        if(hojaDeRuta != null) {
+                            model.addAttribute("displayHojaDeRuta","true");
+                            setDatosHojaDeRuta(trazabilidadForm, hojaDeRuta, userService);
+                        }
+                    }
+                        
+                     }
+                
+                }
+                        
+//            RemitoDetalleService remitoDetalleService = new RemitoDetalleServiceImpl();
 //            RemitoDetalleModel remitoDetalle = remitoDetalleService.getByBulto(bulto.getId());
 //            if(remitoDetalle != null) {
 //                RemitoService remitoService = new RemitoServiceImpl();
@@ -397,6 +457,10 @@ public class TrazabilidadController {
             
                 return modelAndView;                
             }             
+            
+            if ((pallet.getIdRemito() == null) && (pallet.getIdDeposito() != null)) {
+                    model.addAttribute("estaEnDeposito","true");
+                }
                         
             model.addAttribute("displayPallet","true");
             setDatosPallet(trazabilidadForm, pallet, userService, ordenDeProduccionPalletBultoService, ordenDeProduccionBultoService);                                                
@@ -431,7 +495,29 @@ public class TrazabilidadController {
                 
                 setDatosOrdenDeProduccion(trazabilidadForm, ordenDeProduccion, cliente, articulo, articuloFichaTecnica, userService);
             }     
-            RemitoDetalleService remitoDetalleService = new RemitoDetalleServiceImpl();
+            //RemitoDetalleService remitoDetalleService = new RemitoDetalleServiceImpl();
+             RemitoDetalleService remitoDetalleService = new RemitoDetalleServiceImpl();
+                RemitoDetalleModel remitoDetalle = remitoDetalleService.getByPk(pallet.getIdRemito());
+                if(remitoDetalle != null) {
+                     RemitoService remitoService = new RemitoServiceImpl();
+                     RemitoModel remito = remitoService.getByPk(remitoDetalle.getIdRemito());
+                     if(remito != null) {
+                        model.addAttribute("displayRemito","true");
+                        setDatosRemito(trazabilidadForm, remito, userService);
+                        
+                        HojaDeRutaDetalleService hojaDeRutaDetalleService = new HojaDeRutaDetalleServiceImpl();
+                    HojaDeRutaDetalleModel hojaDeRutaDetalle = hojaDeRutaDetalleService.getByRemito(pallet.getIdRemito());
+                    if(hojaDeRutaDetalle != null) {
+                        HojaDeRutaService hojaDeRutaService = new HojaDeRutaServiceImpl();
+                        HojaDeRutaModel hojaDeRuta = hojaDeRutaService.getByPk(hojaDeRutaDetalle.getIdHojaDeRuta());
+                        if(hojaDeRuta != null) {
+                            model.addAttribute("displayHojaDeRuta","true");
+                            setDatosHojaDeRuta(trazabilidadForm, hojaDeRuta, userService);
+                        }
+                    }
+                    }
+                }
+                
 //            RemitoDetalleModel remitoDetalle = remitoDetalleService.getByPallet(pallet.getId());
 //            if(remitoDetalle != null) {
 //                RemitoService remitoService = new RemitoServiceImpl();
@@ -640,6 +726,7 @@ public class TrazabilidadController {
         }
         
     }    
+    
     
     private void setDatosHojaDeRuta(TrazabilidadForm trazabilidadForm, HojaDeRutaModel hojaDeRuta, UserService userService) {
         trazabilidadForm.setCodigoHojaDeRuta(hojaDeRuta.getId().toString());
