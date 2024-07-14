@@ -324,16 +324,19 @@
                                             </c:if>     
                                             
                                              <p>&nbsp;</p>
+                                             
+                                             <c:if test = "${infoDeposito == 'true'}">
                                             
-                                            <div class="form-row row">
-                                                <ol class="breadcrumb mb-1 mt-1">
-                                                    <li class="breadcrumb-item" style="font-size: 16px; color:#00733e">Está en Deposito:</li>
-                                                    <c:choose>
-                                                        <c:when test="${estaEnDeposito == 'true'}">Si</c:when>
-                                                        <c:otherwise>No</c:otherwise>
-                                                    </c:choose>
-                                                </ol>
-                                            </div>
+                                                <div class="form-row row">
+                                                    <ol class="breadcrumb mb-1 mt-1">
+                                                        <li class="breadcrumb-item" style="font-size: 16px; color:#00733e"><strong>Está en Deposito:</strong></li>
+                                                        <c:choose>
+                                                            <c:when test="${estaEnDeposito == 'true'}"><span style="font-size: 16px;">Si</span></c:when>
+                                                            <c:otherwise><span style="font-size: 16px;">No</span></c:otherwise>
+                                                        </c:choose>
+                                                    </ol>
+                                                </div>
+                                            </c:if>
 
                                             
                                             <p>&nbsp;</p>                                                   
@@ -383,10 +386,64 @@
                                                     </div>                                                    
                                                 </div>                                                        
                                             </c:if>   
+                                            
+                                            <p>&nbsp;</p> 
+                                            
+                                            <c:if test = "${infoBaja == 'true'}">
+                                                <div class="form-row row">
+                                                    <ol class="breadcrumb mb-1 mt-1">
+                                                        <li class="breadcrumb-item"><a href="#">Informacion de Baja</a></li>
+                                                    </ol>
+                                                </div>
 
+                                              
+                                                <div class="form-row row">
+                                                    <div class="row col-xs-9 col-sm-3 col-xl-4">
+                                                        <label for="inputFecha">Fecha Baja</label>
+                                                        <form:input type="text" path="fechaBaja" class="form-control" disabled="true"/>
+                                                    </div>                                                    
+                                                    <div class="row col-xs-9 col-sm-3 col-xl-4">
+                                                        <label for="inputFecha">Usuario Baja</label>
+                                                        <form:input type="text" path="usuarioBaja" class="form-control" disabled="true"/>
+                                                    </div>                                                    
+
+                                                </div>                                                    
+                                                                                     
+                                                 <p>&nbsp;</p>      
+                                                                                                       
+                                            </c:if>   
                                             
                                             
-                                             <p>&nbsp;</p> 
+                                            
+                                            <c:if test = "${infoLeyendaBobina == 'true'}">
+                                                <div class="form-row row">
+                                                    <ol class="breadcrumb mb-1 mt-1">
+                                                        <li class="breadcrumb-item"><a href="#" style="font-size: 16px;"><strong>Información de Baja</strong></a></li>
+                                                    </ol>
+                                                </div>
+
+                                              
+                                                <p style="font-size: 20px; color:#00733e"><strong>La bobina ingresada se dió de baja por bulto o pallet</strong></p>                                                  
+                                                 <p>&nbsp;</p>                                     
+                                                                                                       
+                                            </c:if>  
+                                                
+       
+                                                
+                                            <c:if test = "${infoLeyendaBulto == 'true'}">
+                                                 <div class="form-row row">
+                                                    <ol class="breadcrumb mb-1 mt-1">
+                                                        <li class="breadcrumb-item"><a href="#" style="font-size: 16px;"><strong>Información de Baja</strong></a></li>
+                                                    </ol>
+                                                </div>
+
+                                              
+                                                <p style="font-size: 20px; color:#00733e"><strong>El bulto ingresado se dió de baja por pallet</strong></p>                                                  
+                                                <p>&nbsp;</p>  
+                                                                                     
+                                                                                                       
+                                            </c:if> 
+
                                             
                                             <c:if test = "${displayHojaDeRuta == 'true'}">
                                                 <div class="form-row row">

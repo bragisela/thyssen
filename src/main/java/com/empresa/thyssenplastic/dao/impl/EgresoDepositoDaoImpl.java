@@ -49,5 +49,65 @@ public class EgresoDepositoDaoImpl extends GenericDaoImpl implements EgresoDepos
 
         return egresoDeposito;
     }
+    
+    public EgresoDepositoModel getByIdBobina(Integer idBobina) {
+        EgresoDepositoModel egresoDeposito = null;        
+        try {
+            if(idBobina != null){
+                Session session = HibernateUtil.getSessionFactory().openSession();
+                Query query = session.createQuery("from EgresoDepositoModel WHERE idBobina=:idBobina");
+                query.setInteger("idBobina", idBobina);
+                
+                List<EgresoDepositoModel> ingresarDepositos = query.list();
+                if(ingresarDepositos != null && !ingresarDepositos.isEmpty()) {
+                    egresoDeposito = ingresarDepositos.get(0);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return egresoDeposito;
+    }
+    
+    public EgresoDepositoModel getByIdBulto(Integer idBulto) {
+        EgresoDepositoModel egresoDeposito = null;        
+        try {
+            if(idBulto != null){
+                Session session = HibernateUtil.getSessionFactory().openSession();
+                Query query = session.createQuery("from EgresoDepositoModel WHERE idBulto=:idBulto");
+                query.setInteger("idBulto", idBulto);
+                
+                List<EgresoDepositoModel> ingresarDepositos = query.list();
+                if(ingresarDepositos != null && !ingresarDepositos.isEmpty()) {
+                    egresoDeposito = ingresarDepositos.get(0);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return egresoDeposito;
+    }
+    
+    public EgresoDepositoModel getByIdPallet(Integer idPallet) {
+        EgresoDepositoModel egresoDeposito = null;        
+        try {
+            if(idPallet != null){
+                Session session = HibernateUtil.getSessionFactory().openSession();
+                Query query = session.createQuery("from EgresoDepositoModel WHERE idPallet=:idPallet");
+                query.setInteger("idPallet", idPallet);
+                
+                List<EgresoDepositoModel> ingresarDepositos = query.list();
+                if(ingresarDepositos != null && !ingresarDepositos.isEmpty()) {
+                    egresoDeposito = ingresarDepositos.get(0);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return egresoDeposito;
+    }
 
 }

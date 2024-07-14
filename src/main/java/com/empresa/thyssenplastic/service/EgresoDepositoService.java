@@ -20,4 +20,10 @@ public interface EgresoDepositoService {
     List<EgresoDepositoModel> getAll();
     
     EgresoDepositoModel getByPk(Integer pk);
+    
+    EgresoDepositoModel getByIdBobina(Integer idBobina);
+    
+    EgresoDepositoModel getByIdBulto(Integer idBulto);
+    
+    EgresoDepositoModel getByIdPallet(Integer idPallet);
 }

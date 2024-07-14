@@ -12,6 +12,7 @@ import com.empresa.thyssenplastic.model.ArticuloFichaTecnicaModel;
 import com.empresa.thyssenplastic.model.ArticuloModel;
 import com.empresa.thyssenplastic.model.ClienteModel;
 import com.empresa.thyssenplastic.model.ContactoModel;
+import com.empresa.thyssenplastic.model.EgresoDepositoModel;
 import com.empresa.thyssenplastic.model.HojaDeRutaDetalleModel;
 import com.empresa.thyssenplastic.model.HojaDeRutaModel;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionBobinaModel;
@@ -28,6 +29,7 @@ import com.empresa.thyssenplastic.service.ArticuloFichaTecnicaService;
 import com.empresa.thyssenplastic.service.ArticuloService;
 import com.empresa.thyssenplastic.service.ClienteService;
 import com.empresa.thyssenplastic.service.ContactoService;
+import com.empresa.thyssenplastic.service.EgresoDepositoService;
 import com.empresa.thyssenplastic.service.HojaDeRutaDetalleService;
 import com.empresa.thyssenplastic.service.HojaDeRutaService;
 import com.empresa.thyssenplastic.service.OrdenDeProduccionBobinaService;
@@ -44,6 +46,7 @@ import com.empresa.thyssenplastic.service.impl.ArticuloFichaTecnicaServiceImpl;
 import com.empresa.thyssenplastic.service.impl.ArticuloServiceImpl;
 import com.empresa.thyssenplastic.service.impl.ClienteServiceImpl;
 import com.empresa.thyssenplastic.service.impl.ContactoServiceImpl;
+import com.empresa.thyssenplastic.service.impl.EgresoDepositoServiceImpl;
 import com.empresa.thyssenplastic.service.impl.HojaDeRutaDetalleServiceImpl;
 import com.empresa.thyssenplastic.service.impl.HojaDeRutaServiceImpl;
 import com.empresa.thyssenplastic.service.impl.OrdenDeProduccionBobinaServiceImpl;
@@ -176,12 +179,20 @@ public class TrazabilidadController {
         trazabilidadForm.setCantidadBultos("");
         trazabilidadForm.setListaCodigoBultos("");
         
+        
+        trazabilidadForm.setFechaBaja("");
+        trazabilidadForm.setUsuarioBaja("");
+        
         model.addAttribute("displayBobina","false");
         model.addAttribute("displayBulto","false");
         model.addAttribute("displayPallet","false");
         model.addAttribute("displayRemito","false");
         model.addAttribute("estaEnDeposito","false");
+        model.addAttribute("infoBaja","false");
+        model.addAttribute("infoDeposito","false");
         
+         model.addAttribute("infoLeyendaBobina","false");
+        model.addAttribute("infoLeyendaBulto","false");
         if(letra.equalsIgnoreCase("L")) {
             //ORDEN DE PRODUCCION
             OrdenDeProduccionModel ordenDeProduccion = ordenDeProduccionService.getByPk(Integer.valueOf(codigo));
@@ -260,8 +271,10 @@ public class TrazabilidadController {
             }
             
             model.addAttribute("displayBobina","true");
+            model.addAttribute("infoDeposito","true");
             
             if ((bobina.getIdRemito() == null) && (bobina.getIdDeposito() != null)) {
+                    
                     model.addAttribute("estaEnDeposito","true");
                 }
             
@@ -320,9 +333,18 @@ public class TrazabilidadController {
                         model.addAttribute("displayRemito","true");
                         setDatosRemito(trazabilidadForm, remito, userService);
                         
+                        EgresoDepositoService egresoDepositoService = new EgresoDepositoServiceImpl();  
+                        EgresoDepositoModel egresoDepositoModel = egresoDepositoService.getByIdBobina(bobina.getId());
+                        if(egresoDepositoModel != null) {
+                            model.addAttribute("infoBaja","true");
+                            setDatosBaja(trazabilidadForm, egresoDepositoModel, userService);
+                        }else{ 
+                            model.addAttribute("infoLeyendaBobina","true");
+                        }
+                        
                         
                          HojaDeRutaDetalleService hojaDeRutaDetalleService = new HojaDeRutaDetalleServiceImpl();
-                        HojaDeRutaDetalleModel hojaDeRutaDetalle = hojaDeRutaDetalleService.getByRemito(bobina.getIdRemito());
+                        HojaDeRutaDetalleModel hojaDeRutaDetalle = hojaDeRutaDetalleService.getByRemito(remitoDetalle.getIdRemito());
                         if(hojaDeRutaDetalle != null) {
                             HojaDeRutaService hojaDeRutaService = new HojaDeRutaServiceImpl();
                             HojaDeRutaModel hojaDeRuta = hojaDeRutaService.getByPk(hojaDeRutaDetalle.getIdHojaDeRuta());
@@ -346,10 +368,12 @@ public class TrazabilidadController {
             }             
             
             if ((bulto.getIdRemito() == null) && (bulto.getIdDeposito() != null)) {
+                    
                     model.addAttribute("estaEnDeposito","true");
                 }
             
             model.addAttribute("displayBulto","true");
+            model.addAttribute("infoDeposito","true");
             setDatosBulto(trazabilidadForm, bulto, userService, tipoService);
             
             OrdenDeProduccionBobinaModel bobina = ordenDeProduccionBobinaService.getByPk(bulto.getIdOrdenDeProduccionBobina());
@@ -409,9 +433,17 @@ public class TrazabilidadController {
                         model.addAttribute("displayRemito","true");
                         setDatosRemito(trazabilidadForm, remito, userService);
                         
-                 
+                        EgresoDepositoService egresoDepositoService = new EgresoDepositoServiceImpl();  
+                        EgresoDepositoModel egresoDepositoModel = egresoDepositoService.getByIdBulto(bulto.getId());
+                        if(egresoDepositoModel != null) {
+                            model.addAttribute("infoBaja","true");
+                            setDatosBaja(trazabilidadForm, egresoDepositoModel, userService);
+                        }else{ 
+                            model.addAttribute("infoLeyendaBulto","true");
+                        }
+
                     HojaDeRutaDetalleService hojaDeRutaDetalleService = new HojaDeRutaDetalleServiceImpl();
-                    HojaDeRutaDetalleModel hojaDeRutaDetalle = hojaDeRutaDetalleService.getByRemito(bulto.getIdRemito());
+                    HojaDeRutaDetalleModel hojaDeRutaDetalle = hojaDeRutaDetalleService.getByRemito(remitoDetalle.getIdRemito());
                     if(hojaDeRutaDetalle != null) {
                         HojaDeRutaService hojaDeRutaService = new HojaDeRutaServiceImpl();
                         HojaDeRutaModel hojaDeRuta = hojaDeRutaService.getByPk(hojaDeRutaDetalle.getIdHojaDeRuta());
@@ -459,10 +491,12 @@ public class TrazabilidadController {
             }             
             
             if ((pallet.getIdRemito() == null) && (pallet.getIdDeposito() != null)) {
+                
                     model.addAttribute("estaEnDeposito","true");
                 }
                         
             model.addAttribute("displayPallet","true");
+            model.addAttribute("infoDeposito","true");
             setDatosPallet(trazabilidadForm, pallet, userService, ordenDeProduccionPalletBultoService, ordenDeProduccionBultoService);                                                
 
             OrdenDeProduccionModel ordenDeProduccion = ordenDeProduccionService.getByPk(pallet.getIdOrdenDeProduccion());
@@ -505,16 +539,24 @@ public class TrazabilidadController {
                         model.addAttribute("displayRemito","true");
                         setDatosRemito(trazabilidadForm, remito, userService);
                         
-                        HojaDeRutaDetalleService hojaDeRutaDetalleService = new HojaDeRutaDetalleServiceImpl();
-                    HojaDeRutaDetalleModel hojaDeRutaDetalle = hojaDeRutaDetalleService.getByRemito(pallet.getIdRemito());
-                    if(hojaDeRutaDetalle != null) {
-                        HojaDeRutaService hojaDeRutaService = new HojaDeRutaServiceImpl();
-                        HojaDeRutaModel hojaDeRuta = hojaDeRutaService.getByPk(hojaDeRutaDetalle.getIdHojaDeRuta());
-                        if(hojaDeRuta != null) {
-                            model.addAttribute("displayHojaDeRuta","true");
-                            setDatosHojaDeRuta(trazabilidadForm, hojaDeRuta, userService);
+                        
+                        EgresoDepositoService egresoDepositoService = new EgresoDepositoServiceImpl();  
+                        EgresoDepositoModel egresoDepositoModel = egresoDepositoService.getByIdPallet(pallet.getId());
+                        if(egresoDepositoModel != null) {
+                            model.addAttribute("infoBaja","true");
+                            setDatosBaja(trazabilidadForm, egresoDepositoModel, userService);
                         }
-                    }
+                        
+                        HojaDeRutaDetalleService hojaDeRutaDetalleService = new HojaDeRutaDetalleServiceImpl();
+                        HojaDeRutaDetalleModel hojaDeRutaDetalle = hojaDeRutaDetalleService.getByRemito(remitoDetalle.getIdRemito());
+                        if(hojaDeRutaDetalle != null) {
+                            HojaDeRutaService hojaDeRutaService = new HojaDeRutaServiceImpl();
+                            HojaDeRutaModel hojaDeRuta = hojaDeRutaService.getByPk(hojaDeRutaDetalle.getIdHojaDeRuta());
+                            if(hojaDeRuta != null) {
+                                model.addAttribute("displayHojaDeRuta","true");
+                                setDatosHojaDeRuta(trazabilidadForm, hojaDeRuta, userService);
+                            }
+                        }
                     }
                 }
                 
@@ -757,6 +799,16 @@ public class TrazabilidadController {
         }
         
     }    
+    
+    private void setDatosBaja(TrazabilidadForm trazabilidadForm, EgresoDepositoModel egresoDeposito, UserService userService) {
+        trazabilidadForm.setFechaBaja(egresoDeposito.getFechaBaja().toString());
+         if(egresoDeposito.getIdUsuarioBaja() != null) {
+            UserModel user = userService.getUserById(egresoDeposito.getIdUsuarioBaja());
+            if(user != null) {
+                trazabilidadForm.setUsuarioBaja(user.getUsername());
+            }        
+        }
+    }  
 
     
 }
