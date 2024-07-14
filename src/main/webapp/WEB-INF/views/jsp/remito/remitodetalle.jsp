@@ -738,7 +738,7 @@
                    return;
                 }
                 if(item.tipo == '-6') {
-                    alert('La bulto ingresado ya se encuentra en el deposito');
+                    alert('El bulto ingresado no se encuentra en el deposito');
                     $("#codigo").val('');
                     $("#codigoBobinaResultado").text('');
                     return;

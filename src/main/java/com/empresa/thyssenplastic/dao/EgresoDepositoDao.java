@@ -16,4 +16,10 @@ public interface EgresoDepositoDao extends GenericDao {
     List<EgresoDepositoModel> getAll();
     
     EgresoDepositoModel getByPk(Integer pk);
+    
+    EgresoDepositoModel getByIdBobina(Integer idBobina);
+    
+    EgresoDepositoModel getByIdBulto(Integer idBulto);
+    
+    EgresoDepositoModel getByIdPallet(Integer idPallet);
 }

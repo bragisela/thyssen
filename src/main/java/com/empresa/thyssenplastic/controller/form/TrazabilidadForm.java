@@ -75,6 +75,28 @@ public class TrazabilidadForm {
     private String usuarioAltaHojaDeRuta;
     private String chofer;
     
+    ///BAJA
+    private String fechaBaja;
+    private String usuarioBaja;
+
+    public String getFechaBaja() {
+        return fechaBaja;
+    }
+
+    public void setFechaBaja(String fechaBaja) {
+        this.fechaBaja = fechaBaja;
+    }
+
+    public String getUsuarioBaja() {
+        return usuarioBaja;
+    }
+
+    public void setUsuarioBaja(String usuarioBaja) {
+        this.usuarioBaja = usuarioBaja;
+    }
+    
+    
+    
     public String getCodigoSearch() {
         return codigoSearch;
     }

@@ -1247,10 +1247,10 @@ public class RemitoController {
         RemitoDetalleService remitoDetalleService = new RemitoDetalleServiceImpl();        
         List<RemitoDetalleModel> items = remitoDetalleService.getAllByRemito(remito.getId());
         
-        if(items == null || items.isEmpty()) {            
-            model.addAttribute("errorMessage", "Error: no es posible pasar un remito a abierta cuando no tiene items");
-            return "/error";              
-        }
+//        if(items == null || items.isEmpty()) {            
+//            model.addAttribute("errorMessage", "Error: no es posible pasar un remito a abierta cuando no tiene items");
+//            return "/error";              
+//        }
         
         int totalCantidad = 0;
 
@@ -1416,10 +1416,10 @@ public class RemitoController {
         RemitoDetalleService remitoDetalleService = new RemitoDetalleServiceImpl();        
         List<RemitoDetalleModel> items = remitoDetalleService.getAllByRemito(remito.getId());
         
-        if(items == null || items.isEmpty()) {            
-            model.addAttribute("errorMessage", "Error: no es posible cerrar un remito cuando no tiene items");
-            return "/error";              
-        }
+//        if(items == null || items.isEmpty()) {            
+//            model.addAttribute("errorMessage", "Error: no es posible cerrar un remito cuando no tiene items");
+//            return "/error";              
+//        }
         
         Boolean allItemsRecebidos = true;
 //        if(items != null && !items.isEmpty()) {            

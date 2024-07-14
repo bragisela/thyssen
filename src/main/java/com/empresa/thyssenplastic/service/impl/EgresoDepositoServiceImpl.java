@@ -62,4 +62,40 @@ public class EgresoDepositoServiceImpl implements EgresoDepositoService {
         return egresoDeposito;
     }
     
+    public EgresoDepositoModel getByIdBobina(Integer idBobina) {
+        EgresoDepositoModel egresoDeposito = null;
+        try {
+            EgresoDepositoDao egresoDepositoDao = new EgresoDepositoDaoImpl();
+            egresoDeposito = egresoDepositoDao.getByIdBobina(idBobina);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return egresoDeposito;
+    }
+    
+    public EgresoDepositoModel getByIdBulto(Integer idBulto) {
+        EgresoDepositoModel egresoDeposito = null;
+        try {
+            EgresoDepositoDao egresoDepositoDao = new EgresoDepositoDaoImpl();
+            egresoDeposito = egresoDepositoDao.getByIdBulto(idBulto);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return egresoDeposito;
+    }
+    
+    public EgresoDepositoModel getByIdPallet(Integer idPallet) {
+        EgresoDepositoModel egresoDeposito = null;
+        try {
+            EgresoDepositoDao egresoDepositoDao = new EgresoDepositoDaoImpl();
+            egresoDeposito = egresoDepositoDao.getByIdPallet(idPallet);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return egresoDeposito;
+    }
+    
 }
