@@ -1307,7 +1307,7 @@
                                                                         <div class="row">
                                                                             <div class="row col-xs-9 col-sm-4 col-xl-4">
                                                                                 <div class="form-group">
-                                                                                    <label>Largo</label>
+                                                                                    <label>Largo (mm)</label>
                                                                                     <form:input type="number" path="largo" step="0.01" class="form-control" placeholder="Largo ..." disabled="${disabledAlta}"/>
                                                                                 </div>
                                                                             </div>

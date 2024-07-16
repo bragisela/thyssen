@@ -34,9 +34,9 @@
                                         </div>  
                                         
                                             <div class="row col-xs-9 col-sm-3 col-xl-4">
-                                                <label for="inputRol">Seleccione Orden de Trabajo</label>
+                                                <label for="inputRol">Seleccione Orden de Producción</label>
                                                 <input type="hidden" id="idOrdenDeProduccionHidden" name="idOrdenDeProduccion" />
-                                                <input type="text" id="provinciaInput" class="form-control" list="provinciaList" placeholder="Buscar orden de trabajo..." required="required" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')">
+                                                <input type="text" id="provinciaInput" class="form-control" list="provinciaList" placeholder="Buscar orden de producción..." required="required" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')">
                                                 <datalist id="provinciaList">
                                                 <c:forEach items="${provinciaList}" var="provincia" >
                                                  <option id="provincia" value="${provincia}" />

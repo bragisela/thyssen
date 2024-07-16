@@ -22,7 +22,7 @@
                     <div>
                         <div style="margin-bottom: 20px;">
                             <input type="hidden" id="idOrdenDeProduccionHidden" name="idOrdenDeProduccion" />
-                            <input type="text" id="searchInput" style="padding: 8px; flex: 1; border: 1px solid #ddd; border-radius: 4px; margin-right: 8px; box-sizing: border-box;" list="provinciaList" placeholder="Buscar orden de trabajo..." required="required" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')">
+                            <input type="text" id="searchInput" style="padding: 8px; flex: 1; border: 1px solid #ddd; border-radius: 4px; margin-right: 8px; box-sizing: border-box;" list="provinciaList" placeholder="Buscar orden de producción..." required="required" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')">
                             <datalist id="provinciaList">
                                 <c:forEach items="${provinciaList}" var="provincia" >
                                     <option id="provincia" value="${provincia}" />

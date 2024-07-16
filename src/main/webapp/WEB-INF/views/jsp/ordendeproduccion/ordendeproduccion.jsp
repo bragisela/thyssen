@@ -196,7 +196,7 @@
                             <table id="ordendeproduccionesTable" class="display table table-striped table-hover cell-border">
                                 <thead>
                                     <tr>
-                                        <th>ORDEN DE TRABAJO</th>
+                                        <th>ORDEN DE PRODUCCIÓN</th>
                                         <th>FECHA ALTA</th>
                                         <c:if test = "${rol == 'oficina'}">
                                         <th>CLIENTE</th>
