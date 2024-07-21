@@ -4,7 +4,6 @@
     Author     : waltergustavorojo
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
@@ -66,7 +65,7 @@
 
                                     <div class="form-row row">
                                         <div class="row col-xs-9 col-sm-3 col-xl-4">
-                                            <label for="inputTelefono">TelÃ©fono</label>
+                                            <label for="inputTelefono">Teléfono</label>
                                             <form:input path="telefono" class="form-control" placeholder=""/>
                                         </div>
                                         <div class="row col-xs-9 col-sm-3 col-xl-4">
