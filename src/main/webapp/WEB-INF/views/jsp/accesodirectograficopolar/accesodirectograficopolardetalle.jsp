@@ -13,7 +13,7 @@
                                     <li class="breadcrumb-item active">${titleOrdenDeProduccion}</li>
                                 </ol>
                             </div>
-                                <h1 style="color: #008080; border: 2px solid #008080; padding: 20px; border-radius: 8px; margin-top: 20px; margin-bottom: 30px; display: inline-block; text-decoration: underline;">Diagramas Polares para la Orden de Trabajo Nro ${ordenDeProduccionPk}</h1>
+                                <h1 style="color: #008080; border: 2px solid #008080; padding: 20px; border-radius: 8px; margin-top: 20px; margin-bottom: 30px; display: inline-block; text-decoration: underline;">Diagramas Polares para la Orden de Producción Nro ${ordenDeProduccionPk}</h1>
                                 <div class="card">
                                 <div class="card-body">
                                 <div class="row col-xs-12 col-sm-12 col-xl-12">

@@ -16,8 +16,8 @@
                     </div>
                 </ol>
               <div class="row col-xs-9 col-sm-3 col-xl-4">
-                <label for="inputRol">Seleccione Orden de Trabajo</label>
-                    <input type="text" id="provinciaInput" class="form-control" list="provinciaList" placeholder="Buscar orden de trabajo...">
+                <label for="inputRol">Seleccione Orden de Producción</label>
+                    <input type="text" id="provinciaInput" class="form-control" list="provinciaList" placeholder="Buscar orden de producción...">
                     <datalist id="provinciaList">
                     <c:forEach items="${provinciaList}" var="provincia" >
                      <option id="provincia" value="${provincia}" />

@@ -141,7 +141,7 @@
                                     <th>DESCRIPCION</th>                                    
                                     <th class="hidden-xs hidden-sm">PROVEEDOR</th>
                                     <th class="hidden-xs hidden-sm">TIPO</th>
-                                    <th class="hidden-xs hidden-sm">DENOMINACION</th>
+                                    <th class="hidden-xs hidden-sm">DENOMINACION GENERICA</th>
                                     <th class="hidden-xs hidden-sm">PETROQUIMICA</th>
                                     <th class="hidden-xs hidden-sm">STOCK</th>
                                     <th style="text-align: center">ACCIONES</th>

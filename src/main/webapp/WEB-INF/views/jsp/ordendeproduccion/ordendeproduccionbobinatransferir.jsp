@@ -108,7 +108,7 @@
 
                                             <div class="form-row row">
                                                 <div class="row col-xs-9 col-sm-3 col-xl-4" >
-                                                    <label for="inputArticulo">Orden de Trabajo a Transferir</label>
+                                                    <label for="inputArticulo">Orden de Producción a Transferir</label>
                                                     <form:select path="idOrdenDeProduccionATransferir" class="form-control rubro" disabled="${disabledAlta}">                                                    
                                                         <form:option value="-1">Seleccionar...</form:option>
                                                         <form:options items="${ordenesDeProduccionList}" />
@@ -162,7 +162,7 @@
         if(action == 'transferir') {
             
             if(ordenDeProduccionATransferir == undefined || ordenDeProduccionATransferir == '' || ordenDeProduccionATransferir == '-1') {
-                alert('Debe seleccionar una orden de trabajo.');
+                alert('Debe seleccionar una orden de producción.');
             }
             else { 
                 if($("#myForm")[0].checkValidity()) {

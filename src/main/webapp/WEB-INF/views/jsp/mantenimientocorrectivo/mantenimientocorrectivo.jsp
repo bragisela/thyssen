@@ -168,7 +168,7 @@
                                                 <p>    
                                                 <div class="form-row row">
                                                     <div class="row col-xs-9 col-sm-3 col-xl-3" >
-                                                        <label for="inputArticulo">Intervalo de Reparación (días)</label>
+                                                        <label for="inputArticulo">Tiempo de reparación (min)</label>
                                                         <form:input type="number" path="intervaloReparacion" id="intervaloReparacion" class="form-control" required="required" placeholder="" disabled="${disabledCierre}" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')" onfocusout="calculateDiffrence()"/>
                                                     </div>                                                    
                                                 </div>

@@ -312,7 +312,7 @@
                                                 
                                             <div class="form-row row">                                                
                                                 <div class="row col-xs-12 col-sm-12 col-xl-12" style="border: 2px solid black;background-color:aquamarine;padding-left: 10px;">
-                                                    <label for="inputFecha" style="font-size:30px;">Orden de Producción <i>${idOrdenDeProduccion}</i> - Artículo <i>${idArticulo} (${articuloLabel})</i> - Estado <i>${estadoOrderProduccion}</i></label>
+                                                    <label for="inputFecha" style="font-size:30px;">Orden de Producción <i>${idOrdenDeProduccion}</i> - Artículo <i>(${articuloLabel})</i> - Estado <i>${estadoOrderProduccion}</i></label>
                                                     <br> 
                                                     
                                                     <div class="row col-xs-24 col-sm-4 col-xl-4" style="background-color: white; padding: 2px; border-left: 8px solid green; border-radius: 5px; margin: 4px;">
