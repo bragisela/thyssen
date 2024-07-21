@@ -50,13 +50,12 @@
     <body>
         <div style="text-align: center;">
             <div class="row">
-                <div class="row col-xs-2 col-sm-2 col-xl-2">
-                    <img style="margin-top: 5%;height: 90%;width: 90%;" src="<c:url value="/resources/assets/logoTPS.png"/>">    
+                <div class="row col-xs-3 col-sm-3 col-xl-3">
+                    <img style="margin-top: 5%;height: 80%;width: 80%;" src="<c:url value="/resources/assets/logoTPS.png"/>">    
                 </div>
-                <div class="row col-xs-9 col-sm-9 col-xl-9" style="text-align: center;">
+                <div class="row col-xs-6 col-sm-6 col-xl-6" style="text-align: center;">
                     <h1 style="font-size: 80px"><b>${materiaPrima}</b></h1>
-                    <h1 style="font-size: 60px">${descripcion}</h1>
-                    <h2 style="font-size: 40px">Lote: ${lote}</h2>
+                    <h2 style="font-size: 50px">Lote Nro: ${lote}</h2>
                     <h2 style="font-size: 40px">Fecha Lote: ${fechaLote}</h2>
                     <h2 style="font-size: 40px">Fecha Recepción: ${fechaRecepcion}</h2>                        
                 </div>                
@@ -81,15 +80,15 @@
         
         var qrcode = new QRCode("qrcode", {
                 text: "${url}",
-                width: 128,
-                height: 128
+                width: 256,
+                height: 256
             });        
         
         $("#qrcode > img").css({"margin":"auto"});
         
         JsBarcode("#barcode", "${codigo}", {
-            width: 3,
-            height: 80});
+            width: 6,
+            height: 160});
         
     });
        

@@ -3294,7 +3294,7 @@ public class OrdenDeProduccionDetalleController {
                 codigoBobina = ordenDeProduccionBobina.getCodigo();
                 pesoTotal = ordenDeProduccionBobina.getPesoTotal().toString();
                 fechaAltaBobina = ordenDeProduccionBobina.getFechaAlta().toString();
-                url = "http://localhost:8080/thyssenplastic/ordenDeProduccionDetalle/viewbobina/"+ordenDeProduccionBobina.getId();
+                url = "https://www.thyssenplastic.com/index";
                 
                 OrdenDeProduccionService ordenDeProduccionService = new OrdenDeProduccionServiceImpl();   
                 OrdenDeProduccionModel ordenDeProduccionModel = ordenDeProduccionService.getByPk(Integer.valueOf(ordenDeProduccionBobina.getIdOrdenDeProduccion()));

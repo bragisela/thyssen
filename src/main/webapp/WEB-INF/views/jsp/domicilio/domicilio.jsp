@@ -4,13 +4,12 @@
     Author     : waltergustavorojo
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <%@include file = "/WEB-INF/views/jsp/includes/header.jsp" %>
-    
+
             <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <section class="content">
@@ -56,8 +55,9 @@
 
                                         <div class="form-row row">                                            
                                             <div class="row col-xs-9 col-sm-3 col-xl-4">
-                                                <label for="inputTelefono">UbicaciÃ³n</label>
-                                                <form:input path="ubicacion" class="form-control" placeholder="" required="required" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')"/>
+                                                <label for="inputTelefono">Ubicación</label>
+                                                <form:input type="text" path="ubicacion" class="form-control" placeholder="" required="required" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')"/>
+                                                
                                             </div>
                                             <div class="row col-xs-9 col-sm-3 col-xl-4">
                                                 <label for="inputRol">Pais</label>
