@@ -71,7 +71,7 @@ public class HibernateUtil {
                 
                 System.out.println("*** user.dir: "+System.getProperty("user.dir"));
                 Properties properties= new Properties();
-                properties.load(new FileInputStream(new File("C:\\Users\\Neb\\work\\thyssen\\local.properties")));
+                properties.load(new FileInputStream(new File("local.properties")));
       
                 Configuration configuration = new Configuration();
 
