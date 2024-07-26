@@ -214,7 +214,6 @@
                                         <th>NRO ITEM</th>
                                         <th>FECHA ALTA</th>
                                         <th>MATERIA PRIMA</th>
-                                        <th>INSUMO</th>
                                         <th>TIPO</th>
                                         <th>STOCK</th>
                                         <th>CANTIDAD SOLICITADA</th>
@@ -237,9 +236,6 @@
                                             <td>
                                                 <c:out value="${ordendecompraitem.materiaPrima}" />
                                             </td>                                                                                        
-                                            <td>
-                                                <c:out value="${ordendecompraitem.insumo}" />
-                                            </td>                                                                                                                                    
                                             <td>
                                                 <c:out value="${ordendecompraitem.tipo}" />
                                             </td>                                                                                                                                                                                
