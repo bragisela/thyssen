@@ -218,7 +218,8 @@
                                         <th>TIPO</th>
                                         <th>STOCK</th>
                                         <th>CANTIDAD SOLICITADA</th>
-                                        <th>CANTIDAD RECEPCIONADA</th>                                                                                
+                                        <th>CANTIDAD RECEPCIONADA</th>
+                                        <th>REFERENCIA ADMINISTRATIVA</th>
                                         <th style="text-align: center">ACCIONES</th>
                                     </tr>
                                 </thead>
@@ -250,6 +251,9 @@
                                             </td>
                                             <td>
                                                 <c:out value="${ordendecompraitem.cantidadRecepcionada}" />
+                                            </td>                                            
+                                            <td>
+                                                <c:out value="${ordendecompraitem.referenciaAdministrativa}" />
                                             </td>                                            
                                             <td>
                                                 <c:if test = "${rol == 'oficina' && operacion == 'alta' && ordenDeCompraStatus == 'Nuevo'}">

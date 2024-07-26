@@ -23,6 +23,7 @@ public class OrdenDeCompraItemDto implements Serializable {
     private String cantidadSolicitada;
     private String cantidadRecepcionada;
     private String estaCompletado;
+    private String referenciaAdministrativa;
     
 
     public String getPk() {
@@ -89,6 +90,14 @@ public class OrdenDeCompraItemDto implements Serializable {
         this.estaCompletado = estaCompletado;
     }
 
+    public void setReferenciaAdministrativa( String referenciaAdministrativa) {
+        this.referenciaAdministrativa = referenciaAdministrativa;
+    }
+    
+    public String getReferenciaAdministrativa() {
+        return referenciaAdministrativa;
+    }
+    
     public String getInsumo() {
         return insumo;
     }
