@@ -234,16 +234,31 @@
                 let chartConfig = {
                     type: 'radar',
                     series: [{
-                        values: vreal
+                        values: vreal,
+                        marker: {
+                             visible: false,      // Mostrar puntos
+                        },
                     },
                     {
-                        values: vmaximo
+                        values: vmaximo,
+                        marker: {
+                             visible: false,      // Mostrar puntos
+                        },
+                        
                     },
                     {
-                        values: vminimo                   
+                        values: vminimo,
+                        marker: {
+                             visible: false,      // Mostrar puntos
+                        },
+                        
                     },        
                     {
-                        values: vteorico                   
+                        values: vteorico,
+                        marker: {
+                             visible: false,      // Mostrar puntos
+                        },
+                        
                     }                    
                   ],
                   labels: [{
