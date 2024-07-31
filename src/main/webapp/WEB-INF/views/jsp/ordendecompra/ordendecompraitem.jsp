@@ -214,11 +214,11 @@
                                         <th>NRO ITEM</th>
                                         <th>FECHA ALTA</th>
                                         <th>MATERIA PRIMA</th>
-                                        <th>INSUMO</th>
                                         <th>TIPO</th>
                                         <th>STOCK</th>
                                         <th>CANTIDAD SOLICITADA</th>
-                                        <th>CANTIDAD RECEPCIONADA</th>                                                                                
+                                        <th>CANTIDAD RECEPCIONADA</th>
+                                        <th>REFERENCIA ADMINISTRATIVA</th>
                                         <th style="text-align: center">ACCIONES</th>
                                     </tr>
                                 </thead>
@@ -237,9 +237,6 @@
                                                 <c:out value="${ordendecompraitem.materiaPrima}" />
                                             </td>                                                                                        
                                             <td>
-                                                <c:out value="${ordendecompraitem.insumo}" />
-                                            </td>                                                                                                                                    
-                                            <td>
                                                 <c:out value="${ordendecompraitem.tipo}" />
                                             </td>                                                                                                                                                                                
                                             <td>
@@ -250,6 +247,9 @@
                                             </td>
                                             <td>
                                                 <c:out value="${ordendecompraitem.cantidadRecepcionada}" />
+                                            </td>                                            
+                                            <td>
+                                                <c:out value="${ordendecompraitem.referenciaAdministrativa}" />
                                             </td>                                            
                                             <td>
                                                 <c:if test = "${rol == 'oficina' && operacion == 'alta' && ordenDeCompraStatus == 'Nuevo'}">

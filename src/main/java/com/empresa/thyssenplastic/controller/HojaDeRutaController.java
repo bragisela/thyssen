@@ -1054,6 +1054,10 @@ public class HojaDeRutaController {
             hojaDeRutaDetalleDto.setEstadoHojaDeRuta(hojaDeRuta.getEstado());
             hojaDeRutaDetalleDto.setCantidadTotal(cantidad);
             
+            if ( remito != null ) {
+                hojaDeRutaDetalleDto.setReferenciaAdministrativa(remito.getReferenciaAdministrativa());
+            }
+            
             hojasDeRutaDetalleDtos.add(hojaDeRutaDetalleDto);            
         }
          

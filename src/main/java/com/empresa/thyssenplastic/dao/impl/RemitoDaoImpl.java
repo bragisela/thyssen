@@ -34,7 +34,7 @@ public class RemitoDaoImpl extends GenericDaoImpl implements RemitoDao {
         List<RemitoModel> remitos = new ArrayList<RemitoModel>();
         try {
             Session session = HibernateUtil.getSessionFactory().openSession();
-            remitos = session.createQuery("from RemitoModel WHERE estado = 'Completado' AND estaEnHojaDeRuta = 0 ", RemitoModel.class).list();                        
+            remitos = session.createQuery("from RemitoModel WHERE estado = 'Completado' AND estaEnHojaDeRuta = 0 ORDER BY id DESC", RemitoModel.class).list();                        
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -46,7 +46,7 @@ public class RemitoDaoImpl extends GenericDaoImpl implements RemitoDao {
         List<RemitoModel> remitos = new ArrayList<RemitoModel>();
         try {
             Session session = HibernateUtil.getSessionFactory().openSession();
-            remitos = session.createQuery("from RemitoModel WHERE estaEnHojaDeRuta = 0 ", RemitoModel.class).list();                        
+            remitos = session.createQuery("from RemitoModel WHERE estaEnHojaDeRuta = 0 order by id DESC ", RemitoModel.class).list();                        
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -102,6 +102,7 @@ public class OrdenDeCompraItemController {
         String rol = "";    
         String operacion = "";        
         String displayActionButton = "none";
+        String referenciaAdministrativa = "";
                 
         OrdenDeCompraItemForm ordenDeCompraItemForm = new OrdenDeCompraItemForm();
         ordenDeCompraItemForm.setPk("-1");
@@ -125,7 +126,7 @@ public class OrdenDeCompraItemController {
         if(ordenDeCompra.getObservaciones() != null) {
             ordenDeCompraItemForm.setObservaciones(ordenDeCompra.getObservaciones());
         }
-                                        
+        
         if(user.getRol() == Utils.ROL_OFICINA) {            
             operacion = "alta";
             if(ordenDeCompra.getEstado().equalsIgnoreCase("Nuevo")) {
@@ -187,6 +188,12 @@ public class OrdenDeCompraItemController {
                     cantidadRecepcionadaTotal += recepcion.getCantidadRecepcionada();
                 }
             }                        
+            
+            if(ordenDeCompra.getReferenciaAdministrativa() != null) {
+                
+                ordenDeCompraItemDto.setReferenciaAdministrativa( ordenDeCompra.getReferenciaAdministrativa());
+            }
+            
             ordenDeCompraItemDto.setCantidadRecepcionada(cantidadRecepcionadaTotal.toString());            
 
             if(ordenDeCompraItem.getTipo().equalsIgnoreCase("materiaPrima")) {

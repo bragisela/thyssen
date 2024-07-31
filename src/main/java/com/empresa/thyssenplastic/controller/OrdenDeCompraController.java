@@ -110,6 +110,11 @@ public class OrdenDeCompraController {
         List<OrdenDeCompraDto> ordenDeComprasDtos = new ArrayList<OrdenDeCompraDto>();
         for(OrdenDeCompraModel ordenDeCompra: ordenDeCompras) {
             OrdenDeCompraDto ordenDeCompraDto = new OrdenDeCompraDto();
+            
+            if ( ordenDeCompra.getEstado().equalsIgnoreCase("Cerrado") ) {
+                continue;
+            }
+            
             ordenDeCompraDto.setPk(ordenDeCompra.getId().toString());
             ordenDeCompraDto.setFechaAlta(ordenDeCompra.getFechaAlta().toString().replace(" 00:00:00.0", ""));
             if(ordenDeCompra.getFechaEntrega() != null) {

@@ -37,6 +37,7 @@ public class HojaDeRutaDetalleDto implements Serializable {
     private String action;
     private String cantidadTotal;
     private String estado;
+    private String referenciaAdministrativa;
     
 
     public String getEstado() {
@@ -225,6 +226,16 @@ public class HojaDeRutaDetalleDto implements Serializable {
     public void setCantidadTotal(String cantidadTotal) {
         this.cantidadTotal = cantidadTotal;
     }
+
+    public String getReferenciaAdministrativa() {
+        return referenciaAdministrativa;
+    }
+    
+    public void setReferenciaAdministrativa(String referenciaAdministrativa) {
+        this.referenciaAdministrativa = referenciaAdministrativa;
+    }
+    
+    
 
     
 }

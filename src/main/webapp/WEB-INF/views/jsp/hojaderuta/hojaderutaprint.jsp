@@ -46,6 +46,19 @@
         <script src="<c:url value="/resources/core/js/adminlte.min.js"/>"></script>        
         <script src="<c:url value="/resources/core/js/qrcode.js"/>"></script>
         <script src="<c:url value="/resources/core/js/JsBarcode.all.min.js"/>"></script>
+        <style>
+                    /* Opcional: ajustes para el diseño */
+        .dataTables_wrapper {
+            overflow: auto;
+        }
+        .obscell {
+            vertical-align: top;
+            padding-top: 20px; /* Ajusta el espaciado según sea necesario */
+        }
+        </style>
+        
+        
+        
     </head>
     <body>
         <div style="text-align: center;">
@@ -140,9 +153,10 @@
                                         <th>HORARIO</th>                                        
                                         <th>KM</th>         
                                         <th>KM ACUMULADOS</th>         
-                                        
-                                        <th>OBSERVACIONES</th>
-                                                                         
+                                        <th>REFERENCIA ADMINISTRATIVA</th> 
+                                    </tr>
+                                    <tr>
+                                        <th colspan='13'>OBSERVACIONES</th>
                                     </tr>
                                 </thead>
 
@@ -183,12 +197,14 @@
                                             <td>
                                                 <c:out value="${hojaDeRutaDetalle.kmAcumulado}" />
                                             </td>
-                                           
                                             <td>
+                                                <c:out value="${hojaDeRutaDetalle.referenciaAdministrativa}" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan='13'>
                                                 <c:out value="${hojaDeRutaDetalle.observacionesRemito}" />
                                             </td>
-                                            
-                                                                                  
                                         </tr>
                                     </c:forEach>
                                 </tbody>
@@ -215,7 +231,9 @@
     
 <script>
     $(document).ready(function () {
-        
+        ('.table').DataTable({
+
+        });
         
     });
        
