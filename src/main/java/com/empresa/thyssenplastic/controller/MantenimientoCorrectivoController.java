@@ -707,6 +707,9 @@ public class MantenimientoCorrectivoController {
         if(mantenimientoCorrectivo.getHoraParada() != null && !mantenimientoCorrectivo.getHoraParada().isEmpty()) {
             mantenimientoCorrectivoForm.setHoraParada(mantenimientoCorrectivo.getHoraParada());
         }        
+        if(mantenimientoCorrectivo.getHoraArranque() != null && !mantenimientoCorrectivo.getHoraArranque().isEmpty()) {
+            mantenimientoCorrectivoForm.setHoraArranque(mantenimientoCorrectivo.getHoraArranque());
+        }        
         if(mantenimientoCorrectivo.getPrioridad() != null && !mantenimientoCorrectivo.getPrioridad().isEmpty()) {
             mantenimientoCorrectivoForm.setPrioridad(mantenimientoCorrectivo.getPrioridad());
         }        

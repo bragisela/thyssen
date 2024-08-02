@@ -100,7 +100,7 @@
                                                     <div class="row col-xs-9 col-sm-3 col-xl-4" >
                                                         <label for="inputArticulo">Hora Parada</label>
                                                         <form:input type="time" path="horaParada" class="form-control" required="required" placeholder="" disabled="${disabledAlta}" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')"/>                                                        
-                                                    </div>
+                                                   </div>
                                                     
                                                     <div class="row col-xs-9 col-sm-3 col-xl-4">                                                        
                                                         <label for="inputRubro">Prioridad</label>
@@ -109,6 +109,8 @@
                                                             <form:option value="media">Media</form:option>
                                                             <form:option value="baja">Baja</form:option>
                                                         </form:select>
+                                                    </div>
+
                                                     </div>                                                    
                                                 </div>
 
@@ -116,6 +118,10 @@
                                                     <div class="row col-xs-9 col-sm-3 col-xl-4">
                                                         <label for="inputRubro">Problema</label>
                                                         <form:textarea type="text" path="problema" class="form-control" required="required" placeholder="" disabled="${disabledAlta}" maxlength="4000" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')"/>
+                                                    </div>
+                                                    <div class="row col-xs-9 col-sm-3 col-xl-4" >
+                                                        <label for="inputArticulo">Hora de arranque</label>
+                                                        <form:input type="time" path="horaArranque" class="form-control" required="required" placeholder="" disabled="${disabledAlta}" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')"/>                                                        
                                                     </div>
                                                 </div>
                                                     

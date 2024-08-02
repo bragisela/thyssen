@@ -22,6 +22,8 @@ public class MateriaPrimaDto implements Serializable {
     private String idDenominacion;
     private String idPetroquimica;
     private String stock;
+    private Double densidad;
+    private Double indiceDeFluidez;
 
     public String getPk() {
         return pk;
@@ -87,5 +89,19 @@ public class MateriaPrimaDto implements Serializable {
         this.stock = stock;
     }
     
-    
+    public Double getIndiceDeFluidez() {
+        return this.indiceDeFluidez;
+    }
+
+    public void setIndiceDeFluidez(Double indiceDeFluidez) {
+        this.indiceDeFluidez = indiceDeFluidez;
+    }
+
+    public Double getDensidad() {
+        return this.densidad;
+    }
+
+    public void setDensidad(Double densidad) {
+        this.densidad = densidad;
+    }
 }
