@@ -78,6 +78,8 @@ public class MateriaPrimaController {
                 TipoModel tipoModel = tipoService.getByPk(Integer.valueOf(materiaprima.getIdTipo()));
                 if(tipoModel != null) {
                     materiaprimaDto.setIdTipo(tipoModel.getValor());
+                    materiaprimaDto.setIndiceDeFluidez(tipoModel.getIndiceDeFluidez());
+                    materiaprimaDto.setDensidad(tipoModel.getDensidad());
                 }
             }
             if(materiaprima.getIdDenominacion() != null){

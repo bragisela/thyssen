@@ -1431,19 +1431,17 @@
                                                         <c:out value="${articulofichatecnica.version}" />
                                                     </td>
                                                     <td>
-                                                        <c:if test="${articulofichatecnica.ultimaVersion == 'true'}">                                                            
-                                                            <a class="nav-link active fa fa-pencil-square-o fa-lg"
-                                                                href="/thyssenplastic/articulofichatecnica/edit/${articulofichatecnica.pk}"
-                                                                data-toggle="tooltip" data-placement="top"
-                                                                title="Editar"></a>
-                                                            <a class="nav-link active fa fa-trash fa-lg"
-                                                                href="/thyssenplastic/articulofichatecnica/remove/${articulofichatecnica.pk}"
-                                                                data-toggle="tooltip" data-placement="top"
-                                                                title="Eliminar"></a>
+                                                        <a class="nav-link active fa fa-pencil-square-o fa-lg"
+                                                            href="/thyssenplastic/articulofichatecnica/edit/${articulofichatecnica.pk}"
+                                                            data-toggle="tooltip" data-placement="top"
+                                                            title="Editar"></a>
+                                                        <a class="nav-link active fa fa-trash fa-lg"
+                                                            href="/thyssenplastic/articulofichatecnica/remove/${articulofichatecnica.pk}"
+                                                            data-toggle="tooltip" data-placement="top"
+                                                            title="Eliminar"></a>
                                                         <a class="nav-link active fa fa-clone fa-lg"
                                                             href="/thyssenplastic/articulofichatecnica/clone/${articulofichatecnica.pk}"
                                                             data-toggle="tooltip" data-placement="top" title="Clonar"></a>                                                                                                                                                                                
-                                                        </c:if>
                                                         <a class="nav-link active fa fa-eye fa-lg"
                                                             href="/thyssenplastic/articulofichatecnica/view/${articulofichatecnica.pk}"
                                                             data-toggle="tooltip" data-placement="top" title="Ver"></a>                                                        

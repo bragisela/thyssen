@@ -141,6 +141,8 @@
                                     <th>DESCRIPCION</th>                                    
                                     <th class="hidden-xs hidden-sm">PROVEEDOR</th>
                                     <th class="hidden-xs hidden-sm">TIPO</th>
+                                    <th class="hidden-xs hidden-sm">DENSIDAD</th>
+                                    <th class="hidden-xs hidden-sm">INDICE DE FLUIDEZ</th>
                                     <th class="hidden-xs hidden-sm">DENOMINACION GENERICA</th>
                                     <th class="hidden-xs hidden-sm">PETROQUIMICA</th>
                                     <th class="hidden-xs hidden-sm">STOCK</th>
@@ -156,6 +158,8 @@
                                         <td><c:out value="${materiaprima.descripcion}" /></td>
                                         <td class="hidden-xs hidden-sm"><c:out value="${materiaprima.idProveedor}" /></td>
                                         <td class="hidden-xs hidden-sm"><c:out value="${materiaprima.idTipo}" /></td>
+                                        <td class="hidden-xs hidden-sm"><c:out value="${materiaprima.densidad}" /></td>
+                                        <td class="hidden-xs hidden-sm"><c:out value="${materiaprima.indiceDeFluidez}" /></td>
                                         <td class="hidden-xs hidden-sm"><c:out value="${materiaprima.idDenominacion}" /></td>
                                         <td class="hidden-xs hidden-sm"><c:out value="${materiaprima.idPetroquimica}" /></td>
                                         <td class="hidden-xs hidden-sm"><c:out value="${materiaprima.stock}" /></td>
