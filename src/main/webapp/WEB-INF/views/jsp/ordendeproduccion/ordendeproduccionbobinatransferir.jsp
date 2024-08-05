@@ -18,7 +18,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <ol class="breadcrumb mb-1 mt-1">
-                                    <li class="breadcrumb-item"><a href="">Transferir Bobina</a></li>
+                                    <li class="breadcrumb-item"><a href="">${titleTransferirBobina}</a></li>
                                     <li class="breadcrumb-item active">${titleTransferirBobina}</li>
                                 </ol>
                             </div>
@@ -68,7 +68,12 @@
                                                 
                                             <div class="form-row row">                                                
                                                 <div class="row col-xs-12 col-sm-12 col-xl-12">
-                                                    <label for="inputFecha">Bobina <i>${idBobina}</i></i></label>
+                                                    <c:if test="${empty idBulto}">
+                                                        <label for="inputFecha">Bobina <i>${idBobina}</i></label>
+                                                    </c:if>
+                                                    <c:if test="${not empty idBulto}">
+                                                        <label for="inputFecha">Bulto <i>${idBulto}</i></label>
+                                                    </c:if>
                                                 </div>
                                                 <div class="row col-xs-12 col-sm-12 col-xl-12">
                                                     <label for="inputFecha">Orden de Producción <i>${idOrdenDeProduccion}</i> - Cliente <i>${clienteLabel}</i> - Artículo <i>${idArticulo} (${articuloLabel})</i> - Ficha Técnica Versión <i>${fichaTecnicaVersionLabel}</i></label>

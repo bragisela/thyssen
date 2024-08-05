@@ -11,6 +11,7 @@ import com.empresa.thyssenplastic.model.ArticuloFichaTecnicaModel;
 import com.empresa.thyssenplastic.model.ArticuloModel;
 import com.empresa.thyssenplastic.model.ClienteModel;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionBobinaModel;
+import com.empresa.thyssenplastic.model.OrdenDeProduccionBultoModel;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionModel;
 import com.empresa.thyssenplastic.model.UserModel;
 import com.empresa.thyssenplastic.service.ArticuloFichaTecnicaService;
@@ -18,6 +19,7 @@ import com.empresa.thyssenplastic.service.ArticuloService;
 import com.empresa.thyssenplastic.service.ClienteService;
 import com.empresa.thyssenplastic.service.OrdenDeCompraService;
 import com.empresa.thyssenplastic.service.OrdenDeProduccionBobinaService;
+import com.empresa.thyssenplastic.service.OrdenDeProduccionBultoService;
 import com.empresa.thyssenplastic.service.OrdenDeProduccionService;
 import com.empresa.thyssenplastic.service.UserService;
 import com.empresa.thyssenplastic.service.impl.ArticuloFichaTecnicaServiceImpl;
@@ -32,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import com.empresa.thyssenplastic.service.impl.OrdenDeProduccionBobinaServiceImpl;
+import com.empresa.thyssenplastic.service.impl.OrdenDeProduccionBultoServiceImpl;
 import com.empresa.thyssenplastic.service.impl.OrdenDeProduccionServiceImpl;
 import com.empresa.thyssenplastic.service.impl.UserServiceImpl;
 import java.util.Date;
@@ -79,9 +82,22 @@ public class TransferirBobinaController {
             model.addAttribute("errorMessage", "Error: bobina no encontrada");         
             return "/error";                
         }
-
+        
+       
         OrdenDeProduccionService ordenDeProduccionService = new OrdenDeProduccionServiceImpl();   
         OrdenDeProduccionModel ordenDeProduccion = ordenDeProduccionService.getByPk(bobina.getIdOrdenDeProduccion());
+        
+        OrdenDeProduccionBultoService ordenDeProduccionBultoService = new OrdenDeProduccionBultoServiceImpl();
+        OrdenDeProduccionBultoModel bulto = ordenDeProduccionBultoService.getByOrdenDeProduccionBobina(bobina.getId());
+        
+         if(bobina.getEstaEnBulto()) {
+            model.addAttribute("tipo", "bulto");                                                               
+            model.addAttribute("titleTransferirBobina", "Transferir Bulto");
+            model.addAttribute("idBulto", bulto.getCodigo()); 
+        }else{
+            model.addAttribute("tipo", "bobina");  
+            model.addAttribute("titleTransferirBobina", "Transferir Bobina");
+        }
         
         if(ordenDeProduccion == null) {
             model.addAttribute("errorMessage", "Error: bobina no encontrada");         
@@ -144,7 +160,7 @@ public class TransferirBobinaController {
         }
         
         model.addAttribute("transferirBobinaForm", transferirBobinaForm); 
-        model.addAttribute("titleTransferirBobina", "Transferir Bobina");
+        
         model.addAttribute("buttonLabel", "Transferir");
         
                 
@@ -230,14 +246,19 @@ public class TransferirBobinaController {
             return modelAndView;                                                
         }
         
-        if(bobina.getEstaEnBulto()) {
-            modelAndView.setViewName("error");
-            modelAndView.addObject("errorMessage", "Error bobina se encuentra eb bulto");
-            return modelAndView;                                                            
-        }
 
         OrdenDeProduccionService ordenDeProduccionService = new OrdenDeProduccionServiceImpl();   
         OrdenDeProduccionModel ordenDeProduccion = ordenDeProduccionService.getByPk(bobina.getIdOrdenDeProduccion());
+        
+        OrdenDeProduccionModel ordenDeProduccionAtransferir = ordenDeProduccionService.getByPk(Integer.valueOf(transferirBobinaForm.getIdOrdenDeProduccionATransferir()));
+        
+        OrdenDeProduccionBultoService ordenDeProduccionBultoService = new OrdenDeProduccionBultoServiceImpl();
+        OrdenDeProduccionBultoModel bulto = ordenDeProduccionBultoService.getByOrdenDeProduccionBobina(Integer.valueOf(transferirBobinaForm.getIdBobina()));
+        
+        if(bobina.getEstaEnBulto()) {
+            bulto.setIdOrdenDeProduccion(ordenDeProduccionAtransferir.getId());
+            ordenDeProduccionBultoService.save(bulto);                                                            
+        }
         
         if(ordenDeProduccion == null) {
             modelAndView.setViewName("error");
@@ -251,7 +272,6 @@ public class TransferirBobinaController {
             return modelAndView;                                                                                    
         }
         
-        OrdenDeProduccionModel ordenDeProduccionAtransferir = ordenDeProduccionService.getByPk(Integer.valueOf(transferirBobinaForm.getIdOrdenDeProduccionATransferir()));
         
         if(ordenDeProduccionAtransferir == null) {
             modelAndView.setViewName("error");
