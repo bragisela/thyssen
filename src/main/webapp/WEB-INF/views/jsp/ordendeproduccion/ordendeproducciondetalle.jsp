@@ -583,8 +583,8 @@
                                                                                                         <a class="nav-link active fa fa-pie-chart fa-lg"
                                                                                                            href="/thyssenplastic/graficoBobina/${ordendeproduccionbobina.pk}"
                                                                                                             data-toggle="tooltip" data-placement="top" title="Gráfico Polar"></a>
-                                                                                                    </c:if>                                                                
-                                                                                                    <c:if test = "${rol == 'oficina' && ordendeproduccionbobina.estaEnBulto == 'false' && estadoOrderProduccion != 'Completado'}">
+                                                                                                    </c:if>                                                             
+                                                                                                    <c:if test = "${rol == 'oficina' && estadoOrderProduccion != 'Completado'}">
                                                                                                         <a class="nav-link active fa fa-play fa-lg"
                                                                                                            href="/thyssenplastic/transferirBobina/${ordendeproduccionbobina.pk}"
                                                                                                             data-toggle="tooltip" data-placement="top" title="Transferir"></a>
@@ -813,6 +813,11 @@
                                                                                                             href="/thyssenplastic/ordenDeProduccionDetalle/removeBulto/${ordendeproduccionbulto.pk}"
                                                                                                             data-toggle="tooltip" data-placement="top" title="Eliminar"></a>
                                                                                                     </c:if>                                                                                                                                                                                                                                                                    
+                                                                                                    <c:if test = "${rol == 'oficina' && estadoOrderProduccion != 'Completado'}">
+                                                                                                        <a class="nav-link active fa fa-play fa-lg"
+                                                                                                           href="/thyssenplastic/transferirBobina/${ordendeproduccionbulto.idBobina}"
+                                                                                                            data-toggle="tooltip" data-placement="top" title="Transferir"></a>
+                                                                                                    </c:if>    
                                                                                                 </td>
                                                                                             </tr>
                                                                                         </c:forEach>
