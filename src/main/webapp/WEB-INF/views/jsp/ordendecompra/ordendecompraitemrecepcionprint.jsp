@@ -54,7 +54,7 @@
                     <img style="margin-top: 5%;height: 80%;width: 80%;" src="<c:url value="/resources/assets/logoTPS.png"/>">    
                 </div>
                 <div class="row col-xs-6 col-sm-6 col-xl-6" style="text-align: center;">
-                    <h1 style="font-size: 80px"><b>${materiaPrima}</b></h1>
+                    <h1 style="font-size: 50px"><b>${materiaPrima}</b></h1>
                     <h2 style="font-size: 50px">Lote Nro: ${lote}</h2>
                     <h2 style="font-size: 40px">Fecha Lote: ${fechaLote}</h2>
                     <h2 style="font-size: 40px">Fecha Recepción: ${fechaRecepcion}</h2>                        
