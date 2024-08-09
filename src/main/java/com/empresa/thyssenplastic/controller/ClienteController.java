@@ -13,12 +13,14 @@ import com.empresa.thyssenplastic.model.DomicilioModel;
 import com.empresa.thyssenplastic.model.ClienteContactoModel;
 import com.empresa.thyssenplastic.model.ClienteDomicilioModel;
 import com.empresa.thyssenplastic.model.ClienteModel;
+import com.empresa.thyssenplastic.model.OrdenDeProduccionModel;
 import com.empresa.thyssenplastic.model.TipoModel;
 import com.empresa.thyssenplastic.service.ContactoService;
 import com.empresa.thyssenplastic.service.DomicilioService;
 import com.empresa.thyssenplastic.service.ClienteContactoService;
 import com.empresa.thyssenplastic.service.ClienteDomicilioService;
 import com.empresa.thyssenplastic.service.ClienteService;
+import com.empresa.thyssenplastic.service.OrdenDeProduccionService;
 import com.empresa.thyssenplastic.service.TipoService;
 import com.empresa.thyssenplastic.service.impl.ContactoServiceImpl;
 import com.empresa.thyssenplastic.service.impl.DomicilioServiceImpl;
@@ -34,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import com.empresa.thyssenplastic.service.impl.ClienteServiceImpl;
+import com.empresa.thyssenplastic.service.impl.OrdenDeProduccionServiceImpl;
 import com.empresa.thyssenplastic.service.impl.TipoServiceImpl;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -342,6 +345,17 @@ public class ClienteController {
             return "/error/error";    
         }
         
+        //Chequeo que no tenga ordenes de producción antes de borrar al cliente
+        OrdenDeProduccionService ordenDeProduccionService = new OrdenDeProduccionServiceImpl();   
+        List<OrdenDeProduccionModel> ordenDeProducciones = ordenDeProduccionService.getAll();
+
+        for(OrdenDeProduccionModel ordenDeProduccion: ordenDeProducciones) {
+            if(ordenDeProduccion.getIdCliente() == Integer.parseInt(clientepk)){
+                model.addAttribute("haveProductionOrders", "disabled");
+                break;
+            }
+        }
+
         ClienteForm clienteForm = new ClienteForm();
         clienteForm.setPk(cliente.getId().toString());
         clienteForm.setCuit(cliente.getCuit());

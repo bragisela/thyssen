@@ -127,6 +127,7 @@
                                                         <label for="inputArticulo">Ficha Técnica</label>
                                                         <form:select path="idFichaTecnica" class="form-control rubro" required="required" disabled="${disabledAlta}" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')">                                                    
                                                             <form:option value="-1">Seleccionar...</form:option>
+                                                            <form:options items="${articulosFichaTecnicaList}" />
                                                         </form:select>
                                                     </div>
 
