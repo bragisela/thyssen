@@ -21,6 +21,8 @@ public class MateriaPrimaForm {
     private String urlFichaTecnica;  
     private String observaciones;    
     private String action;
+    private Double densidad;
+    private Double indiceDeFluidez;
 
     public String getPk() {
         return pk;
@@ -110,6 +112,21 @@ public class MateriaPrimaForm {
         this.descripcion = descripcion;
     }
 
+    public Double getDensidad() {
+        return densidad;
+    }
+
+    public void setDensidad( Double densidad ) {
+        this.densidad = densidad;
+    }
+
+    public Double getIndiceDeFluidez() {
+        return indiceDeFluidez;
+    }
+
+    public void setIndiceDeFluidez( Double indiceDeFluidez ) {
+        this.indiceDeFluidez = indiceDeFluidez;
+    }
 
     
 }

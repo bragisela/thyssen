@@ -57,7 +57,13 @@ public class MateriaPrimaModel {
 
     @Column(name = "stockPeso")
     private Double stockPeso;
+
+    @Column(name = "densidad")
+    private Double densidad;
     
+    @Column(name = "indiceDeFluidez")
+    private Double indiceDeFluidez;
+
     public MateriaPrimaModel() {
     }
 
@@ -77,7 +83,22 @@ public class MateriaPrimaModel {
         this.id = id;
     }
 
-       
+    public Double getDensidad() {
+        return densidad;
+    }
+
+    public void setDensidad( Double densidad ) {
+        this.densidad = densidad;
+    }
+
+    public Double getIndiceDeFluidez() {
+        return indiceDeFluidez;
+    }
+
+    public void setIndiceDeFluidez( Double indiceDeFluidez ) {
+        this.indiceDeFluidez = indiceDeFluidez;
+    }
+    
     public String getCodigo() {
         return codigo;
     }

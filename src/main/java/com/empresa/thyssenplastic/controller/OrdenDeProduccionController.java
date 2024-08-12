@@ -154,6 +154,9 @@ public class OrdenDeProduccionController {
             }
         }
         
+        
+        
+        
         List<OrdenDeProduccionDto> ordenDeProduccionesDtos = new ArrayList<OrdenDeProduccionDto>();
         for(OrdenDeProduccionModel ordenDeProduccion: ordenDeProducciones) {
             OrdenDeProduccionDto ordenDeProduccionDto = new OrdenDeProduccionDto();
@@ -190,6 +193,7 @@ public class OrdenDeProduccionController {
         model.addAttribute("operacion", operacion);        
         model.addAttribute("clienteList", clientes);        
         model.addAttribute("articuloList", articulos); 
+        model.addAttribute("articulosFichaTecnicaList", articulosFichaTecnica); 
         model.addAttribute("unidadVentaList", unidadVentas);        
         model.addAttribute("ordenDeProducciones", ordenDeProduccionesDtos);        
                 

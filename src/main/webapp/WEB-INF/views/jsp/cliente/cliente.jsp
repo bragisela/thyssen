@@ -87,11 +87,18 @@
 
                                     <div class="form-row row">
                                         <div class="row col-xs-9 col-sm-3 col-xl-4">
-                                            <button type="button" class="btn btn-primary" onClick="callController()">${buttonLabel}</button>
+                                            <button type="button" ${haveProductionOrders} class="btn btn-primary" onClick="callController()">${buttonLabel}</button>
                                             <a href="/thyssenplastic/cliente"><button type="button" class="btn btn-secondary">Cancelar</button></a>
                                         </div>
                                     </div>
-                                        
+                                    <c:if test = "${haveProductionOrders == 'disabled'}">
+                                    <div class="form-row row">
+                                        <div class="row col-xs-9 col-sm-20 col-xl-4">
+                                            <br>
+                                            <label style="color: red;">ATENCION! -- No se puede borrar el cliente ya que tiene Ordenes de producción.</label>
+                                        </div>
+                                    </div>    
+                                    </c:if>
                                 </form:form>
                             </div>
                         </div>

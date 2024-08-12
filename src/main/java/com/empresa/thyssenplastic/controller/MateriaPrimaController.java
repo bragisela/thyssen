@@ -67,6 +67,10 @@ public class MateriaPrimaController {
             MateriaPrimaDto materiaprimaDto = new MateriaPrimaDto();
             materiaprimaDto.setPk(materiaprima.getId().toString());
             materiaprimaDto.setDescripcion(materiaprima.getDescripcion());            
+
+            materiaprimaDto.setIndiceDeFluidez(materiaprima.getIndiceDeFluidez());
+            materiaprimaDto.setDensidad(materiaprima.getDensidad());
+
             
             if(materiaprima.getIdProveedor() != null){
                 ProveedorModel proveedorModel = proveedorService.getByPk(Integer.valueOf(materiaprima.getIdProveedor()));
@@ -78,10 +82,10 @@ public class MateriaPrimaController {
                 TipoModel tipoModel = tipoService.getByPk(Integer.valueOf(materiaprima.getIdTipo()));
                 if(tipoModel != null) {
                     materiaprimaDto.setIdTipo(tipoModel.getValor());
-                    materiaprimaDto.setIndiceDeFluidez(tipoModel.getIndiceDeFluidez());
-                    materiaprimaDto.setDensidad(tipoModel.getDensidad());
                 }
             }
+            
+            
             if(materiaprima.getIdDenominacion() != null){
                 TipoModel tipoModel = tipoService.getByPk(Integer.valueOf(materiaprima.getIdDenominacion()));
                 if(tipoModel != null) {
@@ -220,7 +224,13 @@ public class MateriaPrimaController {
         } else {
             materiaprimaModel.setObservaciones(null);
         }
-                
+        if(materiaprimaForm.getDensidad() != null ) {
+            materiaprimaModel.setDensidad(materiaprimaForm.getDensidad());
+        }
+        if(materiaprimaForm.getIndiceDeFluidez() != null ) {
+            materiaprimaModel.setIndiceDeFluidez(materiaprimaForm.getIndiceDeFluidez());
+        }
+
         if(materiaprimaForm.getAction().equalsIgnoreCase("add") || materiaprimaForm.getAction().equalsIgnoreCase("edit")) {
             materiaprimaService.save(materiaprimaModel);
         } else {
@@ -286,6 +296,12 @@ public class MateriaPrimaController {
         if(materiaprima.getIdPetroquimica() != null) {
             materiaprimaForm.setIdPetroquimica(materiaprima.getIdPetroquimica().toString());
         }        
+        if(materiaprima.getDensidad() != null) {
+            materiaprimaForm.setDensidad(materiaprima.getDensidad());
+        }        
+        if(materiaprima.getIndiceDeFluidez() != null) {
+            materiaprimaForm.setIndiceDeFluidez(materiaprima.getIndiceDeFluidez());
+        }        
         if(materiaprima.getObservaciones() != null) {
             materiaprimaForm.setObservaciones(materiaprima.getObservaciones());
         }
@@ -329,6 +345,12 @@ public class MateriaPrimaController {
             }
             if(materiaprima.getStock() != null) {
                 materiaprimaDto.setStock(materiaprima.getStock().toString());
+            } 
+            if(materiaprima.getDensidad() != null) {
+                materiaprimaDto.setDensidad(materiaprima.getDensidad());
+            } 
+            if(materiaprima.getIndiceDeFluidez() != null) {
+                materiaprimaDto.setIndiceDeFluidez(materiaprima.getIndiceDeFluidez());
             } 
             
             materiasprimaDtos.add(materiaprimaDto);
