@@ -193,11 +193,18 @@
 <script>
     $(document).ready(function () {
 
-        $('#materiasprimaTable').DataTable({
+
+        var table = $('#materiasprimaTable').DataTable({
             language: {
                 "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
             }
         });
+       
+        var action = $( "#action" ).val();
+        
+        if(action == 'edit') {
+            $('#materiasprimaTable').hide();
+        }
 
         var pk = $('#pk').val();
         if (pk != null && pk != '-1') {
@@ -253,8 +260,6 @@
 
     function callController() {
                 
-        var action = $( "#action" ).val();
-
         if(action == 'remove') {
             if(confirm('Desea eliminarlo')) {
                 var form = document.getElementById("myForm");
