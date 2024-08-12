@@ -73,11 +73,11 @@
                                         <div class="form-row row">
                                         <div class="row col-xs-9 col-sm-3 col-xl-4">
                                             <label for="inputDescripcion">Densidad</label> 
-                                            <form:input path="densidad" class="form-control" placeholder="" required="required" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')"/>
+                                            <form:input path="densidad" class="form-control" placeholder="" />
                                         </div>                                                    
                                         <div class="row col-xs-9 col-sm-3 col-xl-4">
                                             <label for="inputDescripcion">Indice de Fluidez</label> 
-                                            <form:input path="indiceDeFluidez" class="form-control" placeholder="" required="required" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')"/>
+                                            <form:input path="indiceDeFluidez" class="form-control" placeholder="" />
                                         </div>                                                    
                                             
                                         </div>
