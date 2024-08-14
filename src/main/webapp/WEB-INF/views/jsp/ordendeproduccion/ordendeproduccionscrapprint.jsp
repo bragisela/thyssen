@@ -55,9 +55,8 @@
                 </div>
                 <div class="row col-xs-6 col-sm-6 col-xl-6" style="text-align: center;">
                     <h1 style="font-size: 80px"><b>${etiquetaArticulo}</b></h1>
-                    <h1 style="font-size: 60px">Art. ${codigoarticulo} ${articulo}</h1>                    
-                    <h2 style="font-size: 40px">Lote Nro.: L${ordenDeProduccion}</h2>
-                    <h2 style="font-size: 40px">Scrap: ${codigoScrap}</h2>
+                    <h1 style="font-size: 50px">Art. ${codigoarticulo} ${articulo}</h1>
+                    <h2 style="font-size: 40px">Lote Nro.: L${ordenDeProduccion}&nbsp; | Scrap: ${codigoScrap}</h2>
                 </div>                
             </div>    
             <div class="row">
