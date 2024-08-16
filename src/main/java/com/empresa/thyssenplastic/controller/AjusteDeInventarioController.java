@@ -61,7 +61,7 @@ public class AjusteDeInventarioController {
         ajusteDeInventarioForm.setPk("-1");
         ajusteDeInventarioForm.setAction("add");
         model.addAttribute("ajusteDeInventarioForm", ajusteDeInventarioForm);  
-        model.addAttribute("titleAjusteDeInventario", "Nuevo AjusteDeInventario");  
+        model.addAttribute("titleAjusteDeInventario", "Nuevo Ajuste De Inventario");  
         model.addAttribute("buttonLabel", "Guardar");
         
         AjusteDeInventarioService ajusteDeInventarioService = new AjusteDeInventarioServiceImpl();   
