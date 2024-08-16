@@ -32,7 +32,7 @@
                                             <label for="inputRubro">Tipo</label>
                                             <form:select  path="tipo" id="tipo" class="form-control dato" required="required" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')" onchange="hideDisplayDivs()" onChange="verificarDatos()">                                                                                                                                                
                                                 <form:option value="chofer">Chofer</form:option>                                                                                                
-                                                <form:option value="denominacion">Denominación</form:option>                                                
+                                                <form:option value="denominacion">Denominación genérica</form:option>                                                
                                                 <form:option value="maquinaMantenimiento">Máquina Mantenimiento</form:option>                                                                                                
                                                 <form:option value="tipodomicilio">Tipo Domicilio</form:option>                                                
                                                 <form:option value="tipoMaterialesArticulo">Tipo Materiales Artículo</form:option>                                                
