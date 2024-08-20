@@ -80,33 +80,33 @@
                                         </div>
                                             
                                         <div class="form-row row">
-                                            <div class="row col-xs-9 col-sm-3 col-xl-4">
+                                            <div class="row col-xs-9 col-sm-3 col-xl-4" id="existentePesoPanel" style="display: none">
                                                 <label for="inputExistentePeso">Existente (Peso - kg)</label>
                                                 <form:input type="text" path="existentePeso" class="form-control" placeholder="" id="existentePeso" required="required" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')" disabled="true"/>                                                                                                
                                             </div>
-                                            <div class="row col-xs-9 col-sm-3 col-xl-4">
+                                            <div class="row col-xs-9 col-sm-3 col-xl-4" id="existenteCantidadPanel" style="display: none">
                                                 <label for="inputExistenteCantidad">Existente (Cantidad - unidades)</label>
                                                 <form:input type="text" path="existenteCantidad" class="form-control" placeholder="" id="existenteCantidad" required="required" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')" disabled="true"/>                                                
                                             </div>                                            
                                         </div>
 
                                         <div class="form-row row">
-                                            <div class="row col-xs-9 col-sm-3 col-xl-4">
+                                            <div class="row col-xs-9 col-sm-3 col-xl-4" id="ajustePesoPanel" style="display: none">
                                                 <label for="inputAjustePeso">Ajuste (Peso - kg)</label>
                                                 <form:input type="number" step="any" path="ajustePeso" class="form-control" placeholder="" required="required" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')" onChange="calcularResultadoPeso()"/>                                                
                                             </div>
-                                            <div class="row col-xs-9 col-sm-3 col-xl-4">
+                                            <div class="row col-xs-9 col-sm-3 col-xl-4" id="ajusteCantidadPanel" style="display: none">
                                                 <label for="inputAjusteCantidad">Ajuste (Cantidad - unidades)</label>
                                                 <form:input type="number" step="any" path="ajusteCantidad" class="form-control" placeholder="" required="required" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')" onChange="calcularResultadoCantidad()"/>                                                
                                             </div>                                            
                                         </div>
 
                                         <div class="form-row row">
-                                            <div class="row col-xs-9 col-sm-3 col-xl-4">
+                                            <div class="row col-xs-9 col-sm-3 col-xl-4" id="resultadoPesoPanel" style="display: none">
                                                 <label for="inputResultadoPeso">Resultado (Peso - kg)</label>
                                                 <form:input type="text" path="resultadoPeso" class="form-control" placeholder="" id="resultadoPeso" required="required" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')" disabled="true"/>                                                
                                             </div>
-                                            <div class="row col-xs-9 col-sm-3 col-xl-4">
+                                            <div class="row col-xs-9 col-sm-3 col-xl-4" id="resultadoCantidadPanel" style="display: none">
                                                 <label for="inputResultadoCantidad">Resultado (Cantidad - unidades)</label>
                                                 <form:input type="text" path="resultadoCantidad" class="form-control" placeholder="" id="resultadoCantidad" required="required" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')" disabled="true"/>                                                
                                             </div>                                            
@@ -220,7 +220,8 @@
         $('#ajustesdeinventarioTable').DataTable({
             language: {
                 "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-            }            
+            },
+            order: [[0, 'desc']]
         });
         
         var tipo = $("#tipo").val();
@@ -228,16 +229,47 @@
            document.getElementById("articuloPanel").style.display="block"; 
            document.getElementById("insumoPanel").style.display="none"; 
            document.getElementById("materiaPrimaPanel").style.display="none"; 
+           document.getElementById("existenteCantidad").style.display="block";
+           document.getElementById("existentePeso").style.display="none";
+           document.getElementById("ajustePesoPanel").style.display="none";
+           document.getElementById("ajusteCantidadPanel").style.display="block";
+           document.getElementById("resultadoPesoPanel").style.display="none";
+           document.getElementById("resultadoCantidadPanel").style.display="block";
+           document.getElementById("ajusteCantidad").setAttribute('required', 'required');
+           document.getElementById("ajustePeso").removeAttribute('required');
+           document.getElementById("existenteCantidad").setAttribute('required', 'required');
+           document.getElementById("existentePeso").removeAttribute('required');
+
         }
         if(tipo == 'insumos') {
            document.getElementById("articuloPanel").style.display="none"; 
            document.getElementById("insumoPanel").style.display="block"; 
            document.getElementById("materiaPrimaPanel").style.display="none"; 
+           document.getElementById("existenteCantidadPanel").style.display="block";
+           document.getElementById("existentePesoPanel").style.display="none";
+           document.getElementById("ajustePesoPanel").style.display="none";
+           document.getElementById("ajusteCantidadPanel").style.display="block";
+           document.getElementById("resultadoPesoPanel").style.display="none";
+           document.getElementById("resultadoCantidadPanel").style.display="block";
+           document.getElementById("ajusteCantidad").setAttribute('required', 'required');
+           document.getElementById("ajustePeso").removeAttribute('required');
+           document.getElementById("existenteCantidad").setAttribute('required', 'required');
+           document.getElementById("existentePeso").removeAttribute('required');
+
         }        
         if(tipo == 'materiaPrima') {
            document.getElementById("articuloPanel").style.display="none"; 
            document.getElementById("insumoPanel").style.display="none"; 
-           document.getElementById("materiaPrimaPanel").style.display="block"; 
+           document.getElementById("materiaPrimaPanel").style.display="block";
+           document.getElementById("existentePesoPanel").style.display="block";
+           document.getElementById("ajustePesoPanel").style.display="block";
+           document.getElementById("ajusteCantidadPanel").style.display="none";
+           document.getElementById("resultadoPesoPanel").style.display="block";
+           document.getElementById("resultadoCantidadPanel").style.display="none";
+           document.getElementById("ajusteCantidad").removeAttribute('required');
+           document.getElementById("ajustePeso").setAttribute('required', 'required');
+           document.getElementById("existenteCantidad").removeAttribute('required');
+           document.getElementById("existentePeso").setAttribute('required', 'required');
         }        
         
     });
@@ -248,16 +280,43 @@
            document.getElementById("articuloPanel").style.display="block"; 
            document.getElementById("insumoPanel").style.display="none"; 
            document.getElementById("materiaPrimaPanel").style.display="none"; 
+           document.getElementById("existenteCantidadPanel").style.display="block";
+           document.getElementById("existentePesoPanel").style.display="none";
+           document.getElementById("ajustePesoPanel").style.display="none";
+           document.getElementById("ajusteCantidadPanel").style.display="block";
+           document.getElementById("resultadoPesoPanel").style.display="none";
+           document.getElementById("resultadoCantidadPanel").style.display="block";
+           document.getElementById("ajusteCantidad").setAttribute('required', 'required');
+           document.getElementById("ajustePeso").removeAttribute('required');
+
         }
         if(tipo == 'insumos') {
            document.getElementById("articuloPanel").style.display="none"; 
            document.getElementById("insumoPanel").style.display="block"; 
            document.getElementById("materiaPrimaPanel").style.display="none"; 
+           document.getElementById("existenteCantidadPanel").style.display="block";
+           document.getElementById("existentePesoPanel").style.display="none";
+           document.getElementById("ajustePesoPanel").style.display="none";
+           document.getElementById("ajusteCantidadPanel").style.display="block";
+           document.getElementById("resultadoPesoPanel").style.display="none";
+           document.getElementById("resultadoCantidadPanel").style.display="block";
+           document.getElementById("ajusteCantidad").setAttribute('required', 'required');
+           document.getElementById("ajustePeso").removeAttribute('required');
+
+           
         }        
         if(tipo == 'materiaPrima') {
            document.getElementById("articuloPanel").style.display="none"; 
            document.getElementById("insumoPanel").style.display="none"; 
-           document.getElementById("materiaPrimaPanel").style.display="block"; 
+           document.getElementById("materiaPrimaPanel").style.display="block";
+           document.getElementById("existenteCantidadPanel").style.display="none";
+           document.getElementById("existentePesoPanel").style.display="block";
+           document.getElementById("ajustePesoPanel").style.display="block";
+           document.getElementById("ajusteCantidadPanel").style.display="none";
+           document.getElementById("resultadoPesoPanel").style.display="block";
+           document.getElementById("resultadoCantidadPanel").style.display="none";
+           document.getElementById("ajusteCantidad").removeAttribute('required');
+           document.getElementById("ajustePeso").setAttribute('required', 'required');
         }        
         $("#idMateriaPrima").val("-1");
         $("#idArticulo").val("-1");
