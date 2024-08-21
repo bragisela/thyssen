@@ -408,7 +408,7 @@
         
         var opcion = confirm("Desea Cerrar el Remito?");
         if (opcion == true) {
-            window.open("/thyssenplastic/remito/setStatusCloseRemito/"+remitopk, "Cerrar Remito");   
+            window.location.href = "/thyssenplastic/remito/setStatusCloseRemito/"+remitopk, "Cerrar Remito"; 
 	}         
     }
 
