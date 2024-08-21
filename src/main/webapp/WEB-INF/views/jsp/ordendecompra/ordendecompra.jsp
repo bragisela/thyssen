@@ -297,7 +297,7 @@
         
         var opcion = confirm("Desea Cerrar la Orden?");
         if (opcion == true) {
-            window.open("/thyssenplastic/ordenDeCompra/setStatusCloseOrdenCompra/"+ordendecomprapk, "Cerrar Orden");   
+            window.location.href = "/thyssenplastic/ordenDeCompra/setStatusCloseOrdenCompra/"+ordendecomprapk, "Cerrar Orden"; 
 	}         
     }
         
