@@ -309,9 +309,9 @@
                                                         <form:input type="text" path="cantidadBultos" class="form-control" disabled="true"/>
                                                     </div>                                                    
                                                     
-                                                    <div class="row col-xs-9 col-sm-3 col-xl-4">
+                                                    <div class="row col-xs-12 col-sm-6 col-xl-8">
                                                         <label for="inputFecha">Lista Códigos de Bultos</label>
-                                                        <form:input type="text" path="listaCodigoBultos" class="form-control" disabled="true"/>
+                                                        <form:textarea path="listaCodigoBultos" class="form-control" disabled="true"/>
                                                     </div>                                                    
 
                                                 </div>                                                    
