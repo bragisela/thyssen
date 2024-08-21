@@ -81,7 +81,7 @@
                                             
                                         <div class="form-row row">
                                             <div class="row col-xs-9 col-sm-3 col-xl-4">
-                                                <label for="inputExistentePeso">Existente (Peso - kg)</label>
+                                                <label for="inputExistentePeso">Existente (Peso - cantidad)</label>
                                                 <form:input type="text" path="existentePeso" class="form-control" placeholder="" id="existentePeso" required="required" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')" disabled="true"/>                                                                                                
                                             </div>
                                             <div class="row col-xs-9 col-sm-3 col-xl-4">
@@ -92,7 +92,7 @@
 
                                         <div class="form-row row">
                                             <div class="row col-xs-9 col-sm-3 col-xl-4">
-                                                <label for="inputAjustePeso">Ajuste (Peso - kg)</label>
+                                                <label for="inputAjustePeso">Ajuste (Peso - cantidad)</label>
                                                 <form:input type="number" step="any" path="ajustePeso" class="form-control" placeholder="" required="required" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')" onChange="calcularResultadoPeso()"/>                                                
                                             </div>
                                             <div class="row col-xs-9 col-sm-3 col-xl-4">
@@ -103,7 +103,7 @@
 
                                         <div class="form-row row">
                                             <div class="row col-xs-9 col-sm-3 col-xl-4">
-                                                <label for="inputResultadoPeso">Resultado (Peso - kg)</label>
+                                                <label for="inputResultadoPeso">Resultado (Peso - cantidad)</label>
                                                 <form:input type="text" path="resultadoPeso" class="form-control" placeholder="" id="resultadoPeso" required="required" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')" disabled="true"/>                                                
                                             </div>
                                             <div class="row col-xs-9 col-sm-3 col-xl-4">
