@@ -209,13 +209,18 @@ public class AjusteDeInventarioController {
             }                        
         }
         
-        if(ajusteDeInventarioForm.getResultadoCantidadHdn() == null /*|| ajusteDeInventarioForm.getResultadoCantidadHdn().isEmpty()*/) {
+        if(
+            ajusteDeInventarioForm.getResultadoCantidadHdn() == null && 
+                ( ajusteDeInventarioForm.getTipo().equalsIgnoreCase("articulos") || ajusteDeInventarioForm.getTipo().equalsIgnoreCase("inventario")) )
+        {
             modelAndView.setViewName("error");
             modelAndView.addObject("errorMessage", "Error: resultado cantidad incorrecta");
             return modelAndView;                                        
         }
 
-        if(ajusteDeInventarioForm.getResultadoPesoHdn() == null || ajusteDeInventarioForm.getResultadoPesoHdn().isEmpty()) {
+        
+        
+        if(ajusteDeInventarioForm.getTipo().equalsIgnoreCase("materiaPrima") && (ajusteDeInventarioForm.getResultadoPesoHdn() == null || ajusteDeInventarioForm.getResultadoPesoHdn().isEmpty())) {
             modelAndView.setViewName("error");
             modelAndView.addObject("errorMessage", "Error: resultado peso incorrecto");
             return modelAndView;                                        
@@ -325,20 +330,17 @@ public class AjusteDeInventarioController {
             
             if(ajusteDeInventarioForm.getTipo().equalsIgnoreCase("articulos")){
                 articulo.setStock(Integer.valueOf(ajusteDeInventarioForm.getResultadoCantidadHdn()));
-                articulo.setStockPeso(Double.valueOf(ajusteDeInventarioForm.getResultadoPesoHdn()));
+                
                 
                 articuloService.save(articulo);
             }
             if(ajusteDeInventarioForm.getTipo().equalsIgnoreCase("materiaPrima")){
-                materiaPrima.setStock(Integer.valueOf(ajusteDeInventarioForm.getResultadoPesoHdn()));
                 materiaPrima.setStockPeso(Double.valueOf(ajusteDeInventarioForm.getResultadoPesoHdn()));
                 
                 materiaPrimaService.save(materiaPrima);                
             }            
             if(ajusteDeInventarioForm.getTipo().equalsIgnoreCase("insumos")){
                 insumo.setStock(Integer.valueOf(ajusteDeInventarioForm.getResultadoCantidadHdn()));
-                insumo.setStockPeso(Double.valueOf(ajusteDeInventarioForm.getResultadoPesoHdn()));
-                
                 insumoService.save(insumo);                
             }
             
