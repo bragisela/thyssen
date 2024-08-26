@@ -29,7 +29,7 @@
                                                 <c:set var = "disabledAlta" value = "false"/>
                                                 <c:set var = "disabledRecepcion" value = "true"/>                                            
                                             </c:if>
-                                            <c:if test = "${operacion == 'view'}">
+                                            <c:if test = "${operacion == 'view' || operacion == 'remove'}">
                                                 <c:set var = "disabledAlta" value = "true"/>
                                                 <c:set var = "disabledRecepcion" value = "true"/>                                            
                                             </c:if>
