@@ -578,7 +578,8 @@ public class OrdenDeCompraItemController {
         model.addAttribute("operacion", operacion);        
         model.addAttribute("materiaPrimaList", materiasPrima);        
         model.addAttribute("insumoList", insumos);        
-        model.addAttribute("ordenDeCompraItems", ordenDeCompraItemsDtos);        
+        model.addAttribute("ordenDeCompraItems", ordenDeCompraItemsDtos); 
+        model.addAttribute("ordenDeCompraStatus", ordenDeCompra.getEstado());
         
         return "/ordendecompra/ordendecompraitem";        
     }
