@@ -24,7 +24,7 @@ public class OrdenDeCompraItemDto implements Serializable {
     private String cantidadRecepcionada;
     private String estaCompletado;
     private String referenciaAdministrativa;
-    
+    private String unidad;
 
     public String getPk() {
         return pk;
@@ -106,5 +106,12 @@ public class OrdenDeCompraItemDto implements Serializable {
         this.insumo = insumo;
     }
 
-    
+    public String getUnidad() {
+        return unidad;
+    }
+
+    public void setUnidad(String unidad) {
+        this.unidad = unidad;
+    }
+  
 }
