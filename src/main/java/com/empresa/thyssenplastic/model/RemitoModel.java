@@ -87,6 +87,17 @@ public class RemitoModel {
     
     @Column(name = "observaciones")
     private String observaciones;
+    
+    @Column(name = "isScrap")
+    private Boolean isScrap;
+
+    public Boolean getIsScrap() {
+        return isScrap;
+    }
+
+    public void setIsScrap(Boolean isScrap) {
+        this.isScrap = isScrap;
+    }
 
     public Integer getCantidadTotal() {
         return cantidadTotal;

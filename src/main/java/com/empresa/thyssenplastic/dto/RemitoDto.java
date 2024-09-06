@@ -27,7 +27,16 @@ public class RemitoDto implements Serializable {
     private Integer cantidadTotalBaja;
     private String localidad;
     private String provincia;
+    private Boolean isScrap;
 
+    public Boolean getIsScrap() {
+        return isScrap;
+    }
+
+    public void setIsScrap(Boolean isScrap) {
+        this.isScrap = isScrap;
+    }
+    
     public String getLocalidad() {
         return localidad;
     }

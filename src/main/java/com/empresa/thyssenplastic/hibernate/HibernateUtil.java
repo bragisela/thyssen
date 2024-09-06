@@ -43,6 +43,7 @@ import com.empresa.thyssenplastic.model.RemitoDetalleModel;
 import com.empresa.thyssenplastic.model.RemitoModel;
 import com.empresa.thyssenplastic.model.ActivacionManualModel;
 import com.empresa.thyssenplastic.model.EgresoDepositoModel;
+import com.empresa.thyssenplastic.model.RemitoDetalleScrapModel;
 import java.io.File;
 import java.io.FileInputStream;
 import java.nio.file.Path;
@@ -121,6 +122,7 @@ public class HibernateUtil {
                 configuration.addAnnotatedClass(GraficoBobinaDetalleModel.class);
                 configuration.addAnnotatedClass(RemitoModel.class);
                 configuration.addAnnotatedClass(RemitoDetalleModel.class);
+                configuration.addAnnotatedClass(RemitoDetalleScrapModel.class);
                 configuration.addAnnotatedClass(IngresarDepositoModel.class);
                 configuration.addAnnotatedClass(HojaDeRutaModel.class);
                 configuration.addAnnotatedClass(HojaDeRutaDetalleModel.class);

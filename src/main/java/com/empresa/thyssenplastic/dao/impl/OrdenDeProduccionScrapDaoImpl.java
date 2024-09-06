@@ -5,6 +5,7 @@
 package com.empresa.thyssenplastic.dao.impl;
 
 import com.empresa.thyssenplastic.dao.OrdenDeProduccionScrapDao;
+import com.empresa.thyssenplastic.dto.DepositoScrapDto;
 import com.empresa.thyssenplastic.hibernate.HibernateUtil;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionScrapModel;
 import java.util.ArrayList;
@@ -29,6 +30,76 @@ public class OrdenDeProduccionScrapDaoImpl extends GenericDaoImpl implements Ord
 
         return ordenDeProduccionScrap;
     }
+        
+    public List<OrdenDeProduccionScrapModel> getAllPaginated(int pageNumber, int pageSize) {
+        List<OrdenDeProduccionScrapModel> ordenDeProduccionScrap = new ArrayList<OrdenDeProduccionScrapModel>();
+        try {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            ordenDeProduccionScrap = session.createQuery("from OrdenDeProduccionScrapModel", OrdenDeProduccionScrapModel.class)
+                                            .setFirstResult((pageNumber - 1) * pageSize)
+                                            .setMaxResults(pageSize)
+                                            .list();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return ordenDeProduccionScrap;
+    }
+    
+//        @Override
+//        public List<Object[]> getResumenPorOrdenDeProduccion(int pageNumber, int pageSize) {
+//            List<Object[]> resumenList = new ArrayList<Object[]>();
+//            try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+//                String hql = "SELECT o.idOrdenDeProduccion, SUM(o.pesoTotal) " +
+//                             "FROM OrdenDeProduccionScrapModel o " +
+//                             "GROUP BY o.idOrdenDeProduccion";
+//
+//                // Ejecutar la consulta HQL
+//                resumenList = session.createQuery(hql)
+//                                     .setFirstResult((pageNumber - 1) * pageSize)
+//                                     .setMaxResults(pageSize)
+//                                     .getResultList();
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//            }
+//            return resumenList;
+//        }
+        
+     public List<DepositoScrapDto> getResumenPorOrdenDeProduccion(int pageNumber, int pageSize) {
+        List<DepositoScrapDto> resumenList = new ArrayList<DepositoScrapDto>();
+        Session session = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            String hql = "SELECT o.idOrdenDeProduccion, SUM(o.pesoTotal) " +
+                         "FROM OrdenDeProduccionScrapModel o " +
+                         "GROUP BY o.idOrdenDeProduccion";
+
+            List<Object[]> results = session.createQuery(hql)
+                                            .setFirstResult((pageNumber - 1) * pageSize)
+                                            .setMaxResults(pageSize)
+                                            .getResultList();
+
+            // Convertir Object[] a DTO
+            for (Object[] result : results) {
+                Integer idOrdenDeProduccion = (Integer) result[0];
+                Double pesoSuma = ((Number) result[1]).doubleValue(); // Convertir a Double
+                resumenList.add(new DepositoScrapDto(idOrdenDeProduccion, pesoSuma));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return resumenList;
+    }
+
+
+
+
+
+
 
     public OrdenDeProduccionScrapModel getByPk(Integer pk) {
         OrdenDeProduccionScrapModel ordenDeProduccionScrap = null;        

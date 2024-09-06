@@ -6,6 +6,7 @@ package com.empresa.thyssenplastic.service.impl;
 
 import com.empresa.thyssenplastic.dao.OrdenDeProduccionScrapDao;
 import com.empresa.thyssenplastic.dao.impl.OrdenDeProduccionScrapDaoImpl;
+import com.empresa.thyssenplastic.dto.DepositoScrapDto;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionScrapModel;
 import com.empresa.thyssenplastic.service.OrdenDeProduccionScrapService;
 import java.util.ArrayList;
@@ -42,6 +43,30 @@ public class OrdenDeProduccionScrapServiceImpl implements OrdenDeProduccionScrap
         try {
             OrdenDeProduccionScrapDao ordenDeProduccionScrapDao = new OrdenDeProduccionScrapDaoImpl();
             ordenDeProducciones = ordenDeProduccionScrapDao.getAll();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return ordenDeProducciones;
+    }
+    
+    public List<OrdenDeProduccionScrapModel> getAllPaginated(int pageNumber, int pageSize) {
+        List<OrdenDeProduccionScrapModel> ordenDeProducciones = new ArrayList<OrdenDeProduccionScrapModel>();
+        try {
+            OrdenDeProduccionScrapDao ordenDeProduccionScrapDao = new OrdenDeProduccionScrapDaoImpl();
+            ordenDeProducciones = ordenDeProduccionScrapDao.getAllPaginated(pageNumber,pageSize);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return ordenDeProducciones;
+    }
+    
+    public List<DepositoScrapDto> getResumenPorOrdenDeProduccion(int pageNumber, int pageSize) {
+        List<DepositoScrapDto> ordenDeProducciones = new ArrayList<DepositoScrapDto>();
+        try {
+            OrdenDeProduccionScrapDao ordenDeProduccionScrapDao = new OrdenDeProduccionScrapDaoImpl();
+            ordenDeProducciones = ordenDeProduccionScrapDao.getResumenPorOrdenDeProduccion(pageNumber,pageSize);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -197,6 +197,7 @@ public class RemitoController {
                 remitoDto.setTipoRemito(remito.getTipoRemito());
                 remitoDto.setCantidadTotal(remito.getCantidadTotal());
                 remitoDto.setCantidadTotalBaja(remito.getCantidadTotalBaja());
+                remitoDto.setIsScrap(remito.getIsScrap());
 
                 RemitoDetalleService remitoDetalleService = new RemitoDetalleServiceImpl();
                 List<RemitoDetalleModel> remitosDetalle = remitoDetalleService.getAllByRemito(remito.getId());
@@ -363,6 +364,11 @@ public class RemitoController {
             }  
         remitoModel.setCantidadTotal(0);
         remitoModel.setCantidadTotalBaja(0);
+        if(remitoForm.getIsScrap() != null) {
+                remitoModel.setIsScrap(remitoForm.getIsScrap());
+            } else {
+                remitoModel.setIsScrap(null);
+            }  
 
         
         if(remitoForm.getAction().equalsIgnoreCase("add") || remitoForm.getAction().equalsIgnoreCase("edit")) {
@@ -383,10 +389,12 @@ public class RemitoController {
                 return modelAndView;                                
             }
         }
-                        
-        //modelAndView.setViewName("redirect:/remito");
-        modelAndView.setViewName("redirect:/remitoDetalle/"+remitoModel.getId().toString());
-
+        
+        if (remitoForm.getIsScrap()) {
+            modelAndView.setViewName("redirect:/remitoDetalleScrap/"+remitoModel.getId().toString());
+        }else{
+            modelAndView.setViewName("redirect:/remitoDetalle/"+remitoModel.getId().toString());
+        }
         return modelAndView; 
     }
 

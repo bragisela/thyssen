@@ -22,7 +22,75 @@ public class ItemBean {
     private List<OrdenDeProduccionBultoDto> bultos;
     private OrdenDeProduccionBobinaDto bobina;
     private String idDeposito;
+    
+    
+    //Scrap
+    
+    private String origen;
+    private String tipoMaterial;
+    private String formato;
+    private String recuperable;
+    private String materialImpreso;
+    private String motivo;
+    private Double pesoTotal;
 
+    public String getMotivo() {
+        return motivo;
+    }
+
+    public void setMotivo(String motivo) {
+        this.motivo = motivo;
+    }
+    
+
+    public String getOrigen() {
+        return origen;
+    }
+
+    public void setOrigen(String origen) {
+        this.origen = origen;
+    }
+
+    public String getTipoMaterial() {
+        return tipoMaterial;
+    }
+
+    public void setTipoMaterial(String tipoMaterial) {
+        this.tipoMaterial = tipoMaterial;
+    }
+
+    public String getFormato() {
+        return formato;
+    }
+
+    public void setFormato(String formato) {
+        this.formato = formato;
+    }
+
+    public String getRecuperable() {
+        return recuperable;
+    }
+
+    public void setRecuperable(String recuperable) {
+        this.recuperable = recuperable;
+    }
+
+    public String getMaterialImpreso() {
+        return materialImpreso;
+    }
+
+    public void setMaterialImpreso(String materialImpreso) {
+        this.materialImpreso = materialImpreso;
+    }
+
+    public Double getPesoTotal() {
+        return pesoTotal;
+    }
+
+    public void setPesoTotal(Double pesoTotal) {
+        this.pesoTotal = pesoTotal;
+    }
+    
     public String getId() {
         return id;
     }

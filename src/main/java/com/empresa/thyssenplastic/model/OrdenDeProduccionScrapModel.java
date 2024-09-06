@@ -64,6 +64,18 @@ public class OrdenDeProduccionScrapModel {
     @Column(name = "idUsuarioAlta")
     private Integer idUsuarioAlta;
     
+    @Column(name = "cantidadUtilizada")
+    private Double cantidadUtilizada;
+
+    public Double getCantidadUtilizada() {
+        return cantidadUtilizada;
+    }
+
+    public void setCantidadUtilizada(Double cantidadUtilizada) {
+        this.cantidadUtilizada = cantidadUtilizada;
+    }
+    
+    
     public Integer getId() {
         return id;
     }
