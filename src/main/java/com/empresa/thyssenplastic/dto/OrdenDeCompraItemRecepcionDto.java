@@ -21,7 +21,11 @@ public class OrdenDeCompraItemRecepcionDto implements Serializable {
     private String referenciaAdministrativa;
     private String idUsuario;
     private String usuario;
-    
+    private String unidad;
+    private String tipo;
+    private String suministro;
+    private String item;
+
 
     public String getPk() {
         return pk;
@@ -79,6 +83,36 @@ public class OrdenDeCompraItemRecepcionDto implements Serializable {
         this.referenciaAdministrativa = referenciaAdministrativa;
     }
 
+    public String getUnidad() {
+        return unidad;
+    }
 
+    public void setUnidad(String unidad) {
+        this.unidad = unidad;
+    }
     
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getSuministro() {
+        return suministro;
+    }
+
+    public void setSuministro(String suministro) {
+        this.suministro = suministro;
+    }
+
+    public String getItem() {
+        return item;
+    }
+
+    public void setItem(String item) {
+        this.item = item;
+    }
+
 }

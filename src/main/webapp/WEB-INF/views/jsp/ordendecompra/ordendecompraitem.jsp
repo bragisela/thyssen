@@ -218,7 +218,9 @@
                                         <th>FECHA ALTA</th>
                                         <th>MATERIA PRIMA</th>
                                         <th>TIPO</th>
-                                        <th>STOCK</th>
+                                        <c:if test = "${rol != 'deposito'}">
+                                            <th>STOCK</th>
+                                        </c:if>  
                                         <th>CANTIDAD SOLICITADA</th>
                                         <th>CANTIDAD RECEPCIONADA</th>
                                         <th>REFERENCIA ADMINISTRATIVA</th>
@@ -242,9 +244,11 @@
                                             <td>
                                                 <c:out value="${ordendecompraitem.tipo}" />
                                             </td>                                                                                                                                                                                
-                                            <td>
-                                                <c:out value="${ordendecompraitem.stock}" />
-                                            </td>                                                                                                                                                                                                                            
+                                            <c:if test = "${rol != 'deposito'}">
+                                                <td>
+                                                    <c:out value="${ordendecompraitem.stock}" />
+                                                </td>                                                                        
+                                            </c:if>  
                                             <td>
                                                 <c:out value="${ordendecompraitem.cantidadSolicitada}" />
                                             </td>
