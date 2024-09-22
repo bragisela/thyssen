@@ -6,6 +6,7 @@ package com.empresa.thyssenplastic.dao;
 
 import com.empresa.thyssenplastic.model.RemitoDetalleScrapModel;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -19,8 +20,11 @@ public interface RemitoDetalleScrapDao extends GenericDao {
     
      List<RemitoDetalleScrapModel> getAllByIdOrdenDeProduccionScrap(Integer idOrdenDeProduccionScrap);
     
-    //List<RemitoDetalleScrapModel> getAllByRemito(Integer idRemito);
+    List<RemitoDetalleScrapModel> getAllByRemito(Integer idRemito);
     
+    RemitoDetalleScrapModel getByCodigoAndRemito(String codigo, Integer idRemito);
  
+    Double getSumaCantidadUtilizadaByCodigo(String codigo);
     
+    Map<String, Double> getMapSumaCantidadUtilizadaByCodigo(String codigo);
 }

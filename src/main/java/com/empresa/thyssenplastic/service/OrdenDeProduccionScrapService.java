@@ -30,6 +30,8 @@ public interface OrdenDeProduccionScrapService {
     
     List<DepositoScrapDto> getResumenPorOrdenDeProduccion(int pageNumber, int pageSize);
     
+    //List<OrdenDeProduccionScrapModel> getAllPaginatedWithCode(String codigo, int pageNumber, int pageSize);
+    
     /*
     List<OrdenDeProduccionScrapModel> getAllAvailableByOrdenDeProduccion(Integer idOrdenDeProduccion);
     

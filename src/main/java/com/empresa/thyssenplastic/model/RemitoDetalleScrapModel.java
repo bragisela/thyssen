@@ -31,6 +31,9 @@ public class RemitoDetalleScrapModel {
     @Column(name = "idOrdenDeProduccionScrap")
     private Integer idOrdenDeProduccionScrap;
     
+    @Column(name = "idOrdenDeProduccion")
+    private Integer idOrdenDeProduccion;
+    
     @Column(name = "fecha")
     private Date fecha;
 
@@ -42,7 +45,30 @@ public class RemitoDetalleScrapModel {
 
     @Column(name = "cantidadUtilizadaRemito")
     private Double cantidadUtilizadaRemito;
+    
+    @Column(name = "utilizadoAlCien")
+    private Boolean utilizadoAlCien;
+    
+     @Column(name = "dadoDeBaja")
+    private Boolean dadoDeBaja;
 
+    public Boolean getDadoDeBaja() {
+        return dadoDeBaja;
+    }
+
+    public void setDadoDeBaja(Boolean dadoDeBaja) {
+        this.dadoDeBaja = dadoDeBaja;
+    }
+     
+
+    public Boolean getUtilizadoAlCien() {
+        return utilizadoAlCien;
+    }
+
+    public void setUtilizadoAlCien(Boolean utilizadoAlCien) {
+        this.utilizadoAlCien = utilizadoAlCien;
+    }
+   
     public Integer getId() {
         return id;
     }
@@ -58,13 +84,21 @@ public class RemitoDetalleScrapModel {
     public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
-
-    public Integer getIdOrdenDeProduccion() {
+    
+     public Integer getIdOrdenDeProduccionScrap() {
         return idOrdenDeProduccionScrap;
     }
 
-    public void setIdOrdenDeProduccion(Integer idOrdenDeProduccionScrap) {
+    public void setIdOrdenDeProduccionScrap(Integer idOrdenDeProduccionScrap) {
         this.idOrdenDeProduccionScrap = idOrdenDeProduccionScrap;
+    }
+
+    public Integer getIdOrdenDeProduccion() {
+        return idOrdenDeProduccion;
+    }
+
+    public void setIdOrdenDeProduccion(Integer idOrdenDeProduccion) {
+        this.idOrdenDeProduccion = idOrdenDeProduccion;
     }
 
     public Date getFecha() {

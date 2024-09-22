@@ -23,9 +23,11 @@ import com.empresa.thyssenplastic.model.OrdenDeProduccionBobinaModel;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionBultoModel;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionModel;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionPalletModel;
+import com.empresa.thyssenplastic.model.OrdenDeProduccionScrapModel;
 import com.empresa.thyssenplastic.model.ProveedorContactoModel;
 import com.empresa.thyssenplastic.model.ProveedorModel;
 import com.empresa.thyssenplastic.model.RemitoDetalleModel;
+import com.empresa.thyssenplastic.model.RemitoDetalleScrapModel;
 import com.empresa.thyssenplastic.model.RemitoModel;
 import com.empresa.thyssenplastic.model.TipoModel;
 import com.empresa.thyssenplastic.model.UserModel;
@@ -39,9 +41,11 @@ import com.empresa.thyssenplastic.service.LocalidadService;
 import com.empresa.thyssenplastic.service.OrdenDeProduccionBobinaService;
 import com.empresa.thyssenplastic.service.OrdenDeProduccionBultoService;
 import com.empresa.thyssenplastic.service.OrdenDeProduccionPalletService;
+import com.empresa.thyssenplastic.service.OrdenDeProduccionScrapService;
 import com.empresa.thyssenplastic.service.OrdenDeProduccionService;
 import com.empresa.thyssenplastic.service.ProveedorContactoService;
 import com.empresa.thyssenplastic.service.ProveedorService;
+import com.empresa.thyssenplastic.service.RemitoDetalleScrapService;
 import com.empresa.thyssenplastic.service.RemitoDetalleService;
 import com.empresa.thyssenplastic.service.RemitoService;
 import com.empresa.thyssenplastic.service.TipoService;
@@ -56,9 +60,11 @@ import com.empresa.thyssenplastic.service.impl.LocalidadServiceImpl;
 import com.empresa.thyssenplastic.service.impl.OrdenDeProduccionBobinaServiceImpl;
 import com.empresa.thyssenplastic.service.impl.OrdenDeProduccionBultoServiceImpl;
 import com.empresa.thyssenplastic.service.impl.OrdenDeProduccionPalletServiceImpl;
+import com.empresa.thyssenplastic.service.impl.OrdenDeProduccionScrapServiceImpl;
 import com.empresa.thyssenplastic.service.impl.OrdenDeProduccionServiceImpl;
 import com.empresa.thyssenplastic.service.impl.ProveedorContactoServiceImpl;
 import com.empresa.thyssenplastic.service.impl.ProveedorServiceImpl;
+import com.empresa.thyssenplastic.service.impl.RemitoDetalleScrapServiceImpl;
 import com.empresa.thyssenplastic.service.impl.RemitoDetalleServiceImpl;
 import com.empresa.thyssenplastic.utils.Utils;
 import java.util.ArrayList;
@@ -201,10 +207,20 @@ public class RemitoController {
 
                 RemitoDetalleService remitoDetalleService = new RemitoDetalleServiceImpl();
                 List<RemitoDetalleModel> remitosDetalle = remitoDetalleService.getAllByRemito(remito.getId());
+                
                 if(remitosDetalle == null || remitosDetalle.isEmpty()) {
                     remitoDto.setCanDelete("true");
                 } else {
                     remitoDto.setCanDelete("false");
+                }
+                
+                RemitoDetalleScrapService remitoDetalleScrapService = new RemitoDetalleScrapServiceImpl();
+                List<RemitoDetalleScrapModel> remitosScrapDetalles = remitoDetalleScrapService.getAllByRemito(remito.getId());
+                
+                if(remitosScrapDetalles == null || remitosScrapDetalles.isEmpty()) {
+                    remitoDto.setCanDeleteScrap("true");
+                } else {
+                    remitoDto.setCanDeleteScrap("false");
                 }
                 remitoDto.setLocalidad("hola");
                 remitoDto.setProvincia("hola");
@@ -1416,35 +1432,47 @@ public class RemitoController {
             return "/error";
         }
         
-//        if(!remito.getEstado().equalsIgnoreCase("Completado")) {            
-//            model.addAttribute("errorMessage", "Error: no es posible cerrar el remito con estado "+remito.getEstado());
-//            return "/error";
-//        }            
+        RemitoDetalleScrapService remitoDetalleScrapService = new RemitoDetalleScrapServiceImpl();
+        OrdenDeProduccionScrapService ordenDeProduccionScrapService = new OrdenDeProduccionScrapServiceImpl();
+        
+        if (remito.getIsScrap()) {
+            List<RemitoDetalleScrapModel> itemsRemitosScrap = remitoDetalleScrapService.getAllByRemito(remito.getId());
+           
+            for (RemitoDetalleScrapModel item : itemsRemitosScrap) {
                 
-        RemitoDetalleService remitoDetalleService = new RemitoDetalleServiceImpl();        
-        List<RemitoDetalleModel> items = remitoDetalleService.getAllByRemito(remito.getId());
+              OrdenDeProduccionScrapModel ordenDeProduccionScrapModel = ordenDeProduccionScrapService.getByCode(item.getCodigo());
+                
+              RemitoDetalleScrapModel remitoDetalleScrapModel = remitoDetalleScrapService.getByPk(item.getId());
+                if(remitoDetalleScrapModel != null) {
+                    remitoDetalleScrapModel.setDadoDeBaja(true);
+                    
+                    remitoDetalleScrapService.save(remitoDetalleScrapModel);
+                }
+                
+                if(ordenDeProduccionScrapModel != null) {
+                    ordenDeProduccionScrapModel.setCantidadUtilizada(ordenDeProduccionScrapModel.getCantidadUtilizada() + item.getCantidadUtilizadaRemito());
+                    
+                    ordenDeProduccionScrapService.save(ordenDeProduccionScrapModel);
+                }
+                System.out.println("ID: " + item.getId());
+                System.out.println("Código: " + item.getCodigo());
+            }
         
-//        if(items == null || items.isEmpty()) {            
-//            model.addAttribute("errorMessage", "Error: no es posible cerrar un remito cuando no tiene items");
-//            return "/error";              
-//        }
+        } else {
+                
+            Boolean allItemsRecebidos = true;
+  
+            if(!allItemsRecebidos) {
+                model.addAttribute("errorMessage", "Error: no es posible cerrar un remito cuando tiene items sin recibir en el depósito");
+                return "/error";                          
+            }
         
-        Boolean allItemsRecebidos = true;
-//        if(items != null && !items.isEmpty()) {            
-//            for(RemitoDetalleModel item :items) {
-//                if(!item.getIngresoDeposito()) {
-//                    allItemsRecebidos = false;
-//                }
-//            }
-//        }
-        if(!allItemsRecebidos) {
-            model.addAttribute("errorMessage", "Error: no es posible cerrar un remito cuando tiene items sin recibir en el depósito");
-            return "/error";                          
         }
         
         remito.setEstado("Cerrado");
         remito.setFechaCierre(new Date());
         remito.setIdUsuarioCierre(user.getId());
+        
         remitoService.save(remito);
         
         return "redirect:/remito";                         
@@ -1690,5 +1718,138 @@ public class RemitoController {
         
         
         return "/remito/remitoprint"; 
+    }        
+    
+    @RequestMapping(value = "/remito2/print/{remitopk}", method = RequestMethod.GET)
+    public String printRemitoScrap(@PathVariable String remitopk, HttpServletRequest req, ModelMap model) throws Exception {
+        
+
+        RemitoDetalleScrapService remitoDetalleSrapService = new RemitoDetalleScrapServiceImpl();   
+
+        UserService userService = new UserServiceImpl();   
+        Integer userId = Integer.valueOf(Utils.getUserLoggedId(req));
+        UserModel user = userService.getUserById(userId);
+
+        RemitoService remitoService = new RemitoServiceImpl();   
+        RemitoModel remito = remitoService.getByPk(Integer.valueOf(remitopk));
+        if(remito == null) {
+            model.addAttribute("errorMessage", "Error: Remito inválido. No ha sido encontrado.");         
+            return "/error";    
+        }
+
+
+        
+        ClienteService clienteService = new ClienteServiceImpl();   
+        ClienteDomicilioService clienteDomicilioService = new ClienteDomicilioServiceImpl();   
+        DomicilioService domicilioService = new DomicilioServiceImpl();   
+        LocalidadService localidadService = new LocalidadServiceImpl();   
+        TipoService tipoService = new TipoServiceImpl();   
+        
+                
+        RemitoDetalleForm remitoDetalleForm = new RemitoDetalleForm();
+        remitoDetalleForm.setIdRemito(remito.getId().toString());
+        remitoDetalleForm.setCodigoRemito(remito.getId().toString());
+        remitoDetalleForm.setFechaRemito(remito.getFechaRemito().toString().replace("00:00:00.0", ""));
+        remitoDetalleForm.setTipoRemito(remito.getTipoRemito());
+        remitoDetalleForm.setEstadoRemito(remito.getEstado()); 
+        remitoDetalleForm.setObservaciones(remito.getObservaciones());
+        if(remito.getReferenciaAdministrativa() != null) {
+            remitoDetalleForm.setReferenciaAdministrativa(remito.getReferenciaAdministrativa());
+        }
+        ClienteModel cliente = null;
+        if(remito.getIdCliente() != null) {
+            cliente = clienteService.getByPk(remito.getIdCliente());
+            if(cliente != null) {
+                remitoDetalleForm.setCliente("(" + cliente.getId() + ") " + cliente.getRazonSocial());
+            }
+        }
+        if(remito.getIdChofer() != null) {
+            ContactoService contactoService = new ContactoServiceImpl();
+            ContactoModel c = contactoService.getByPk(remito.getIdChofer());
+           remitoDetalleForm.setIdChofer(c.getNombre());
+        }
+        if(remito.getIdDomicilio() != null) {
+            DomicilioModel domicilioModel = domicilioService.getByPk(remito.getIdDomicilio());
+            if(domicilioModel != null) {
+                 TipoService tipoServicee = new TipoServiceImpl();
+                 TipoModel localidaad = null;
+                 TipoModel provincia = null;
+                
+                if (domicilioModel.getIdLocalidad() != null){
+                    localidaad = tipoServicee.getByPk(domicilioModel.getIdLocalidad());
+                    remitoDetalleForm.setLocalidad(localidaad.getValor());
+                }
+                
+                if (domicilioModel.getIdProvincia() != null){
+                    provincia = tipoServicee.getByPk(domicilioModel.getIdProvincia());
+                    remitoDetalleForm.setProvincia(provincia.getValor());
+                }
+                
+                remitoDetalleForm.setDomicilio(domicilioModel.getUbicacion());
+                remitoDetalleForm.setNombreContacto(domicilioModel.getNombreContacto());
+                remitoDetalleForm.setTelefonoContacto(domicilioModel.getTelefonoContacto());
+                remitoDetalleForm.setPuntoGps(domicilioModel.getPuntoGps());
+            }
+            
+        }        
+        if(remito.getIdTransporte() != null) {
+            ProveedorService proveedorService = new ProveedorServiceImpl();
+            ProveedorModel proveedor = proveedorService.getByPk(remito.getIdTransporte());
+            remitoDetalleForm.setTransporte(proveedor.getRazonSocial());
+        }
+        
+        model.addAttribute("remitoDetalleForm", remitoDetalleForm);  
+                
+
+        ArticuloService articuloService = new ArticuloServiceImpl();
+        OrdenDeProduccionService ordenDeProduccionService = new OrdenDeProduccionServiceImpl();
+        
+                 
+        List<RemitoDetalleScrapModel> remitoDetalles = remitoDetalleSrapService.getAllByRemito(remito.getId());
+        
+        List<RemitoDetalleDto> remitoDetallesDtos = new ArrayList<RemitoDetalleDto>();
+        for(RemitoDetalleScrapModel remitoDetalleScrapModel: remitoDetalles) {
+            RemitoDetalleDto remitoDetalleDto = new RemitoDetalleDto();
+            remitoDetalleDto.setPk(remitoDetalleScrapModel.getCodigo());
+            remitoDetalleDto.setFechaAlta(remitoDetalleScrapModel.getFecha().toString().replace(" 00:00:00.0", ""));
+            
+            remitoDetalleDto.setLote(remitoDetalleScrapModel.getIdOrdenDeProduccion().toString());
+            
+            remitoDetalleDto.setCantidad(remitoDetalleScrapModel.getCantidadUtilizadaRemito().toString());
+            
+            remitoDetalleDto.setDeposito("Scrap");
+        
+            OrdenDeProduccionModel ordenDeProduccion = ordenDeProduccionService.getByPk(remitoDetalleScrapModel.getIdOrdenDeProduccion());
+            ArticuloModel articulo = null;
+            if(ordenDeProduccion != null){
+               articulo = articuloService.getByPk(ordenDeProduccion.getIdArticulo());
+            }
+            if(articulo != null) {
+                remitoDetalleDto.setArticulo(articulo.getDenominacion());
+            }
+
+
+            
+            remitoDetallesDtos.add(remitoDetalleDto);
+            
+            
+        }
+        
+        Date fechaActual = new Date();
+        String nombreRemito = "REMITO DE ";
+        if(remito.getTipoRemito().equalsIgnoreCase("Salida")) {
+            nombreRemito = nombreRemito + "SALIDA Nro. ";
+        }
+        if(remito.getTipoRemito().equalsIgnoreCase("Entrada")) {
+            nombreRemito = nombreRemito + "ENTRADA Nro. ";
+        }
+        nombreRemito = nombreRemito + remito.getId();
+                
+        model.addAttribute("nombreRemito", nombreRemito);        
+        model.addAttribute("remitoDetalles", remitoDetallesDtos);                   
+        model.addAttribute("fechaActual", fechaActual);
+        
+        
+        return "/remito/remitoscrapprint"; 
     }        
 }

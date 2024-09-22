@@ -83,6 +83,7 @@
   
      
     <section class="content">
+        
         <div class="contenedor">
             <h1>Deposito Scrap</h1>
 
@@ -130,7 +131,7 @@
         
     </section>                                                
 </div>              
-
+           
 <!-- ./wrapper -->
 
 <%@include file = "/WEB-INF/views/jsp/includes/footer.jsp" %>

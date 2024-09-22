@@ -13,7 +13,9 @@ import com.empresa.thyssenplastic.model.RemitoDetalleScrapModel;
 import com.empresa.thyssenplastic.service.RemitoDetalleScrapService;
 import com.empresa.thyssenplastic.service.RemitoDetalleService;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -76,18 +78,55 @@ public class RemitoDetalleScrapServiceImpl implements RemitoDetalleScrapService 
 
         return remitoDetalles;
     }
+    
+    public List<RemitoDetalleScrapModel> getAllByRemito(Integer idRemito) {
+        List<RemitoDetalleScrapModel> remitoDetalles = new ArrayList<RemitoDetalleScrapModel>();
+        try {
+            RemitoDetalleScrapDao remitoDetalleScrapDao = new RemitoDetalleScrapDaoImpl();
+            remitoDetalles = remitoDetalleScrapDao.getAllByRemito(idRemito);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
-//    public List<RemitoDetalleModel> getAllByRemito(Integer idRemito) {
-//        List<RemitoDetalleModel> remitoDetalles = new ArrayList<RemitoDetalleModel>();
-//        try {
-//            RemitoDetalleDao remitoDetalleDao = new RemitoDetalleDaoImpl();
-//            remitoDetalles = remitoDetalleDao.getAllByRemito(idRemito);
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//
-//        return remitoDetalles;
-//    }
-   
-        
+        return remitoDetalles;
+    }        
+    
+    public RemitoDetalleScrapModel getByCodigoAndRemito(String codigo, Integer idRemito) {
+        RemitoDetalleScrapModel remitoDetalles = null;
+        try {
+            RemitoDetalleScrapDao remitoDetalleScrapDao = new RemitoDetalleScrapDaoImpl();
+            remitoDetalles = remitoDetalleScrapDao.getByCodigoAndRemito(codigo, idRemito);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return remitoDetalles;
+    }
+    
+    public Double getSumaCantidadUtilizadaByCodigo(String codigo) {
+        Double sumaCantidadUtilizada = 0.0;
+        try {
+            RemitoDetalleScrapDao remitoDetalleScrapDao = new RemitoDetalleScrapDaoImpl();
+            sumaCantidadUtilizada = remitoDetalleScrapDao.getSumaCantidadUtilizadaByCodigo(codigo);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return sumaCantidadUtilizada;
+    }
+    
+    public Map<String, Double> getMapSumaCantidadUtilizadaByCodigo(String codigo) {
+        Map<String, Double> resultado = new HashMap<String, Double>();
+        resultado.put("noDadoDeBaja", 0.0);
+        resultado.put("dadoDeBaja", 0.0);
+        try {
+            RemitoDetalleScrapDao remitoDetalleScrapDao = new RemitoDetalleScrapDaoImpl();
+            resultado = remitoDetalleScrapDao.getMapSumaCantidadUtilizadaByCodigo(codigo);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return resultado;
+    }
+    
 }

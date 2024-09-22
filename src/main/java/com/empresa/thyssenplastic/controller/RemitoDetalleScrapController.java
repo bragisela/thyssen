@@ -8,7 +8,6 @@ package com.empresa.thyssenplastic.controller;
 import com.empresa.thyssenplastic.controller.beans.ItemBean;
 import com.empresa.thyssenplastic.controller.beans.OrdenDeCompraBean;
 import com.empresa.thyssenplastic.controller.beans.StockOrdenDeCompraBean;
-import com.empresa.thyssenplastic.controller.form.EgresoDepositoForm;
 import com.empresa.thyssenplastic.controller.form.EgresoScrapForm;
 import com.empresa.thyssenplastic.controller.form.RemitoDetalleForm;
 import com.empresa.thyssenplastic.controller.form.UserForm;
@@ -17,6 +16,7 @@ import com.empresa.thyssenplastic.dto.OrdenDepositoDto;
 import com.empresa.thyssenplastic.dto.RemitoDetalleDto;
 import com.empresa.thyssenplastic.model.ArticuloModel;
 import com.empresa.thyssenplastic.model.ClienteDomicilioModel;
+import com.empresa.thyssenplastic.dto.RemitoDetalleScrapDto;
 import com.empresa.thyssenplastic.service.impl.ActivacionManualServiceImpl;
 import com.empresa.thyssenplastic.model.ActivacionManualModel;
 import com.empresa.thyssenplastic.service.ActivacionManualService;
@@ -31,6 +31,7 @@ import com.empresa.thyssenplastic.model.OrdenDeProduccionPalletModel;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionScrapModel;
 import com.empresa.thyssenplastic.model.ProveedorModel;
 import com.empresa.thyssenplastic.model.RemitoDetalleModel;
+import com.empresa.thyssenplastic.model.RemitoDetalleScrapModel;
 import com.empresa.thyssenplastic.model.RemitoModel;
 import com.empresa.thyssenplastic.model.TipoModel;
 import com.empresa.thyssenplastic.model.UserModel;
@@ -46,6 +47,7 @@ import com.empresa.thyssenplastic.service.OrdenDeProduccionPalletService;
 import com.empresa.thyssenplastic.service.OrdenDeProduccionScrapService;
 import com.empresa.thyssenplastic.service.OrdenDeProduccionService;
 import com.empresa.thyssenplastic.service.ProveedorService;
+import com.empresa.thyssenplastic.service.RemitoDetalleScrapService;
 import com.empresa.thyssenplastic.service.RemitoDetalleService;
 import com.empresa.thyssenplastic.service.RemitoService;
 import com.empresa.thyssenplastic.service.TipoService;
@@ -62,6 +64,7 @@ import com.empresa.thyssenplastic.service.impl.OrdenDeProduccionPalletServiceImp
 import com.empresa.thyssenplastic.service.impl.OrdenDeProduccionScrapServiceImpl;
 import com.empresa.thyssenplastic.service.impl.OrdenDeProduccionServiceImpl;
 import com.empresa.thyssenplastic.service.impl.ProveedorServiceImpl;
+import com.empresa.thyssenplastic.service.impl.RemitoDetalleScrapServiceImpl;
 import com.empresa.thyssenplastic.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,7 +104,7 @@ public class RemitoDetalleScrapController {
 
     @RequestMapping(value = "/remitoDetalleScrap/{idRemito}", method = RequestMethod.GET)
     public String getHomeRemitoDetalleScrap(@PathVariable String idRemito, @RequestParam(value = "page", defaultValue = "1") int pageNumber,
-    @RequestParam(value = "size", defaultValue = "2") int pageSize, HttpServletRequest req, ModelMap model) {
+    @RequestParam(value = "size", defaultValue = "5") int pageSize, HttpServletRequest req, ModelMap model) {
       
         UserService userService = new UserServiceImpl();   
         Integer userId = Integer.valueOf(Utils.getUserLoggedId(req));
@@ -131,22 +134,13 @@ public class RemitoDetalleScrapController {
         }
         
         ClienteService clienteService = new ClienteServiceImpl();   
-        ClienteDomicilioService clienteDomicilioService = new ClienteDomicilioServiceImpl();   
-        DomicilioService domicilioService = new DomicilioServiceImpl();   
-        LocalidadService localidadService = new LocalidadServiceImpl();   
-        TipoService tipoService = new TipoServiceImpl();   
         
+        DomicilioService domicilioService = new DomicilioServiceImpl();   
+       
         String rol = "";    
         String operacion = "";        
         String displayActionButton = "block";
-        
-        EgresoDepositoForm egresoDepositoForm = new EgresoDepositoForm();
-        egresoDepositoForm.setPk("-1");
-        egresoDepositoForm.setAction("add");
-        egresoDepositoForm.setIdBobina("-1");
-        egresoDepositoForm.setIdBulto("-1");
-        egresoDepositoForm.setIdPallet("-1");
-        egresoDepositoForm.setIdOrdenDeProduccionE("-1");
+       
         
         EgresoScrapForm egresoScrapForm = new EgresoScrapForm();
        
@@ -238,180 +232,11 @@ public class RemitoDetalleScrapController {
         model.addAttribute("titleRemitoDetalle", "Nuevo Remito Detalle");  
         model.addAttribute("buttonLabel", "Guardar");
         
-        OrdenDeProduccionService ordenDeProduccionService = new OrdenDeProduccionServiceImpl();   
-        ArticuloService articuloService = new ArticuloServiceImpl();   
-        Map<String,String> articulos = new LinkedHashMap<String,String>();
-        List<ArticuloModel> articulosModel = articuloService.getAll();
 
-        List<OrdenDeProduccionModel> ordenDeProducciones = ordenDeProduccionService.getAllWithStock();
-        Set<String> articulosSet = new HashSet<String>();
-        
-        for(OrdenDeProduccionModel ordenDeProduccionCompleted :ordenDeProducciones) {
-            articulosSet.add(ordenDeProduccionCompleted.getIdArticulo().toString());
-        }
-        
-       if(articulosModel != null && !articulosModel.isEmpty()){
-           for(ArticuloModel articuloModel :articulosModel) {
-                if(articulosSet.contains(articuloModel.getId().toString())) {
-                    articulos.put(articuloModel.getId().toString(), articuloModel.getDenominacion());
-               }
-            }
-        }
-                 
-        //OrdenDeProduccionBobinaService bobinaService = new OrdenDeProduccionBobinaServiceImpl();   
-        //OrdenDeProduccionBultoService bultoService = new OrdenDeProduccionBultoServiceImpl();   
-        //OrdenDeProduccionPalletService palletService = new OrdenDeProduccionPalletServiceImpl();           
-        RemitoDetalleService remitoDetalleService = new RemitoDetalleServiceImpl();   
-        List<RemitoDetalleModel> remitoDetalles = remitoDetalleService.getAllByRemito(remito.getId());
-        System.out.println("**** remitoid:"+remito.getId());
-        
-        
-        Boolean itemsRecibidos = true;
-        List<RemitoDetalleDto> remitoDetallesDtos = new ArrayList<RemitoDetalleDto>();
-        for(RemitoDetalleModel remitoDetalle: remitoDetalles) {
-            RemitoDetalleDto remitoDetalleDto = new RemitoDetalleDto();
-            remitoDetalleDto.setPk(remitoDetalle.getId().toString());
-            remitoDetalleDto.setFechaAlta(remitoDetalle.getFechaAlta().toString().replace(" 00:00:00.0", ""));
-            
-            remitoDetalleDto.setLote(remitoDetalle.getIdOrdenDeProduccion().toString());
-            remitoDetalleDto.setDeposito(remitoDetalle.getIdDeposito().toString());
-            remitoDetalleDto.setCantidad(remitoDetalle.getCantidad().toString());
-            remitoDetalleDto.setCantidadBaja(remitoDetalle.getCantidadBaja().toString());
-            
-            TipoModel deposito = tipoService.getByPk(remitoDetalle.getIdDeposito());
-                if(deposito != null) {
-                    remitoDetalleDto.setDeposito(deposito.getValor());
-                } 
-            OrdenDeProduccionModel ordenDeProduccion = ordenDeProduccionService.getByPk(remitoDetalle.getIdOrdenDeProduccion());
-            ArticuloModel articulo = null;
-            if(ordenDeProduccion != null){
-               articulo = articuloService.getByPk(ordenDeProduccion.getIdArticulo());
-            }
-            if(articulo != null) {
-                remitoDetalleDto.setArticulo(articulo.getDenominacion());
-            }
-            
-            //if(!remitoDetalle.getIngresoDeposito()){
-              //  itemsRecibidos = false;
-           // }
-            //if(remitoDetalle.getIngresoDeposito()) {
-              //  remitoDetalleDto.setIngresoDeposito("Si");
-            //} else {
-              //  remitoDetalleDto.setIngresoDeposito("No");
-            //}
-            
-            //if(remitoDetalle.getIdBobina() != null) {
-                
-               // OrdenDeProduccionBobinaModel bobina = bobinaService.getByPk(remitoDetalle.getIdBobina());
-                //if(bobina != null) {
-                    //remitoDetalleDto.setDeposito("Sin información");
-                    //if(bobina.getIdDeposito() != null) {
-                       // TipoModel deposito = tipoService.getByPk(bobina.getIdDeposito());
-                       // if(deposito != null) {
-                          //  remitoDetalleDto.setDeposito(deposito.getValor());        
-                        //}
-                   // }
-                   // OrdenDeProduccionModel ordenDeProduccion = ordenDeProduccionService.getByPk(bobina.getIdOrdenDeProduccion());
-                   // if(ordenDeProduccion != null) {
-                   //     remitoDetalleDto.setLote("L"+ordenDeProduccion.getId());                        
-                        
-                   //     ArticuloModel articulo = articuloService.getByPk(ordenDeProduccion.getIdArticulo());
-                   //     if(articulo != null) {
-                    //        remitoDetalleDto.setArticulo("(" + articulo.getId() + ") " + articulo.getDenominacion());
-                    //    }
-                    //}
-                    //remitoDetalleDto.setCodigo(bobina.getCodigo());
-                    //remitoDetalleDto.setTieneBultoOPallet("true");
-                //}
-           // }
-            //if(remitoDetalle.getIdBulto() != null) {
-                
-                //OrdenDeProduccionBultoModel bulto = bultoService.getByPk(remitoDetalle.getIdBulto());
-                //if(bulto != null) {
-                   // remitoDetalleDto.setDeposito("Sin información");
-                    //if(bulto.getIdDeposito() != null) {
-                      //  TipoModel deposito = tipoService.getByPk(bulto.getIdDeposito());
-                       // if(deposito != null) {
-                         //   remitoDetalleDto.setDeposito(deposito.getValor());        
-                        //}
-                    //}                    
-                    //OrdenDeProduccionModel ordenDeProduccion = ordenDeProduccionService.getByPk(bulto.getIdOrdenDeProduccion());
-                    //if(ordenDeProduccion != null) {
-                      //  remitoDetalleDto.setLote("L"+ordenDeProduccion.getId());
-                        
-                      //  ArticuloModel articulo = articuloService.getByPk(ordenDeProduccion.getIdArticulo());
-                      //  if(articulo != null) {
-                        //    remitoDetalleDto.setArticulo("(" + articulo.getId() + ") " + articulo.getDenominacion());
-                        //}                        
-                   // }
-                   // remitoDetalleDto.setCodigo(bulto.getCodigo());
-                   // remitoDetalleDto.setTieneBultoOPallet("true");
-                //}
-            //}
-            //if(remitoDetalle.getIdPallet() != null) {
-                
-              //  OrdenDeProduccionPalletModel pallet = palletService.getByPk(remitoDetalle.getIdPallet());
-              //  if(pallet != null) {
-                //    remitoDetalleDto.setDeposito("Sin información");
-                 //   if(pallet.getIdDeposito() != null) {
-                 //       TipoModel deposito = tipoService.getByPk(pallet.getIdDeposito());
-                 //       if(deposito != null) {
-                   //         remitoDetalleDto.setDeposito(deposito.getValor());        
-                   //     }
-                    //}                    
-                    //OrdenDeProduccionModel ordenDeProduccion = ordenDeProduccionService.getByPk(pallet.getIdOrdenDeProduccion());
-                    //if(ordenDeProduccion != null) {
-                       // remitoDetalleDto.setLote("L"+ordenDeProduccion.getId());
-                        
-                        //ArticuloModel articulo = articuloService.getByPk(ordenDeProduccion.getIdArticulo());
-                        //if(articulo != null) {
-                          //  remitoDetalleDto.setArticulo("(" + articulo.getId() + ") " + articulo.getDenominacion());
-                        //}                        
-                    //}
-                    //remitoDetalleDto.setCodigo(pallet.getCodigo());
-                    //remitoDetalleDto.setTieneBultoOPallet("true");
-                //}
-           // }
-           // if(remitoDetalle.getIdBobina() == null && remitoDetalle.getIdBulto() == null && remitoDetalle.getIdPallet() == null) {
-                //remitoDetalleDto.setDeposito("Sin información");   
-                //if(remitoDetalle.getIdOrdenDeProduccion() != null) {
-                 //   OrdenDeProduccionModel ordenDeProduccion = ordenDeProduccionService.getByPk(remitoDetalle.getIdOrdenDeProduccion());
-                 //   if(ordenDeProduccion != null) {
-                  //      remitoDetalleDto.setLote("L"+ordenDeProduccion.getId());
-                  //  }                
-               // }
-                //if(remitoDetalle.getIdArticulo() != null) {
-                  //  ArticuloModel articulo = articuloService.getByPk(remitoDetalle.getIdArticulo());
-                  //  if(articulo != null) {
-                    //    remitoDetalleDto.setArticulo("(" + articulo.getId() + ") " + articulo.getDenominacion());
-                    //}                        
-                //}                
-            //}
-            
-            remitoDetallesDtos.add(remitoDetalleDto);
-            
-            
-        }
-        
-        OrdenDeProduccionBobinaService ordenDeProduccionBobinaService = new OrdenDeProduccionBobinaServiceImpl();   
-        List<OrdenDepositoDto> ordenDepositoDto = ordenDeProduccionBobinaService.getAllByDeposito();
-        System.out.println(ordenDepositoDto.size());
-        
-        //ArticuloService articuloService = new ArticuloServiceImpl();
-        List<OrdenDepositoDto> ordenDepositoDto2 = ordenDeProduccionBobinaService.getAllByDeposito();
-        List<ArticuloModel> articulosModel2 = articuloService.getAll();
-        Map<String, String> articuloss = new LinkedHashMap<String, String>();
-
-        if (articulosModel2 != null && !articulosModel2.isEmpty()) {
-            for (ArticuloModel articuloModel : articulosModel) {
-                articuloss.put(articuloModel.getId().toString(), articuloModel.getDenominacion());
-            }
-       }
-        
         ActivacionManualService activacionManualService = new ActivacionManualServiceImpl();
         ActivacionManualModel activacionManual = activacionManualService.getByPk(1);
        
-        System.out.println("**** idOrdenDeProduccion:"+remitoDetallesDtos);
+ 
         
         model.addAttribute("statusAct", activacionManual.getActivacionManual() || rol.equalsIgnoreCase("oficina"));
                 
@@ -422,16 +247,8 @@ public class RemitoDetalleScrapController {
         model.addAttribute("action", "new");
         model.addAttribute("displayActionButton", displayActionButton);
         model.addAttribute("operacion", operacion);        
-        model.addAttribute("articulosList", articulos);        
-        model.addAttribute("remitoDetalles", remitoDetallesDtos);
-        model.addAttribute("articuloList2", articuloss);
-        model.addAttribute("depositos", ordenDepositoDto2);
         model.addAttribute("remito", remitoDetalleForm);
-        model.addAttribute("egresoDepositoForm", egresoDepositoForm);  
         model.addAttribute("egresoScrapForm", egresoScrapForm); 
-        
-        
-        
         
         ////////SCRAP
         OrdenDeProduccionScrapService ordenDeProduccionScrapService = new OrdenDeProduccionScrapServiceImpl();   
@@ -442,6 +259,66 @@ public class RemitoDetalleScrapController {
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("idRemito", idRemito);
+        
+        RemitoDetalleScrapService remitoDetalleScrapService = new RemitoDetalleScrapServiceImpl(); 
+        List<RemitoDetalleScrapModel> listadoRemitoDetalleScrap = remitoDetalleScrapService.getAllByRemito(Integer.parseInt(idRemito));
+        
+        List<RemitoDetalleScrapDto> listadoRemitoDetalleScrapDto = new ArrayList<RemitoDetalleScrapDto>();
+        
+        ArticuloService articuloService = new ArticuloServiceImpl();
+        OrdenDeProduccionService ordenDeProduccionService = new OrdenDeProduccionServiceImpl();
+            
+        
+        for (RemitoDetalleScrapModel remitoDetalleScrap: listadoRemitoDetalleScrap) {
+            RemitoDetalleScrapDto listRemitoDetalledto = new RemitoDetalleScrapDto();
+            
+            listRemitoDetalledto.setPk(remitoDetalleScrap.getId().toString());
+            
+            
+            OrdenDeProduccionModel ordenDeProduccion = ordenDeProduccionService.getByPk(remitoDetalleScrap.getIdOrdenDeProduccion());
+            ArticuloModel articulo = null;
+            if(ordenDeProduccion != null){
+               articulo = articuloService.getByPk(ordenDeProduccion.getIdArticulo());
+            }
+            if(articulo != null) {
+                listRemitoDetalledto.setArticulo(articulo.getDenominacion());
+            }
+            
+            
+            listRemitoDetalledto.setDadoDeBaja(remitoDetalleScrap.getDadoDeBaja());
+            
+             listRemitoDetalledto.setIdSrap(remitoDetalleScrap.getCodigo().substring(1));
+            
+            OrdenDeProduccionScrapModel scrapnn = ordenDeProduccionScrapService.getByCode(remitoDetalleScrap.getCodigo());
+            
+            Double cantidadTotal = scrapnn.getPesoTotal();
+            Double cantidadUtilizadaRemito = remitoDetalleScrap.getCantidadUtilizadaRemito();
+            
+            // Asegúrate de que cantidadTotal no sea cero para evitar división por cero
+            Double porcentajeDeUso = 0.0;
+            if (cantidadTotal != null && cantidadTotal > 0) {
+                porcentajeDeUso = (cantidadUtilizadaRemito / cantidadTotal) * 100;
+            }
+
+            // Puedes redondear el porcentaje a dos decimales si lo deseas
+            porcentajeDeUso = Math.round(porcentajeDeUso * 100.0) / 100.0;
+
+            
+            listRemitoDetalledto.setCantidadUtilizadaRemito(cantidadUtilizadaRemito);
+            
+            listRemitoDetalledto.setDeposito("Scrap");
+            
+            listRemitoDetalledto.setLote(remitoDetalleScrap.getIdOrdenDeProduccion().toString());
+            
+            listRemitoDetalledto.setCodigo(remitoDetalleScrap.getCodigo());
+            
+            listRemitoDetalledto.setPorcentajeDeUso(porcentajeDeUso);
+            
+            listadoRemitoDetalleScrapDto.add(listRemitoDetalledto);
+        }
+        
+        model.addAttribute("remitoDetallesScrap", listadoRemitoDetalleScrapDto);
+        
         
         return "/remito/remitodetallescrap";
     }  

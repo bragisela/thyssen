@@ -20,6 +20,26 @@ public class EgresoScrapForm {
     private String operacion;
     private String action;
     private String idOrdenDeProduccionE;
+    private Double cantidadAUtilizar;
+    private Boolean esUtilizadaAlCien;
+
+    public Double getCantidadAUtilizar() {
+        return cantidadAUtilizar;
+    }
+
+    public void setCantidadAUtilizar(Double cantidadAUtilizar) {
+        this.cantidadAUtilizar = cantidadAUtilizar;
+    }
+
+    public Boolean getEsUtilizadaAlCien() {
+        return esUtilizadaAlCien;
+    }
+
+    public void setEsUtilizadaAlCien(Boolean esUtilizadaAlCien) {
+        this.esUtilizadaAlCien = esUtilizadaAlCien;
+    }
+     
+     
 
     public String getIdOrdenDeProduccionScrap() {
         return idOrdenDeProduccionScrap;

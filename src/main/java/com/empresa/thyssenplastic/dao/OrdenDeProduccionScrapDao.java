@@ -23,6 +23,8 @@ public interface OrdenDeProduccionScrapDao extends GenericDao {
     List<OrdenDeProduccionScrapModel> getAllByOrdenDeProduccion(Integer idOrdenDeProduccion);
     List<OrdenDeProduccionScrapModel> getAllPaginated(int pageNumber, int pageSize);
     
+    //List<OrdenDeProduccionScrapModel> getAllPaginatedWithCode(String codigo, int pageNumber, int pageSize);
+    
     List<DepositoScrapDto> getResumenPorOrdenDeProduccion(int pageNumber, int pageSize);
     
     /*

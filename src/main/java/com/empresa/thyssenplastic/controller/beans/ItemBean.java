@@ -33,6 +33,66 @@ public class ItemBean {
     private String materialImpreso;
     private String motivo;
     private Double pesoTotal;
+    private Double sumaPesoEnRemitosQueNoEstanCerrados;
+    private boolean fueUtilizadoParcialMente;
+    
+    //private boolean dadoDeBaja;
+    private Double pesoUtilizadoEnRemitosAbiertos; //peso que todavia esta pero no se dio efectivamente de baja
+    private Double pesoUtilizadoDadoDeBaja; //peso total que ya se dio de baja
+    private Double pesoDisponibleParaUsar; //calcular con los otros datos
+
+    //public boolean isDadoDeBaja() {
+        //return dadoDeBaja;
+    //}
+
+    //public void setDadoDeBaja(boolean dadoDeBaja) {
+        //this.dadoDeBaja = dadoDeBaja;
+    //}
+
+    public Double getPesoUtilizadoEnRemitosAbiertos() {
+        return pesoUtilizadoEnRemitosAbiertos;
+    }
+
+    public void setPesoUtilizadoEnRemitosAbiertos(Double pesoUtilizadoEnRemitosAbiertos) {
+        this.pesoUtilizadoEnRemitosAbiertos = pesoUtilizadoEnRemitosAbiertos;
+    }
+
+    public Double getPesoUtilizadoDadoDeBaja() {
+        return pesoUtilizadoDadoDeBaja;
+    }
+
+    public void setPesoUtilizadoDadoDeBaja(Double pesoUtilizadoDadoDeBaja) {
+        this.pesoUtilizadoDadoDeBaja = pesoUtilizadoDadoDeBaja;
+    }
+
+    public Double getPesoDisponibleParaUsar() {
+        return pesoDisponibleParaUsar;
+    }
+
+    public void setPesoDisponibleParaUsar(Double pesoDisponibleParaUsar) {
+        this.pesoDisponibleParaUsar = pesoDisponibleParaUsar;
+    }
+    
+    
+    
+
+    public Double getSumaPesoEnRemitosQueNoEstanCerrados() {
+        return sumaPesoEnRemitosQueNoEstanCerrados;
+    }
+
+    public void setSumaPesoEnRemitosQueNoEstanCerrados(Double sumaPesoEnRemitosQueNoEstanCerrados) {
+        this.sumaPesoEnRemitosQueNoEstanCerrados = sumaPesoEnRemitosQueNoEstanCerrados;
+    }
+
+    public boolean isFueUtilizadoParcialMente() {
+        return fueUtilizadoParcialMente;
+    }
+
+    public void setFueUtilizadoParcialMente(boolean fueUtilizadoParcialMente) {
+        this.fueUtilizadoParcialMente = fueUtilizadoParcialMente;
+    }
+    
+    
 
     public String getMotivo() {
         return motivo;

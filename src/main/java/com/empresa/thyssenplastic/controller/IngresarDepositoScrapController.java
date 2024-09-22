@@ -87,6 +87,9 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -104,7 +107,7 @@ public class IngresarDepositoScrapController {
     @RequestMapping(value = "/ingresarDepositoScrap", method = RequestMethod.GET)
     public String getHomeIngresarDepositoScrap(
     @RequestParam(value = "page", defaultValue = "1") int pageNumber,
-    @RequestParam(value = "size", defaultValue = "5") int pageSize,
+    @RequestParam(value = "size", defaultValue = "10") int pageSize,
     HttpServletRequest req, ModelMap model) {
 
         if(!Utils.isAutenticated(req)) {
@@ -124,9 +127,8 @@ public class IngresarDepositoScrapController {
        
         OrdenDeProduccionScrapService ordenDeProduccionScrapService = new OrdenDeProduccionScrapServiceImpl();   
         List<OrdenDeProduccionScrapModel> listadoScrap = ordenDeProduccionScrapService.getAllPaginated(pageNumber, pageSize);
-       
         
-   
+     
         // Pasa los datos al modelo
         model.addAttribute("depositoList", listadoScrap);
         model.addAttribute("currentPage", pageNumber);
@@ -138,7 +140,7 @@ public class IngresarDepositoScrapController {
     }
     
     @RequestMapping(value = "/verMovimientos/{id}", method = RequestMethod.GET)
-    public String getHomeMovimientoScrap(HttpServletRequest req, ModelMap model) {
+    public String getHomeMovimientoScrap(@PathVariable("id") Integer id, HttpServletRequest req, ModelMap model) {
 
         if(!Utils.isAutenticated(req)) {
             model.addAttribute("userForm", new UserForm());         
@@ -150,7 +152,7 @@ public class IngresarDepositoScrapController {
         //RemitoDetalleModel remitoDetalle = remitoDetalleService.getAllByOrdenDeProduccionScrap(74); //TRAER ID REMITO
         RemitoDetalleScrapService remitoDetalleScrap = new RemitoDetalleScrapServiceImpl();
         List<RemitoDetalleScrapModel> movimientoScrapList = new ArrayList<RemitoDetalleScrapModel>();
-        movimientoScrapList = remitoDetalleScrap.getAllByIdOrdenDeProduccionScrap(30);
+        movimientoScrapList = remitoDetalleScrap.getAllByIdOrdenDeProduccionScrap(id);
         
         RemitoService remitoService = new RemitoServiceImpl();
         List<MovimientoScrapDto> movimientoScrapDtos = new ArrayList<MovimientoScrapDto>();
@@ -166,11 +168,15 @@ public class IngresarDepositoScrapController {
             RemitoModel remito = remitoService.getByPk(detalleScrap.getIdRemito());
             // Agregar el RemitoModel a la lista de resultados
             if (remito != null) {
+                Date fecha = remito.getFechaAlta();
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                String fechaFormateadaConHora = sdf.format(fecha);
+
                 MovimientoScrapDto movimientoScrapDto = new MovimientoScrapDto();
                 movimientoScrapDto.setCodigoRemito(remito.getId().toString());
                 movimientoScrapDto.setEstadoRemito(remito.getEstado());
-                movimientoScrapDto.setFechaAltaRemito(remito.getFechaAlta().toString());
-                
+                movimientoScrapDto.setFechaAltaRemito(fechaFormateadaConHora);
+
                  if(remito.getIdUsuarioAlta() != null) {
                     UserModel user = userService.getUserById(remito.getIdUsuarioAlta());
                     if(user != null) {
@@ -178,7 +184,11 @@ public class IngresarDepositoScrapController {
                     }        
                 }
                  
-                 movimientoScrapDto.setFechaAltaDetalle(detalleScrap.getFecha().toString());
+                 Date fecha2 = detalleScrap.getFecha();
+                SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                String fechaFormateadaConHora2 = sdf2.format(fecha2);
+                
+                 movimientoScrapDto.setFechaAltaDetalle(fechaFormateadaConHora2);
                  movimientoScrapDto.setCantidadUtilizadaRemito(detalleScrap.getCantidadUtilizadaRemito());
                  
                 
@@ -189,12 +199,13 @@ public class IngresarDepositoScrapController {
 
         // Agregar la lista de remitos al modelo
         model.addAttribute("remitos", movimientoScrapDtos);
+        
           
         } else {
             model.addAttribute("movimientos", false);
         }
         
-  
+        model.addAttribute("codigoScrap", id);
         return "/ingresaradeposito/movimientoscrap";
     }
     
@@ -221,50 +232,50 @@ public class IngresarDepositoScrapController {
 
              
         RemitoDetalleScrapService remitoDetalleScrap = new RemitoDetalleScrapServiceImpl();
-        
+        //TipoService tipoService = new TipoServiceImpl();
 
-        TipoService tipoService = new TipoServiceImpl();
-
-        String sessionId = req.getSession().getId();
+        //String sessionId = req.getSession().getId();
         //String id = egresoScrapForm.getPk();
+        
+        OrdenDeProduccionScrapService ordenDeProduccionScrapService = new OrdenDeProduccionScrapServiceImpl();
+        
+        OrdenDeProduccionScrapModel scrapnn = ordenDeProduccionScrapService.getByCode(egresoScrapForm.getCodigo());
             
         RemitoDetalleScrapModel remitoDetalleScrapModel = new RemitoDetalleScrapModel();
-        
-//        if(id.equalsIgnoreCase("-1")) {
-//            //RemitoDetalleScrapModel remitoDetalleScrapModel = new RemitoDetalleScrapModel();
-//            remitoDetalleScrapModel.setFecha(new Date());
-//            remitoDetalleScrapModel.setIdUsuarioAlta(user.getId());
-//        } else {
-//            remitoDetalleScrapModel = remitoDetalleScrap.getByPk(Integer.valueOf(id));
-//            if(remitoDetalleScrapModel == null) {
-//                modelAndView.setViewName("error");
-//                modelAndView.addObject("errorMessage", "Error: id de ingresarDeposito invalido.");
-//                return modelAndView;                
-//            } 
-//        } 
-        
            
-        //int numeroEntero = Integer.parseInt(egresoScrapForm.getIdRemito());
-        
-        //remitoDetalleScrapModel.setIdRemito(numeroEntero);
+        int numeroEntero = Integer.parseInt(egresoScrapForm.getIdRemito());
+       
         egresoScrapForm.setAction("add");
         
-        remitoDetalleScrapModel.setIdOrdenDeProduccion(27);
+        remitoDetalleScrapModel.setIdUsuarioAlta(user.getId());
         
-        remitoDetalleScrapModel.setIdUsuarioAlta(1);
+        remitoDetalleScrapModel.setFecha(new Date());
         
-        remitoDetalleScrapModel.setCodigo("S30");
+        remitoDetalleScrapModel.setCodigo(egresoScrapForm.getCodigo());
         
-        remitoDetalleScrapModel.setIdRemito(74);
+        remitoDetalleScrapModel.setIdRemito(numeroEntero);
+        RemitoDetalleScrapService remitoDetalleScrapService = new RemitoDetalleScrapServiceImpl(); 
         
-        remitoDetalleScrapModel.setCantidadUtilizadaRemito(200.0);
-       
+        if (egresoScrapForm.getEsUtilizadaAlCien()) {
+            Map<String, Double> resultado = new HashMap<String, Double>();
+            resultado.put("noDadoDeBaja", 0.0);
+            resultado.put("dadoDeBaja", 0.0);
+                    
+            resultado = remitoDetalleScrapService.getMapSumaCantidadUtilizadaByCodigo(scrapnn.getCodigo());
+            double pesoFinal = scrapnn.getPesoTotal() - resultado.getOrDefault("dadoDeBaja", 0.0) - resultado.getOrDefault("noDadoDeBaja", 0.0);
+           
+            remitoDetalleScrapModel.setCantidadUtilizadaRemito(pesoFinal);
+            remitoDetalleScrapModel.setUtilizadoAlCien(true);
+        }else {
+            egresoScrapForm.getCantidadAUtilizar();
+            System.out.println(egresoScrapForm.getCantidadAUtilizar());
+            remitoDetalleScrapModel.setCantidadUtilizadaRemito(egresoScrapForm.getCantidadAUtilizar());
+            remitoDetalleScrapModel.setUtilizadoAlCien(false);
+        }
         
-        //RemitoDetalleService remitoDetalleService = new RemitoDetalleServiceImpl();  
-        //RemitoDetalleModel remitoAmodificar = remitoDetalleService.getByPk(numeroEntero);
+        remitoDetalleScrapModel.setIdOrdenDeProduccion(Integer.parseInt(egresoScrapForm.getIdOrdenDeProduccionE()));
         
-        RemitoService remitoService = new RemitoServiceImpl();  
-        //RemitoModel remitoAmodificarNoDetalle = remitoService.getByPk(remitoAmodificar.getIdRemito());
+        remitoDetalleScrapModel.setIdOrdenDeProduccionScrap(scrapnn.getId()); 
         
 
         if(egresoScrapForm.getAction().equalsIgnoreCase("add") || egresoScrapForm.getAction().equalsIgnoreCase("edit")) {
@@ -285,21 +296,89 @@ public class IngresarDepositoScrapController {
                 return modelAndView;                                
             }
         }
-        
-        RemitoDetalleService remitoDetalleService = new RemitoDetalleServiceImpl();   
-        RemitoDetalleModel remito = remitoDetalleService.getByPk(76);
                         
-        modelAndView.setViewName("redirect:/remitoDetalleScrap/76");
+        modelAndView.setViewName("redirect:/remitoDetalleScrap/" + numeroEntero);
     
 
         return modelAndView; 
     }
     
+    @RequestMapping(value = "/egresoDepositoScrap/remove/{remitoDetallepk}", method = RequestMethod.GET)
+    public ModelAndView removeRemitoDetalleScrap(@PathVariable String remitoDetallepk, HttpServletRequest req, ModelMap model) throws Exception {
+        
+        ModelAndView modelAndView = new ModelAndView();
+        
+         if(!Utils.isAutenticated(req)) {            
+            modelAndView.setViewName("/login/login");    
+            model.addAttribute("userForm", new UserForm());         
+            return modelAndView;
+        }
+         
+        UserService userService = new UserServiceImpl();   
+        Integer userId = Integer.valueOf(Utils.getUserLoggedId(req));
+        UserModel user = userService.getUserById(userId);
+
+        if(user.getRol() != Utils.ROL_OFICINA) {
+            modelAndView.setViewName("error");
+            modelAndView.addObject("errorMessage", "Error:  usuario no permite esta operación.");
+            return modelAndView;                                   
+        }
+ 
+
+        if(remitoDetallepk == null) {
+            modelAndView.setViewName("error");
+            modelAndView.addObject("errorMessage", "Error: RemitoDetalle inválido.");
+            return modelAndView;            
+        }
+        
+        String operacion = "remove";        
+        String displayActionButton = "block";
+        
+   
+        
+        RemitoDetalleScrapService remitoDetalleScrapService = new RemitoDetalleScrapServiceImpl();   
+        RemitoDetalleScrapModel remitoDetalleScrap = remitoDetalleScrapService.getByPk(Integer.valueOf(remitoDetallepk));
+        if(remitoDetalleScrap == null) {
+
+            modelAndView.setViewName("error");
+            modelAndView.addObject("errorMessage", "Error: RemitoDetalle inválido. No ha sido encontrado.");
+            return modelAndView; 
+            
+        }else{ 
+            remitoDetalleScrapService.delete(remitoDetalleScrap);
+        }
+
+
+        RemitoService remitoService = new RemitoServiceImpl();   
+        RemitoModel remito = remitoService.getByPk(Integer.valueOf(remitoDetalleScrap.getIdRemito()));
+        if(remito == null) {
+            
+             modelAndView.setViewName("error");
+            modelAndView.addObject("errorMessage", "Error:  Remito inválido. No ha sido encontrado.");
+            return modelAndView; 
+        
+        }
+
+        if(!remito.getEstado().equalsIgnoreCase("Nuevo")) {
+          
+            modelAndView.setViewName("error");
+            modelAndView.addObject("errorMessage", "Error:  Remito con estado inválido. No es posible realizar este operación.");
+            return modelAndView;   
+        }
+                
+        
+        
+        modelAndView.setViewName("redirect:/remitoDetalleScrap/"+remito.getId().toString());
+
+        return modelAndView;
+        
+    }    
+    
    
     
     @ResponseBody
-    @RequestMapping(value = "/depositoScrap/findScrap/{codigo}/{orden}", method = RequestMethod.GET)
-    public List<ItemBean> getScrap(@PathVariable String codigo,@PathVariable String orden, HttpServletRequest req, ModelMap model) throws Exception {
+    @RequestMapping(value = "/depositoScrap/findScrap/{codigo}/{orden}/{idRemito}", method = RequestMethod.GET)
+    public List<ItemBean> getScrap(@PathVariable String codigo,@PathVariable String orden, @PathVariable String idRemito, HttpServletRequest req, ModelMap model) throws Exception {
         
         OrdenDeProduccionScrapService ordenDeProduccionScrapService = new OrdenDeProduccionScrapServiceImpl(); 
         OrdenDeProduccionPalletService ordenDeProduccionPalletService = new OrdenDeProduccionPalletServiceImpl();
@@ -318,10 +397,23 @@ public class IngresarDepositoScrapController {
                 OrdenDeProduccionScrapModel scrap = ordenDeProduccionScrapService.getByCode(codigo);
                 
                 OrdenDeProduccionScrapDto ordenDeProduccionScrapDto = new OrdenDeProduccionScrapDto();
+                
+                boolean yaestautilizadoEnEsteRemito = false;
+                
+                RemitoDetalleScrapService remitoDetalleScrapService = new RemitoDetalleScrapServiceImpl(); 
+                RemitoDetalleScrapModel listadoRemitoDetalleScrap = remitoDetalleScrapService.getByCodigoAndRemito(scrap.getCodigo(), Integer.parseInt(idRemito));
+                
+                if (listadoRemitoDetalleScrap != null){
+                    yaestautilizadoEnEsteRemito = true;
+                }
+                
 
                 if (scrap != null && !scrap.getIdOrdenDeProduccion().equals(Integer.valueOf(orden))) {
                    bean.setId("-2");
                    bean.setTipo("-2");
+                } else if (yaestautilizadoEnEsteRemito) {
+                    bean.setId("-3");
+                    bean.setTipo("-3");
                 } else {
                 if(scrap != null) {
                     OrdenDeProduccionScrapModel scrapCompleto = ordenDeProduccionScrapService.getByPk(scrap.getId());
@@ -396,6 +488,21 @@ public class IngresarDepositoScrapController {
                     
                     
                     bean.setPesoTotal(scrapCompleto.getPesoTotal());
+                    
+    
+                    Map<String, Double> resultado = new HashMap<String, Double>();
+                    
+                    resultado.put("noDadoDeBaja", 0.0);
+                    resultado.put("dadoDeBaja", 0.0);
+                    
+                    resultado = remitoDetalleScrapService.getMapSumaCantidadUtilizadaByCodigo(codigo);
+                    
+                    //double cantidadUtilizadaRemitosAbiertos = remitoDetalleScrapService.getSumaCantidadUtilizadaByCodigo(codigo); //CALCULAR
+                    double pesoFinal = scrapCompleto.getPesoTotal() - resultado.getOrDefault("dadoDeBaja", 0.0) - resultado.getOrDefault("noDadoDeBaja", 0.0);
+                    
+                    bean.setPesoUtilizadoDadoDeBaja(resultado.getOrDefault("dadoDeBaja", 0.0));
+                    bean.setPesoDisponibleParaUsar(pesoFinal);
+                    bean.setPesoUtilizadoEnRemitosAbiertos(resultado.getOrDefault("noDadoDeBaja", 0.0));
                
                     bean.setId(scrapCompleto.getId().toString());
                     bean.setTipo("scrap");

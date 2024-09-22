@@ -46,31 +46,13 @@ public class OrdenDeProduccionScrapDaoImpl extends GenericDaoImpl implements Ord
         return ordenDeProduccionScrap;
     }
     
-//        @Override
-//        public List<Object[]> getResumenPorOrdenDeProduccion(int pageNumber, int pageSize) {
-//            List<Object[]> resumenList = new ArrayList<Object[]>();
-//            try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-//                String hql = "SELECT o.idOrdenDeProduccion, SUM(o.pesoTotal) " +
-//                             "FROM OrdenDeProduccionScrapModel o " +
-//                             "GROUP BY o.idOrdenDeProduccion";
-//
-//                // Ejecutar la consulta HQL
-//                resumenList = session.createQuery(hql)
-//                                     .setFirstResult((pageNumber - 1) * pageSize)
-//                                     .setMaxResults(pageSize)
-//                                     .getResultList();
-//            } catch (Exception ex) {
-//                ex.printStackTrace();
-//            }
-//            return resumenList;
-//        }
         
      public List<DepositoScrapDto> getResumenPorOrdenDeProduccion(int pageNumber, int pageSize) {
         List<DepositoScrapDto> resumenList = new ArrayList<DepositoScrapDto>();
         Session session = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
-            String hql = "SELECT o.idOrdenDeProduccion, SUM(o.pesoTotal) " +
+            String hql = "SELECT o.idOrdenDeProduccion, SUM(o.pesoTotal - o.cantidadUtilizada) " +
                          "FROM OrdenDeProduccionScrapModel o " +
                          "GROUP BY o.idOrdenDeProduccion";
 
@@ -158,60 +140,4 @@ public class OrdenDeProduccionScrapDaoImpl extends GenericDaoImpl implements Ord
 
         return ordenDeProduccionScrap;
     }
-
-    /*
-    public List<OrdenDeProduccionScrapModel> getAllAvailableByOrdenDeProduccion(Integer idOrdenDeProduccion) {
-        
-        List<OrdenDeProduccionScrapModel> ordenDeProduccionScrap = null;
-        try {
-            if(idOrdenDeProduccion != null){
-                Session session = HibernateUtil.getSessionFactory().openSession();
-                Query query = session.createQuery("from OrdenDeProduccionScrapModel WHERE idOrdenDeProduccion=:idOrdenDeProduccion AND estaEnBulto = 0");
-                query.setInteger("idOrdenDeProduccion", idOrdenDeProduccion);
-                
-                ordenDeProduccionScrap = query.list();
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        return ordenDeProduccionScrap;
-    }
- 
-    public List<OrdenDeProduccionScrapModel> getAllAvailableForRemitoByOrdenDeProduccion(Integer idOrdenDeProduccion) {
-        
-        List<OrdenDeProduccionScrapModel> ordenDeProduccionScraps = null;
-        try {
-            if(idOrdenDeProduccion != null){
-                Session session = HibernateUtil.getSessionFactory().openSession();
-                Query query = session.createQuery("from OrdenDeProduccionScrapModel WHERE idOrdenDeProduccion=:idOrdenDeProduccion AND estaDisponibleParaRemito = 1");
-                query.setInteger("idOrdenDeProduccion", idOrdenDeProduccion);
-                
-                ordenDeProduccionScraps = query.list();
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        return ordenDeProduccionScraps;
-    }
-
-    public List<OrdenDeProduccionScrapModel> getAllNotAvailableForRemitoByOrdenDeProduccion(Integer idOrdenDeProduccion) {
-        
-        List<OrdenDeProduccionScrapModel> ordenDeProduccionScraps = null;
-        try {
-            if(idOrdenDeProduccion != null){
-                Session session = HibernateUtil.getSessionFactory().openSession();
-                Query query = session.createQuery("from OrdenDeProduccionScrapModel WHERE idOrdenDeProduccion=:idOrdenDeProduccion AND estaDisponibleParaRemito = 0");
-                query.setInteger("idOrdenDeProduccion", idOrdenDeProduccion);
-                
-                ordenDeProduccionScraps = query.list();
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        return ordenDeProduccionScraps;
-    }
-    */
 }

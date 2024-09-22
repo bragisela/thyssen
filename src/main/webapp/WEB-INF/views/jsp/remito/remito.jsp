@@ -213,7 +213,7 @@
                                                         href="/thyssenplastic/remito/edit/${remito.pk}"
                                                         data-toggle="tooltip" data-placement="top" title="Editar"></a>
                                                 </c:if>                                                        
-                                                <c:if test = "${rol == 'oficina' && operacion == 'alta' && remito.estado == 'Nuevo' && remito.canDelete == 'true'}">
+                                                <c:if test = "${rol == 'oficina' && operacion == 'alta' && remito.estado == 'Nuevo' && remito.canDelete == 'true' && remito.canDeleteScrap == 'true'}">
                                                     <a class="nav-link active fa fa-trash fa-lg"
                                                         href="/thyssenplastic/remito/remove/${remito.pk}"
                                                         data-toggle="tooltip" data-placement="top" title="Eliminar"></a>
@@ -245,9 +245,19 @@
                                                 
                                                                                                   
                                                 <c:if test = "${(rol == 'deposito' || rol == 'oficina')}">
-                                                    <a class="nav-link active fa fa-print fa-lg"
-                                                       href="javascript:void(0);" onclick="printRemito(${remito.pk})"
-                                                        data-toggle="tooltip" data-placement="top" title="Imprimir"></a>
+                                                    <c:choose>
+                                                        <c:when test="${remito.isScrap}">
+                                                            <a class="nav-link active fa fa-print fa-lg"
+                                                               href="javascript:void(0);" onclick="printRemitoScrap(${remito.pk})"
+                                                               data-toggle="tooltip" data-placement="top" title="Imprimir"></a>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <a class="nav-link active fa fa-print fa-lg"
+                                                               href="javascript:void(0);" onclick="printRemito(${remito.pk})"
+                                                               data-toggle="tooltip" data-placement="top" title="Imprimir"></a>
+                                                        </c:otherwise>
+                                                    </c:choose>
+
                                                 </c:if>
                                                 
                                                 <c:if test = "${rol == 'oficina' && operacion == 'alta' && remito.estado == 'Abierto' && (remito.cantidadTotalBaja >= remito.cantidadTotal)}">
@@ -449,6 +459,10 @@
 
     function printRemito(remitopk) {
         window.open("/thyssenplastic/remito/print/"+remitopk, "Imprimir Remito", "popup,width=1024,height=800");
+    }
+    
+    function printRemitoScrap(remitopk) {
+        window.open("/thyssenplastic/remito2/print/"+remitopk, "Imprimir Remito", "popup,width=1024,height=800");
     }
 
 

@@ -110,6 +110,18 @@ public class OrdenDeProduccionScrapServiceImpl implements OrdenDeProduccionScrap
         return ordenDeProduccion;
     }
     
+//    public List<OrdenDeProduccionScrapModel> getAllPaginatedWithCode(String codigo, int pageNumber, int pageSize) {
+//        List<OrdenDeProduccionScrapModel> ordenDeProducciones = new ArrayList<OrdenDeProduccionScrapModel>();
+//        try {
+//            OrdenDeProduccionScrapDao ordenDeProduccionScrapDao = new OrdenDeProduccionScrapDaoImpl();
+//            ordenDeProducciones = ordenDeProduccionScrapDao.getAllPaginatedWithCode(codigo, pageSize, pageSize);
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//
+//        return ordenDeProducciones;
+//    }
+    
     /*
     public List<OrdenDeProduccionScrapModel> getAllAvailableByOrdenDeProduccion(Integer idOrdenDeProduccion) {
         List<OrdenDeProduccionScrapModel> ordenDeProducciones = new ArrayList<OrdenDeProduccionScrapModel>();

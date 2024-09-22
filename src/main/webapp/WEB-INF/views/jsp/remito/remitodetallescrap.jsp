@@ -29,7 +29,7 @@
                             <div class="col-md-12">
                                 <div class="col-md-6">
                                     <div class="data">
-                                        <label class="labelClass" >Remito:</label><span class="spanClass">${remito.codigoRemito}</span>
+                                        <label class="labelClass" >Remito:</label><span id="codRem" class="spanClass">${remito.codigoRemito}</span>
                                     </div>
                                     <div class="data">
                                         <label class="labelClass">Tipo: </label><span class="spanClass">${remito.tipoRemito}</span>
@@ -39,6 +39,9 @@
                                     </div>
                                     <div class="data">
                                         <label class="labelClass">Estado:</label><span class="spanClass">${remito.estadoRemito}</span>
+                                    </div>
+                                     <div class="data">
+                                        <label class="labelClass">Scrap:</label><span class="spanClass">Si</span>
                                     </div>
                                 </div>
                             <div class="col-md-6">
@@ -71,14 +74,10 @@
                                                 <div class="modal-body">
                                                     <div class="row">
                                                         <div class="col-xs-6 col-sm-6 col-xl-6">
+                                                           
+                                                                
                                                             <div class="articulo-section border rounded p-3 mb-3 bg-light">
-                                                                <h5 class="text-center text-info">Artículo</h5>
-                                                                <ul class="list-group">
-                                                                    <!-- Datos del artículo (puedes reemplazar estos ejemplos con tus propios datos) -->
-                                                                   
-                                                                    <li class="list-group-item">Lote: <span id="deposito" class="font-weight-bold text-primary"></span></li>
-                                                                    <li class="list-group-item">Deposito: Scrap<span id="valorEnModal" class="font-weight-bold text-primary"></span></li>
-                                                                    <form:form class="form-horizontal" method="post" action="/thyssenplastic/egresoDepositoScrap/addOrEditOrRemove" modelAttribute="egresoScrapForm" id="myFormm">
+                                                                <form:form class="form-horizontal" method="post" action="/thyssenplastic/egresoDepositoScrap/addOrEditOrRemove" modelAttribute="egresoScrapForm" id="myFormm">
                                                                     <form:hidden path="pk" class="form-control"/>
                                                                     <form:hidden path="action" class="form-control"/>
                                                                 
@@ -88,6 +87,14 @@
                                                                     <form:hidden path="tipo" class="form-control"/>
                                                                    <form:hidden path="idOrdenDeProduccionScrap" class="form-control"/>
                                                                    <form:hidden path="idOrdenDeProduccionE" class="form-control"/>
+                                                                <h5 class="text-center text-info">Peso Asignado y Disponible</h5>
+                                                                <ul class="list-group">
+                                                                    <!-- Datos del artículo (puedes reemplazar estos ejemplos con tus propios datos) -->
+                                                                   
+                                                                    <li class="list-group-item">Peso dado de baja: <span style="font-weight: bold;" id="pesodadodebaja"></span></li>
+                                                                    <li class="list-group-item">Peso utilizado en remitos abiertos: <span style="font-weight: bold;" id="enremitosabiertos"></span></li>
+                                                                    <li class="list-group-item">Peso disponible para utilizar: </span><span style="font-weight: bold;" class="font-weight-bold text-primary" id="disponibleparausar"></span></li>
+                                           
                                                                 </ul>
                                                             </div>
                                                             
@@ -95,7 +102,9 @@
                                                                 <h5 class="text-center text-info">Datos</h5>
                                                                 <ul class="list-group">
                                                                     <!-- Datos del artículo (puedes reemplazar estos ejemplos con tus propios datos) -->
-                                                                    <li class="list-group-item">Peso Disponible: <span id="pesoDisp"></span><span class="font-weight-bold text-primary"> Kgrs</span></li>
+                                                                    <li class="list-group-item">Lote: <span id="deposito" class="font-weight-bold text-primary"></span></li>
+                                                                    <li class="list-group-item">Deposito: Scrap<span id="valorEnModal" class="font-weight-bold text-primary"></span></li>
+                                                                    <li class="list-group-item">Peso Inicial <span id="pesoDisp"></span><span class="font-weight-bold text-primary"> Kgrs</span></li>
                                                                     <li class="list-group-item">Origen: <span id="origen"></span></li>
                                                                     <li class="list-group-item">Tipo Material: <span id="tipoMaterial"></span></li>
                                                                     <li class="list-group-item">Motivo: <span id="motivo"></span></li>
@@ -104,7 +113,10 @@
                                                                    <li class="list-group-item">Material Impreso: <span id="matImpreso"></span></li>
                                                                 </ul>
                                                             </div>
+                                                                
+                                                                   
                                                         </div>
+                                                           
 
                                                         <div class="col-xs-6 col-sm-6 col-xl-6">
                                                             <div class="articulo-section border rounded p-3 mb-3 bg-light"> 
@@ -160,19 +172,28 @@
                                                             <div style="height: 200px; overflow-y: hidden;">
                                                                 </c:if>
                                                                 
+                                                               
+                                                                
+                                                              
+
+                                                                
                                                                   <div>
                                                                 <label for="inputIsScrap">Utilizar al 100%</label>
-                                                                <form:select id="inputIsScrap" path="idOrdenDeProduccionE" class="form-control" onchange="toggleInputField()">
+                                                                <form:select id="inputIsScrap" path="esUtilizadaAlCien" class="form-control" onchange="toggleInputField()">
                                                                      <form:option value="true" label="Sí" />
                                                                     <form:option value="false" label="No" />
 
                                                                 </form:select>
+                                                                
                                                             </div>
                                                             
                                                             <div id="inputContainer" style="display: none; margin-top: 10px;">
                                                                 <label for="inputPartialUsage">Cantidad kgrs a utilizar</label>
-                                                                <input type="string" path="idOrdenDeProduccionE" id="inputIsScrap" class="form-control" min="0" max="100" placeholder="Ingrese ls cantidad kgrs a utilizar">
+                                                                <form:input id="cantidadAUtilizar" path="cantidadAUtilizar" max="100" class="form-control" placeholder="Ingrese ls cantidad kgrs a utilizar" />
+                                                          
                                                             </div>
+                                                                
+                                                           
                                                                 
                                                             
                                                                 
@@ -196,43 +217,122 @@
 
                 <hr>
                 
-                <table class="display table table-striped table-hover cell-border">
+                <c:if test="${remito.estadoRemito eq 'Nuevo'}">
+                    <div>
+                        <button id="toggleSectionScrapBtn" class="btn btn-primary">Mostrar/Ocultar Sección de carga</button>
+                    </div>
+                    <div id="seccionCargaItemsScrap">
+                
+                    <table class="display table table-striped table-hover cell-border">
+                    <thead>
+                        <tr>
+
+                            <th>Orden de produccion</th>
+
+                            <th>Peso Total (kg)</th>
+                            <th>Acciones</th>
+                            <!-- Agrega más columnas según las propiedades de OrdenDeProduccionScrapModel -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="scrap" items="${depositoList}">
+                            <tr>
+                                <td>${scrap.idOrdenDeProduccion}</td>
+                                <td>${scrap.pesoSuma}</td>
+
+                                <td>
+                                 <button type="button"  class="btn btn-primary btn-agregarE" data-toggle="modal"  data-target="#miModalEgreso"  data-deposito-idB="${scrap.idOrdenDeProduccion}" data-loteB="5" data-remito="${remito.codigoRemito}">Seleccionar</button>
+                                </td>
+
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+
+                    <div class="pagination">
+                        <c:if test="${currentPage > 1}">
+                            <a href="/thyssenplastic/remitoDetalleScrap/${idRemito}?page=${currentPage - 1}&size=${pageSize}">Anterior</a>
+                        </c:if>
+                            <span>${currentPage}</span>
+                        <c:if test="${depositoList.size() == pageSize}">
+                            <a href="/thyssenplastic/remitoDetalleScrap/${idRemito}?page=${currentPage + 1}&size=${pageSize}">Siguiente</a>
+                        </c:if>
+                    </div>
+
+                </div>
+             </div>           
+                    
+            </c:if>
+                    
+            <div class="card">
+    <div class="card-body">
+        <div class="row col-xs-12 col-sm-12 col-xl-12">
+            <table id="remitodDetalleScrapTable" class="display table table-striped table-hover cell-border" style="width: 90%">
                 <thead>
                     <tr>
-                  
-                        <th>Orden de produccion</th>
-                      
-                        <th>Peso Total (kg)</th>
-                        <th>Acciones</th>
-                        <!-- Agrega más columnas según las propiedades de OrdenDeProduccionScrapModel -->
+                        <th style="text-align: center">Codigo</th>
+                        <th style="text-align: center">Aritulo</th>
+                        <th style="text-align: center">Lote</th>
+                        <th style="text-align: center">Deposito</th>
+                        <th style="text-align: center">Peso</th>
+                        
+                        <th style="text-align: center">Uso (%)</th>
+                        <c:if test="${remito.estadoRemito eq 'Nuevo'}">
+                            <th style="text-align: center">Acciones</th>
+                        </c:if>
+                        <th style="text-align: center">Estado Baja</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach var="scrap" items="${depositoList}">
+                    
+                    <c:forEach items="${remitoDetallesScrap}" var="remitoDetalle">
                         <tr>
-                            <td>${scrap.idOrdenDeProduccion}</td>
-                            <td>${scrap.pesoSuma}</td>
-
-                            <td>
-                             <button type="button"  class="btn btn-primary btn-agregarE" data-toggle="modal"  data-target="#miModalEgreso"  data-deposito-idB="${scrap.idOrdenDeProduccion}" data-loteB="5" data-remito="5">Seleccionar</button>
+                            <td><c:out value="${remitoDetalle.codigo}"/></td>
+                            <td><c:out value="${remitoDetalle.articulo}"/></td>
+                            <td><c:out value="${remitoDetalle.lote}"/></td>
+                            <td><c:out value="${remitoDetalle.deposito}"/></td>
+                             <td><c:out value="${remitoDetalle.cantidadUtilizadaRemito}"/></td>
+                            
+                            <td style="text-align: center">
+                                <span class="badge badge-large ${remitoDetalle.porcentajeDeUso >= 80 ? 'badge-high' : remitoDetalle.porcentajeDeUso >= 50 ? 'badge-medium' : 'badge-low'}">
+                                    ${remitoDetalle.porcentajeDeUso}%
+                                </span>
                             </td>
-                         
+                            
+                                <c:if test = "${rol == 'oficina' && estadoRemito == 'nuevo'}">
+                                                <td style="text-align: center">
+                                                    <a class="nav-link active fa fa-trash fa-lg"
+                                                        href="/thyssenplastic/egresoDepositoScrap/remove/${remitoDetalle.pk}"
+                                                        data-toggle="tooltip" data-placement="top" title="Eliminar"></a>
+                                                </td>
+                                             </c:if>
+                            <td style="text-align: center">
+                                <c:if test="${remitoDetalle.dadoDeBaja}">
+                                <span style="font-size: 20px; color: #49ad3a;" class="fa fa-check-circle text-success" title="El remito se ha cerrado y el ítem ha sido dado de baja"></span>
+                                <a href="/thyssenplastic/verMovimientos/${remitoDetalle.idSrap}" title="Ver movimientos" class="btn btn-outline-primary btn-lg d-flex align-items-center" style="gap: 5px;">
+                                    <i class="fa fa-eye"></i> Ver
+                                </a>
+                            </c:if>
+                            <c:if test="${!remitoDetalle.dadoDeBaja}">
+                                <span style="font-size: 20px; color: #a3a21b;" class="fa fa-exclamation-circle text-warning icon-large" title="El remito está nuevo o abierto por lo tanto el ítem aún no ha sido dado de baja"></span>
+                                <a href="/thyssenplastic/verMovimientos/${remitoDetalle.idSrap}" title="Ver movimientos" class="btn btn-outline-primary btn-lg d-flex align-items-center" style="gap: 5px;">
+                                    <i class="fa fa-eye"></i> Ver
+                                </a>
+                            </c:if>
+
+                             </td>
+                            
+                        
                         </tr>
                     </c:forEach>
+                        
                 </tbody>
             </table>
-                
-                <div class="pagination">
-                    <c:if test="${currentPage > 1}">
-                        <a href="/thyssenplastic/remitoDetalleScrap/${idRemito}?page=${currentPage - 1}&size=${pageSize}">Anterior</a>
-                    </c:if>
-                        <span>${currentPage}</span>
-                    <c:if test="${depositoList.size() == pageSize}">
-                        <a href="/thyssenplastic/remitoDetalleScrap/${idRemito}?page=${currentPage + 1}&size=${pageSize}">Siguiente</a>
-                    </c:if>
-                </div>
-                
-            </div>
+        </div>
+    </div>
+</div>
+
+
         </section>
     </div>
                   
@@ -410,22 +510,48 @@
     color: white;
 }
 
+.badge-low {
+    background-color: #dc3545; /* Rojo */
+    color: white;
+}
+
+.badge-medium {
+    background-color: #e5e600; /* Amarillo */
+    color: white;
+}
+
+.badge-high {
+    background-color: #28a745; /* Verde */
+    color: white;
+}
+
+.badge-large {
+    font-size: 1em;
+    padding: 7px 10px;
+    border-radius: 10px;
+}
+
+
     
     </style>
     
     <script>
     
-    //select
     function toggleInputField() {
-        const selectElement = document.getElementById('inputIsScrap');
-        const inputContainer = document.getElementById('inputContainer');
-        
-        if (selectElement.value === 'false') {
-            inputContainer.style.display = 'block'; // Mostrar el input
+    const selectElement = document.getElementById('inputIsScrap');
+    const inputContainer = document.getElementById('inputContainer');
+    const cantidadAUtilizar = document.getElementById('cantidadAUtilizar');
+
+    if (selectElement.value === 'false') {
+        inputContainer.style.display = 'block'; // Mostrar el input
+        cantidadAUtilizar.required = true; // Hacer el input obligatorio
         } else {
             inputContainer.style.display = 'none'; // Ocultar el input
+            cantidadAUtilizar.required = false; // No hacer el input obligatorio
         }
     }
+    document.addEventListener('DOMContentLoaded', toggleInputField);
+
     
     //limpiar modal cuando se cierra
     
@@ -476,6 +602,16 @@
         document.getElementById("codigoBobinaResultado").textContent = "" + codigoBobina;
     }
     
+    $(document).ready(function () {
+        $('#seccionCargaItems').hide();
+     
+        
+        $('#toggleSectionScrapBtn').on('click', function () {
+            $('#seccionCargaItemsScrap').toggle();
+        });
+        
+    });
+    
     
     $('#miModalEgreso').on('hidden.bs.modal', function (event) {
         console.log('Evento hidden.bs.modal ejecutado');
@@ -486,6 +622,9 @@
         $("#formato").empty();
         $("#recuperable").empty();
         $("#matImpreso").empty();
+        $("#pesodadodebaja").empty();
+        $("#enremitosabiertos").empty();
+        $("#disponibleparausar").empty();
         
         
         $('#myFormm')[0].reset();
@@ -497,6 +636,10 @@
             $('#idOrdenDeProduccionE').val(depositoIdE);
        
             $('#deposito').text(depositoIdE);
+            
+            const idRemito = $(this).attr('data-remito');
+          
+            $('#idRemito').val(idRemito);
         });
     
     function callController2() {
@@ -506,6 +649,24 @@
         if((codigoScrap === '-1' || codigoScrap === '')) {
             alert('Debe ingresar codigo de scrap');
             return;
+        }
+       
+    const cantidadAUtilizar = parseFloat($("#cantidadAUtilizar").val());
+    //const maxCantidad = parseFloat($("#cantidadAUtilizar").attr('max'));
+    const maxCantidad = parseFloat(document.getElementById('disponibleparausar').textContent);
+    
+    // Validar si maxCantidad es 0, mostrar alerta y evitar continuar
+    if (maxCantidad === 0) {
+        alert('No hay más cantidad disponible para utilizar.');
+        return; // Evitar que siga ejecutando el código
+    }
+ 
+    const esUtilizadaAlCien = document.getElementById('cantidadAUtilizar');
+    console.log(esUtilizadaAlCien);
+    const selectElement = document.getElementById('inputIsScrap');
+    if (selectElement.value === 'false' && cantidadAUtilizar > maxCantidad) {
+        alert('La cantidad debe ser menor o igual a ' + maxCantidad + '.');
+        return;
         }
 
         if(action == 'remove') {
@@ -531,13 +692,14 @@
         
         const codigoScrap = $("#codigo").val();
         const ordenProduccionScrap = $("#idOrdenDeProduccionE").val();
+        const idRemito = $("#codRem").text();
    
         if(codigoScrap == '' || codigoScrap == null || codigoScrap == undefined) {
             alert('Debe ingresar un código');
             return;
         }
  
-        var sUrl = '/thyssenplastic/depositoScrap/findScrap/'+codigoScrap+'/'+ordenProduccionScrap;
+        var sUrl = '/thyssenplastic/depositoScrap/findScrap/'+codigoScrap+'/'+ordenProduccionScrap+'/'+idRemito;
         $.ajax({
             async: true,
             type: 'GET',
@@ -566,16 +728,24 @@
                     $("#codigoBobinaResultado").text('');
                     return;
                 }
+                
+                if(item.tipo == '-3') {
+                    alert('Este código ya ha sido utilizado en este remito. Por favor, edite el item existente o ingrese un nuevo código.');
+                    $("#codigo").val('');
+                    $("#codigoBobinaResultado").text('');
+                    return;
+                }
 
                 if(item.tipo === 'scrap') {
- 
                     $("#pesoDisp").text(item.pesoTotal);
-                     $("#origen").text(item.origen);
-                      $("#motivo").text(item.motivo);
-                       $("#formato").text(item.formato);
-                     $("#recuperable").text(item.recuperable);
-                     $("#matImpreso").text(item.materialImpreso);
- 
+                    $("#origen").text(item.origen);
+                    $("#motivo").text(item.motivo);
+                    $("#formato").text(item.formato);
+                    $("#recuperable").text(item.recuperable);
+                    $("#matImpreso").text(item.materialImpreso);
+                    $("#pesodadodebaja").text(item.pesoUtilizadoDadoDeBaja);
+                    $("#enremitosabiertos").text(item.pesoUtilizadoEnRemitosAbiertos);
+                    $("#disponibleparausar").text(item.pesoDisponibleParaUsar);
                 } 
                                 
             }            
@@ -589,6 +759,16 @@
         });
 
     }
+    
+     $(document).ready(function () {
+        
+        $('#remitodDetalleScrapTable').DataTable({
+            language: {
+                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+            },           
+            order: [[1, 'desc']]            
+        });
+    });
     
 </script>
 
