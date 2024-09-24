@@ -110,13 +110,18 @@ public class AjusteDeInventarioController {
                     descripcion = insumoModel.getDescripcion();
                 }                
                 ajusteDeInventarioDto.setDescripcion(descripcion);
-            }                                    
-            ajusteDeInventarioDto.setAjusteCantidad(ajusteDeInventario.getAjusteCantidad().toString());
-            ajusteDeInventarioDto.setAjustePeso(ajusteDeInventario.getAjustePeso().toString());
-            ajusteDeInventarioDto.setExistenteCantidad(ajusteDeInventario.getExistenteCantidad().toString());
-            ajusteDeInventarioDto.setExistentePeso(ajusteDeInventario.getExistentePeso().toString());
-            ajusteDeInventarioDto.setResultadoCantidad(ajusteDeInventario.getResultadoCantidad().toString());
-            ajusteDeInventarioDto.setResultadoPeso(ajusteDeInventario.getResultadoPeso().toString());
+            }                    
+            if(ajusteDeInventario.getTipo().equalsIgnoreCase("insumos") || ajusteDeInventario.getTipo().equalsIgnoreCase("articulos") ) {
+                ajusteDeInventarioDto.setAjusteCantidad(ajusteDeInventario.getAjusteCantidad().toString());
+                ajusteDeInventarioDto.setExistenteCantidad(ajusteDeInventario.getExistenteCantidad().toString());
+                ajusteDeInventarioDto.setResultadoCantidad(ajusteDeInventario.getResultadoCantidad().toString());
+            } 
+            if(ajusteDeInventario.getTipo().equalsIgnoreCase("materiaPrima")) {
+                ajusteDeInventarioDto.setAjustePeso(ajusteDeInventario.getAjustePeso().toString());
+                ajusteDeInventarioDto.setExistentePeso(ajusteDeInventario.getExistentePeso().toString());
+                ajusteDeInventarioDto.setResultadoPeso(ajusteDeInventario.getResultadoPeso().toString());
+            }
+            
             
             ajustesDeInventarioDtos.add(ajusteDeInventarioDto);
         }
@@ -204,13 +209,18 @@ public class AjusteDeInventarioController {
             }                        
         }
         
-        if(ajusteDeInventarioForm.getResultadoCantidadHdn() == null || ajusteDeInventarioForm.getResultadoCantidadHdn().isEmpty()) {
+        if(
+            ajusteDeInventarioForm.getResultadoCantidadHdn() == null && 
+                ( ajusteDeInventarioForm.getTipo().equalsIgnoreCase("articulos") || ajusteDeInventarioForm.getTipo().equalsIgnoreCase("inventario")) )
+        {
             modelAndView.setViewName("error");
             modelAndView.addObject("errorMessage", "Error: resultado cantidad incorrecta");
             return modelAndView;                                        
         }
 
-        if(ajusteDeInventarioForm.getResultadoPesoHdn() == null || ajusteDeInventarioForm.getResultadoPesoHdn().isEmpty()) {
+        
+        
+        if(ajusteDeInventarioForm.getTipo().equalsIgnoreCase("materiaPrima") && (ajusteDeInventarioForm.getResultadoPesoHdn() == null || ajusteDeInventarioForm.getResultadoPesoHdn().isEmpty())) {
             modelAndView.setViewName("error");
             modelAndView.addObject("errorMessage", "Error: resultado peso incorrecto");
             return modelAndView;                                        
@@ -320,20 +330,17 @@ public class AjusteDeInventarioController {
             
             if(ajusteDeInventarioForm.getTipo().equalsIgnoreCase("articulos")){
                 articulo.setStock(Integer.valueOf(ajusteDeInventarioForm.getResultadoCantidadHdn()));
-                articulo.setStockPeso(Double.valueOf(ajusteDeInventarioForm.getResultadoPesoHdn()));
+                
                 
                 articuloService.save(articulo);
             }
             if(ajusteDeInventarioForm.getTipo().equalsIgnoreCase("materiaPrima")){
-                materiaPrima.setStock(Integer.valueOf(ajusteDeInventarioForm.getResultadoCantidadHdn()));
                 materiaPrima.setStockPeso(Double.valueOf(ajusteDeInventarioForm.getResultadoPesoHdn()));
                 
                 materiaPrimaService.save(materiaPrima);                
             }            
             if(ajusteDeInventarioForm.getTipo().equalsIgnoreCase("insumos")){
                 insumo.setStock(Integer.valueOf(ajusteDeInventarioForm.getResultadoCantidadHdn()));
-                insumo.setStockPeso(Double.valueOf(ajusteDeInventarioForm.getResultadoPesoHdn()));
-                
                 insumoService.save(insumo);                
             }
             
