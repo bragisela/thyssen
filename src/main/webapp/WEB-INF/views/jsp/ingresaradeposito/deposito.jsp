@@ -61,7 +61,6 @@
                                 <th>Nro Lote</th>
                                 <th>Depósito</th>
                                 <th>Unidades</th>
-                                <th>U. Remitidas</th>
                                 <th>Recepcionado(KG)</th>
                                 <th>Disponible(KG)</th>
                                 <th>Consumido(KG)</th>
@@ -77,7 +76,6 @@
                                     <td class="custom-icon-container" style="--remito-detalle: ${remitoDetalle};">
                                          <div style="float: left;">${deposito.unidad}</div>
                                     </td>
-                                    <td>${deposito.remitoDetalle}</td>
                                         
                                    <td>${deposito.sumapeso}</td>
                                    <td>${deposito.sumapeso - deposito.pesoConsumido}</td>

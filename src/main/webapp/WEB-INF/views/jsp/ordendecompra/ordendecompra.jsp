@@ -220,13 +220,19 @@
                                                     <a class="nav-link active fa fa-wrench fa-lg"
                                                        href="/thyssenplastic/ordenDeCompra/completarOrden/${ordendecompra.pk}"
                                                         data-toggle="tooltip" data-placement="top" title="Cambiar a estado Completado"></a>
-                                                </c:if>                                                    
+                                                </c:if>        
                                                 <c:if test = "${rol == 'oficina' && operacion == 'alta' && ordendecompra.estado == 'Completado' && ordendecompra.superaCantidad == 'true'}">
                                                     <span style="font-size: 12px; color: red">(Posee items que supera la cantidad solicitada)</span>
                                                 </c:if>    
                                                 <c:if test = "${rol == 'oficina' && operacion == 'alta' && ordendecompra.estado == 'Completado' && ordendecompra.faltaCantidad == 'true'}">
                                                     <span style="font-size: 12px; color: green">(Posee items donde la cantidad recepcionada es menor a la cantidad solicitada)</span>
                                                 </c:if>                                                        
+                                                <c:if test = "${(rol == 'deposito' || rol == 'oficina')}">
+                                                    <a class="nav-link active fa fa-print fa-lg"
+                                                       href="javascript:void(0);" onclick="printOrdenDeCompra(${ordendecompra.pk})"
+                                                        data-toggle="tooltip" data-placement="top" title="Imprimir"></a>
+                                                </c:if>
+
                                             </td>
                                         </tr>
                                     </c:forEach>
@@ -297,10 +303,15 @@
         
         var opcion = confirm("Desea Cerrar la Orden?");
         if (opcion == true) {
-            window.open("/thyssenplastic/ordenDeCompra/setStatusCloseOrdenCompra/"+ordendecomprapk, "Cerrar Orden");   
+            window.location.href = "/thyssenplastic/ordenDeCompra/setStatusCloseOrdenCompra/"+ordendecomprapk, "Cerrar Orden"; 
 	}         
     }
-        
+
+    
+     function printOrdenDeCompra(ordendecomprapk) {
+         console.log("va a disparar la ventana");
+        window.open("/thyssenplastic/ordenDeCompra/print/"+ordendecomprapk, "Imprimir Orden", "popup,width=1024,height=800");
+    }
 </script>
 
 <%@include file = "/WEB-INF/views/jsp/includes/footer.jsp" %>

@@ -8,14 +8,27 @@ package com.empresa.thyssenplastic.controller;
 import com.empresa.thyssenplastic.controller.form.OrdenDeCompraForm;
 import com.empresa.thyssenplastic.controller.form.UserForm;
 import com.empresa.thyssenplastic.dto.OrdenDeCompraDto;
+import com.empresa.thyssenplastic.dto.OrdenDeCompraItemDto;
+import com.empresa.thyssenplastic.dto.OrdenDeCompraItemRecepcionDto;
+import com.empresa.thyssenplastic.model.InsumoModel;
+import com.empresa.thyssenplastic.model.MateriaPrimaModel;
 import com.empresa.thyssenplastic.model.OrdenDeCompraItemModel;
+import com.empresa.thyssenplastic.model.OrdenDeCompraItemRecepcionModel;
 import com.empresa.thyssenplastic.model.OrdenDeCompraModel;
 import com.empresa.thyssenplastic.model.ProveedorModel;
+import com.empresa.thyssenplastic.model.TipoModel;
 import com.empresa.thyssenplastic.model.UserModel;
+import com.empresa.thyssenplastic.service.InsumoService;
+import com.empresa.thyssenplastic.service.MateriaPrimaService;
+import com.empresa.thyssenplastic.service.OrdenDeCompraItemRecepcionService;
 import com.empresa.thyssenplastic.service.OrdenDeCompraItemService;
 import com.empresa.thyssenplastic.service.OrdenDeCompraService;
 import com.empresa.thyssenplastic.service.ProveedorService;
+import com.empresa.thyssenplastic.service.TipoService;
 import com.empresa.thyssenplastic.service.UserService;
+import com.empresa.thyssenplastic.service.impl.InsumoServiceImpl;
+import com.empresa.thyssenplastic.service.impl.MateriaPrimaServiceImpl;
+import com.empresa.thyssenplastic.service.impl.OrdenDeCompraItemRecepcionServiceImpl;
 import com.empresa.thyssenplastic.service.impl.OrdenDeCompraItemServiceImpl;
 import com.empresa.thyssenplastic.utils.Utils;
 import java.util.ArrayList;
@@ -28,6 +41,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import com.empresa.thyssenplastic.service.impl.OrdenDeCompraServiceImpl;
 import com.empresa.thyssenplastic.service.impl.ProveedorServiceImpl;
+import com.empresa.thyssenplastic.service.impl.TipoServiceImpl;
 import com.empresa.thyssenplastic.service.impl.UserServiceImpl;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -963,4 +977,138 @@ public class OrdenDeCompraController {
                                                         
         return "/ordendecompra/ordendecompra";        
     }    
+    
+    @RequestMapping(value = "/ordenDeCompra/print/{ordendecomprapk}", method = RequestMethod.GET)
+    public String printOrdenDeCompra(@PathVariable String ordendecomprapk, HttpServletRequest req, ModelMap model) throws Exception {
+                
+        if(!Utils.isAutenticated(req)) {
+            model.addAttribute("userForm", new UserForm());         
+            return "/login/login";            
+        }
+
+        if(ordendecomprapk == null) {
+            model.addAttribute("errorMessage", "Error: OrdenDeCompra inválido");         
+            return "/error";                
+        }
+        
+        OrdenDeCompraService ordenDeCompraService = new OrdenDeCompraServiceImpl();   
+        OrdenDeCompraModel ordenDeCompra = ordenDeCompraService.getByPk(Integer.valueOf(ordendecomprapk));
+        if(ordenDeCompra == null) {
+            model.addAttribute("errorMessage", "Error: OrdenDeCompra inválido. No ha sido encontrado.");         
+            return "/error";    
+        }
+        
+        String refAdministrativa = ordenDeCompra.getReferenciaAdministrativa();
+        Date today = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        
+        String fechaHoy = sdf.format(today);
+        String fechaEntrega = ordenDeCompra.getFechaEntrega().toString().replace(" 00:00:00.0", "");
+        String estado = ordenDeCompra.getEstado();
+        
+        ProveedorService proveedorService = new ProveedorServiceImpl();   
+        ProveedorModel proveedor = proveedorService.getByPk(ordenDeCompra.getIdProveedor());
+        String proveedorRazonSocial = proveedor.getRazonSocial();
+        
+        OrdenDeCompraItemService ordenDeCompraItemService = new OrdenDeCompraItemServiceImpl();   
+        List<OrdenDeCompraItemModel> ordenDeCompraItems = ordenDeCompraItemService.getAllByOrdenDeCompra(Integer.valueOf(ordendecomprapk));
+
+        TipoService tipoService = new TipoServiceImpl();
+        
+        MateriaPrimaService materiaPrimaService = new MateriaPrimaServiceImpl();   
+        
+        InsumoService insumoService = new InsumoServiceImpl();   
+        
+        List<OrdenDeCompraItemDto> ordenDeCompraItemsDtos = new ArrayList<OrdenDeCompraItemDto>();
+        List<OrdenDeCompraItemRecepcionDto> ordenDeCompraItemsRecepcionDtos = new ArrayList<OrdenDeCompraItemRecepcionDto>();
+        String unidad = "";
+        String suministro = "";
+        
+        for(OrdenDeCompraItemModel ordenDeCompraItem: ordenDeCompraItems) {
+            OrdenDeCompraItemDto ordenDeCompraItemDto = new OrdenDeCompraItemDto();
+            ordenDeCompraItemDto.setPk(ordenDeCompraItem.getId().toString());
+            ordenDeCompraItemDto.setFechaAlta(ordenDeCompraItem.getFechaAlta().toString().replace(" 00:00:00.0", ""));
+            ordenDeCompraItemDto.setCantidadSolicitada(ordenDeCompraItem.getCantidad().toString());
+
+            OrdenDeCompraItemRecepcionService ordenDeCompraItemRecepcionService = new OrdenDeCompraItemRecepcionServiceImpl(); 
+            Integer cantidadRecepcionadaTotal = 0;
+            List<OrdenDeCompraItemRecepcionModel> ordenDeCompraItemsRecepcion = ordenDeCompraItemRecepcionService.getAllByOrdenDeCompraItem(ordenDeCompraItem.getId());
+            
+            if(ordenDeCompra.getReferenciaAdministrativa() != null) {
+                
+                ordenDeCompraItemDto.setReferenciaAdministrativa( ordenDeCompra.getReferenciaAdministrativa());
+            }
+            
+            ordenDeCompraItemDto.setCantidadRecepcionada(cantidadRecepcionadaTotal.toString());            
+
+            if(ordenDeCompraItem.getTipo().equalsIgnoreCase("materiaPrima")) {
+                MateriaPrimaModel materiaPrima = materiaPrimaService.getByPk(ordenDeCompraItem.getIdMateriaPrima());            
+                ordenDeCompraItemDto.setMateriaPrima(materiaPrima.getDescripcion());
+                suministro = materiaPrima.getDescripcion();
+                ordenDeCompraItemDto.setTipo("Materia Prima");
+                ordenDeCompraItemDto.setUnidad("kilos");
+                unidad = "kilos";
+                ordenDeCompraItemDto.setStock(materiaPrima.getStock().toString());            
+            }                        
+            if(ordenDeCompraItem.getTipo().equalsIgnoreCase("insumo")) {
+                InsumoModel insumo = insumoService.getByPk(ordenDeCompraItem.getIdInsumo());                            
+                ordenDeCompraItemDto.setMateriaPrima(insumo.getDescripcion());
+                suministro = insumo.getDescripcion();
+                ordenDeCompraItemDto.setTipo("Insumo");
+                unidad = "unidades";
+                ordenDeCompraItemDto.setUnidad("unidades");
+                ordenDeCompraItemDto.setStock(insumo.getStock().toString());            
+            }                                    
+            if(ordenDeCompraItem.getEstaCompletado() == null) {
+                ordenDeCompraItemDto.setEstaCompletado("0");
+            } else {
+                ordenDeCompraItemDto.setEstaCompletado(ordenDeCompraItem.getEstaCompletado().toString());
+            }
+
+            if(ordenDeCompraItemsRecepcion != null && !ordenDeCompraItemsRecepcion.isEmpty()) {
+                for(OrdenDeCompraItemRecepcionModel ordenDeCompraItemRecepcion: ordenDeCompraItemsRecepcion) {
+                    OrdenDeCompraItemRecepcionDto ordenDeCompraItemRecepcionDto = new OrdenDeCompraItemRecepcionDto();
+                    ordenDeCompraItemRecepcionDto.setPk(ordenDeCompraItemRecepcion.getId().toString());
+                    ordenDeCompraItemRecepcionDto.setItem(ordenDeCompraItem.getId().toString());
+                    ordenDeCompraItemRecepcionDto.setFechaRecepcion(ordenDeCompraItemRecepcion.getFechaRecepcion().toString().replace(".0",""));
+                    ordenDeCompraItemRecepcionDto.setCantidadRecepcionada(ordenDeCompraItemRecepcion.getCantidadRecepcionada().toString());
+                    ordenDeCompraItemRecepcionDto.setUnidad(unidad);
+                    ordenDeCompraItemRecepcionDto.setSuministro(suministro);
+                    if ( unidad.equalsIgnoreCase("unidades") ){
+                        ordenDeCompraItemRecepcionDto.setTipo("Insumo");
+                    }
+                    if ( unidad.equalsIgnoreCase("kilos")) {
+                        ordenDeCompraItemRecepcionDto.setTipo("Materia Prima");
+                    }
+                    
+                    if(ordenDeCompraItemRecepcion.getLote() != null) {
+                        ordenDeCompraItemRecepcionDto.setLote(ordenDeCompraItemRecepcion.getLote());
+                    }
+                    if(ordenDeCompraItemRecepcion.getRefenciaAdministrativa() != null) {
+                        ordenDeCompraItemRecepcionDto.setReferenciaAdministrativa(ordenDeCompraItemRecepcion.getRefenciaAdministrativa());
+                    }
+                                
+                    ordenDeCompraItemsRecepcionDtos.add(ordenDeCompraItemRecepcionDto);
+
+                    cantidadRecepcionadaTotal += ordenDeCompraItemRecepcion.getCantidadRecepcionada();
+                }
+            }                        
+
+            
+            ordenDeCompraItemsDtos.add(ordenDeCompraItemDto);
+        }
+
+               
+        model.addAttribute("ordenDeCompraNro", ordenDeCompra.getId());
+        model.addAttribute("ordenDeCompraRefAdministrativa", refAdministrativa);
+        model.addAttribute("fechaHoy", fechaHoy);
+        model.addAttribute("fechaEntrega", fechaEntrega);
+        model.addAttribute("estado", estado);
+        model.addAttribute("proveedorRazonSocial", proveedorRazonSocial);
+        model.addAttribute("ordenDeCompraItems", ordenDeCompraItemsDtos);
+        model.addAttribute("ordenDeCompraItemsRecepcion", ordenDeCompraItemsRecepcionDtos);        
+        
+        return "/ordendecompra/ordendecompraprint"; 
+    }        
+
 }

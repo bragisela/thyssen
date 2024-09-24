@@ -14,7 +14,6 @@
                                     <li class="breadcrumb-item active">${titleOrdenDeCompraItem}</li>
                                 </ol>
                             </div>
-
                             <div class="card-body">
                                 <form:form class="form-horizontal" method="post"
                                         action="/thyssenplastic/ordenDeCompraItem/addOrEditOrRemove"
@@ -30,8 +29,12 @@
                                                 <c:set var = "disabledAlta" value = "false"/>
                                                 <c:set var = "disabledRecepcion" value = "true"/>                                            
                                             </c:if>
-                                            <c:if test = "${operacion == 'view'}">
+                                            <c:if test = "${operacion == 'view' || operacion == 'remove'}">
                                                 <c:set var = "disabledAlta" value = "true"/>
+                                                <c:set var = "disabledRecepcion" value = "true"/>                                            
+                                            </c:if>
+                                            <c:if test = "${operacion == 'edit'}">
+                                                <c:set var = "disabledAlta" value = "false"/>
                                                 <c:set var = "disabledRecepcion" value = "true"/>                                            
                                             </c:if>
                                         </c:if>
@@ -215,7 +218,9 @@
                                         <th>FECHA ALTA</th>
                                         <th>MATERIA PRIMA</th>
                                         <th>TIPO</th>
-                                        <th>STOCK</th>
+                                        <c:if test = "${rol != 'deposito'}">
+                                            <th>STOCK</th>
+                                        </c:if>  
                                         <th>CANTIDAD SOLICITADA</th>
                                         <th>CANTIDAD RECEPCIONADA</th>
                                         <th>REFERENCIA ADMINISTRATIVA</th>
@@ -239,9 +244,11 @@
                                             <td>
                                                 <c:out value="${ordendecompraitem.tipo}" />
                                             </td>                                                                                                                                                                                
-                                            <td>
-                                                <c:out value="${ordendecompraitem.stock}" />
-                                            </td>                                                                                                                                                                                                                            
+                                            <c:if test = "${rol != 'deposito'}">
+                                                <td>
+                                                    <c:out value="${ordendecompraitem.stock}" />
+                                                </td>                                                                        
+                                            </c:if>  
                                             <td>
                                                 <c:out value="${ordendecompraitem.cantidadSolicitada}" />
                                             </td>

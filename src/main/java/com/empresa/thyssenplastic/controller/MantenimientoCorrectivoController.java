@@ -263,6 +263,12 @@ public class MantenimientoCorrectivoController {
             } else {
                 mantenimientoCorrectivoModel.setProblema(null);
             }
+            if(mantenimientoCorrectivoForm.getHoraArranque() != null && !mantenimientoCorrectivoForm.getHoraArranque().isEmpty()) {
+                mantenimientoCorrectivoModel.setHoraArranque(mantenimientoCorrectivoForm.getHoraArranque());
+            } else {
+                mantenimientoCorrectivoModel.setHoraArranque(null);
+            }
+            
             
             mantenimientoCorrectivoModel.setIdUserAlta(Integer.valueOf(Utils.getUserLoggedId(req)));
             mantenimientoCorrectivoModel.setEstado("Abierto");

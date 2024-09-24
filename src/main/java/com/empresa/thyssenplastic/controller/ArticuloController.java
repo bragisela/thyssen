@@ -92,9 +92,16 @@ public class ArticuloController {
             }                                    
             if(articulo.getIdRubro() != null) {
                 String rubro = "";
+                Integer artTipo = 0;
+                Integer artRubro = 0;
                 if(rubrosModel != null && !rubrosModel.isEmpty()){
                     for(TipoModel tipoModel :rubrosModel) {
-                        if(articulo.getIdRubro() == tipoModel.getId()) {
+                        // Mauro nota: tuve que forzar que la comparación del if sea como string porque por algún motivo de otra galaxia
+                        // el condicional que estaba ( que estaba correctísimo ) como Integers fallaba para algunos casos. 
+                        artTipo = tipoModel.getId();
+                        artRubro = articulo.getIdRubro();
+                        
+                        if(artTipo.toString().equalsIgnoreCase(artRubro.toString())) {
                             rubro = tipoModel.getValor();
                         }
                     }
