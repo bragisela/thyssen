@@ -334,8 +334,9 @@
                                             </div>
                                                 
                                             <p>
-
+                                            <c:set var = "disabledPesoTecnico" value = "true"/>
                                             <c:if test = "${rol == 'oficina'}">
+                                                <c:set var = "disabledPesoTecnico" value = "false"/>
                                                 <div class="form-row row">
 
                                                     <div class="row col-xs-9 col-sm-3 col-xl-4">
@@ -354,7 +355,7 @@
                                                     <div class="row col-xs-9 col-sm-3 col-xl-4">
                                                         <label for="inputFecha">Peso Técnico (kg)</label>
                                                         <form:input type="text" path="pesoTecnicoArticulo" class="form-control" placeholder=""
-                                                                    id="holderDateOfBirth" required="required" disabled="true"/>
+                                                                    id="holderDateOfBirth" required="required" disabled="${disabledPesoTecnico}"/>
                                                     </div>                                                    
 
                                                     <div class="row col-xs-9 col-sm-3 col-xl-4">
@@ -380,20 +381,28 @@
                                                         <form:input type="text" path="metrosArticulo" class="form-control" placeholder=""
                                                                     id="holderDateOfBirth" required="required" disabled="true"/>
                                                     </div>                                                                                                    
-                                                </div>                 
+                                                </div>  
                                             </c:if>                                                
+
+                                    <div class="form-row row">
+                                        <div class="row col-xs-9 col-sm-3 col-xl-4">
+                                            <button type="button" class="btn btn-primary" onclick="callController(${idOrdenDeProduccion})">${buttonLabel}</button>
+                                            
+                                        </div>
+                                    </div>
+
                                             
                                             <p>&nbsp;</p>
                                             
                                             <div class="form-row row">
                                                 <div class="row col-xs-9 col-sm-1 col-xl-1" style="display:${displayButtonCambiarEstadoFabricacion}">
-                                                    <button type="button" class="btn btn-primary" onclick="window.location.href='/thyssenplastic/ordenDeProduccionDetalle/setStatusFabricacionOrdenProduccion/${idOrdenDeProduccion}'">Cambiar Estado Fabricación</button>                                                                                                                                                    
+                                                    <button type="button" class="btn btn-primary" onclick="window.location.href='/thyssenplastic/ordenDeProduccionDetalle/setStatusFabricacionOrdenProduccion/${idOrdenDeProduccion}'">Cambiar Estado Fabricación</button>
                                                 </div>
                                             </div>
 
                                             <div class="form-row row">
                                                 <div class="row col-xs-9 col-sm-1 col-xl-1" style="display:${displayButtonCambiarEstadoEmpaque}">
-                                                    <button type="button" class="btn btn-primary" onclick="window.location.href='/thyssenplastic/ordenDeProduccionDetalle/setStatusEmpaqueOrdenProduccion/${idOrdenDeProduccion}'">Cambiar Estado Empaque</button>                                                                                                                                                    
+                                                    <button type="button" class="btn btn-primary" onclick="window.location.href='/thyssenplastic/ordenDeProduccionDetalle/setStatusEmpaqueOrdenProduccion/${idOrdenDeProduccion}'">Cambiar Estado Empaque</button>
                                                 </div>
                                             </div>
 
@@ -405,7 +414,8 @@
 
                                             <div class="form-row row">
                                                 <div class="row col-xs-9 col-sm-1 col-xl-1" style="display:${displayButtonCambiarEstadoCompletado}">
-                                                    <button type="button" class="btn btn-primary" onclick="window.location.href='/thyssenplastic/ordenDeProduccionDetalle/setStatusCompletadoOrdenProduccion/${idOrdenDeProduccion}'">Cambiar Estado Completado</button>                                                                                                                                                    
+                                                    <button type="button" class="btn btn-primary" onclick="window.location.href='/thyssenplastic/ordenDeProduccionDetalle/setStatusCompletadoOrdenProduccion/${idOrdenDeProduccion}'">Cambiar Estado Completado</button>
+                                                    <!-- <button type="button" class="btn btn-primary" onclick="window.location.href='/thyssenplastic/ordenDeProduccionDetalle/setStatusCompletadoOrdenProduccion/${idOrdenDeProduccion}'">Cambiar Estado Completado</button> -->
                                                 </div>
                                             </div>
                                                 
@@ -1248,10 +1258,32 @@
 
 <script>
      // Escucha el evento "show.bs.modal" que se dispara cuando se muestra el modal
-     
+
+    function callController(ordendeproduccionpk) {
+    // Por aca
+        var peso = encryptStringToNumbers($('input[name="pesoTecnicoArticulo"]').val());
+        
+        window.location.href = "/thyssenplastic/ordenDeProduccionDetalle/setPesoTecnico/" + ordendeproduccionpk + "/" + peso;
+    }    
+
+    // Paso los caracteres especiales a numeros ( tabla ASCII ) para que me lo tolere el sistema.
+    function encryptStringToNumbers(str) {
+        let encrypted = '';
     
-      
-     $('#miModal').on('show.bs.modal', function (event) {
+        for (let i = 0; i < str.length; i++) {
+            const charCode = str.charCodeAt(i);
+            // Solo incluye caracteres ASCII (0-127)
+            if (charCode >= 0 && charCode <= 127) {
+                encrypted += charCode.toString().padStart(3, '0'); // Pad to ensure 3 digits
+            } else {
+                console.warn(`Ignoring non-ASCII character: ${str[i]}`);
+            }
+        }
+        return encrypted; // Retorna la cadena de números concatenados
+    }
+    
+    
+    $('#miModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
         var codigoOrdenProduccion = button.data('codigo');
         var mapaCodigos = button.data('lista'); // Ahora `mapaBultos` se recupera como un objeto en JavaScript

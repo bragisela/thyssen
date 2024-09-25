@@ -1965,6 +1965,65 @@ public class OrdenDeProduccionDetalleController {
     }
 
     
+    @RequestMapping(value = "/ordenDeProduccionDetalle/setPesoTecnico/{ordenDeProduccionPk}/{peso}", method = RequestMethod.GET)
+    public ModelAndView setPesoTecnico(@PathVariable String ordenDeProduccionPk,@PathVariable String peso, HttpServletRequest req, ModelMap model) throws Exception {
+
+        ModelAndView modelAndView = new ModelAndView();
+        
+               
+        OrdenDeProduccionService ordenDeProduccionService = new OrdenDeProduccionServiceImpl();   
+        OrdenDeProduccionModel ordenDeProduccion = ordenDeProduccionService.getByPk(Integer.valueOf(ordenDeProduccionPk));
+        
+        if(ordenDeProduccion == null) {
+            modelAndView.setViewName("error");
+            modelAndView.addObject("Error: OrdenDeProduccion inválido. No ha sido encontrado.", "Error");
+            return modelAndView;
+        }
+
+
+        ArticuloFichaTecnicaService articuloFichaTecnicaService = new ArticuloFichaTecnicaServiceImpl();
+        ArticuloFichaTecnicaModel articuloFichaTecnica = articuloFichaTecnicaService.getByPk(ordenDeProduccion.getIdFichaTecnica());
+        if(articuloFichaTecnica == null) {
+            modelAndView.setViewName("error");
+            modelAndView.addObject("Error: ficha tecnica no encontrada", "Error");
+            return modelAndView;
+        }
+
+        //Desencriptamos el numero ASCII en un string
+        StringBuilder decrypted = new StringBuilder();
+        
+        // Itera sobre la cadena numérica de tres en tres
+         for (int i = 0; i < peso.length(); i += 3) {
+            // Extrae un substring de tres caracteres o lo que quede
+            String substring = peso.substring(i, Math.min(i + 3, peso.length()));
+
+            // Convierte el substring a un valor entero (código ASCII)
+            int charCode = Integer.parseInt(substring);
+
+            // Verifica que el código ASCII esté en un rango válido
+            if (charCode >= 32 && charCode <= 126) {
+                // Convierte el código a carácter y lo añade al StringBuilder
+                decrypted.append((char) charCode);
+            } else {
+                // Manejo de caracteres no válidos, se puede lanzar una excepción o manejarlo de otra forma
+                decrypted.append('?'); // Agrega un símbolo de interrogación para representar un carácter no válido
+            }
+        }
+        
+        peso = decrypted.toString();
+
+        articuloFichaTecnica.setPeso(Double.parseDouble(peso));
+        articuloFichaTecnicaService.save(articuloFichaTecnica);
+        
+        modelAndView.setViewName("redirect:/"
+            + "ordenDeProduccionDetalle/"+ordenDeProduccionPk);
+
+        
+        return modelAndView; 
+    }
+    
+
+    
     @RequestMapping(value = "/ordenDeProduccionDetalle/editbobina/{ordenDeProduccionBobinaPk}", method = RequestMethod.GET)
     public String editOrdenDeProduccion(@PathVariable String ordenDeProduccionBobinaPk, HttpServletRequest req, ModelMap model) throws Exception {
                 
