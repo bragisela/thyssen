@@ -197,7 +197,7 @@ public class MantenimientoCorrectivoController {
         
         String operacion = mantenimientoCorrectivoForm.getOperacion();
         
-        if(operacion == null || (!operacion.equalsIgnoreCase("alta") && !operacion.equalsIgnoreCase("cierre"))) {
+        if(operacion == null || (!operacion.equalsIgnoreCase("alta") && !operacion.equalsIgnoreCase("cierre") && !operacion.equalsIgnoreCase("edit") )) {
             modelAndView.setViewName("error");
             modelAndView.addObject("errorMessage", "Error");
             return modelAndView;                        
@@ -207,7 +207,7 @@ public class MantenimientoCorrectivoController {
             modelAndView.addObject("errorMessage", "Error");
             return modelAndView;                        
         }
-        if(!mantenimientoCorrectivoForm.getPk().equalsIgnoreCase("-1") && !operacion.equalsIgnoreCase("cierre")) {
+        if(!mantenimientoCorrectivoForm.getPk().equalsIgnoreCase("-1") && !operacion.equalsIgnoreCase("cierre") && !operacion.equalsIgnoreCase("edit") ) {
             modelAndView.setViewName("error");
             modelAndView.addObject("errorMessage", "Error");
             return modelAndView;                        
@@ -230,7 +230,15 @@ public class MantenimientoCorrectivoController {
             } 
         }        
         
-        if(operacion.equalsIgnoreCase("alta")) {
+        if (operacion.equalsIgnoreCase("edit")) {
+            if(mantenimientoCorrectivoForm.getHoraArranque() != null && !mantenimientoCorrectivoForm.getHoraArranque().isEmpty()) {
+                mantenimientoCorrectivoModel.setHoraArranque(mantenimientoCorrectivoForm.getHoraArranque());
+            } else {
+                mantenimientoCorrectivoModel.setHoraArranque(null);
+            }
+        }
+        
+        if(operacion.equalsIgnoreCase("alta") ) {
             if(mantenimientoCorrectivoForm.getFechaAlta() != null && !mantenimientoCorrectivoForm.getFechaAlta().trim().equals("")) {
                 SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd"); 
                 Date fecha = formato.parse(mantenimientoCorrectivoForm.getFechaAlta());
@@ -383,7 +391,7 @@ public class MantenimientoCorrectivoController {
         Integer userId = Integer.valueOf(Utils.getUserLoggedId(req));
         UserModel user = userService.getUserById(userId);
 
-        if(user.getRol() != Utils.ROL_MANTENIMIENTO) {
+        if(user.getRol() != Utils.ROL_MANTENIMIENTO && user.getRol() != Utils.ROL_OFICINA && user.getRol() != Utils.ROL_PLANTA ) {
             model.addAttribute("errorMessage", "Error: usuario no permite esta operación.");         
             return "/error";                                                                
         }
@@ -417,6 +425,9 @@ public class MantenimientoCorrectivoController {
         if(mantenimientoCorrectivo.getIntervaloReparacion() != null) {
             mantenimientoCorrectivoForm.setIntervaloReparacion(mantenimientoCorrectivo.getIntervaloReparacion().toString());
         }        
+        if(mantenimientoCorrectivo.getHoraArranque() != null) {
+            mantenimientoCorrectivoForm.setHoraArranque(mantenimientoCorrectivo.getHoraArranque());
+        }        
         
         Calendar c = Calendar.getInstance();        
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd"); 
@@ -430,6 +441,10 @@ public class MantenimientoCorrectivoController {
             displayActionButton = "block";
             
         }
+        if(user.getRol() == Utils.ROL_OFICINA || user.getRol() == Utils.ROL_PLANTA) {
+            operacion = "edit";
+        }
+
         mantenimientoCorrectivoForm.setOperacion(operacion);
         
         mantenimientoCorrectivoForm.setAction("edit");

@@ -190,8 +190,8 @@
                                     </c:if>                                                                                
                                 </ul>                                
                             </li>
-                        </c:if>                            
-                        <c:if test="${sessionInformation.rolUser == '1' || sessionInformation.rolUser == '3' || sessionInformation.rolUser == '4'}">
+                        </c:if>                 
+                        <c:if test="${sessionInformation.rolUser == '1' || sessionInformation.rolUser == '2' || sessionInformation.rolUser == '3' || sessionInformation.rolUser == '4'}">
                             <li class="treeview">
                                 <a href="#"><i class="fa fa-cogs"></i> <span>Mantenimiento</span>
                                     <span class="pull-right-container">
@@ -199,7 +199,7 @@
                                     </span>
                                 </a>
                                 <ul class="treeview-menu">
-                                    <c:if test="${sessionInformation.rolUser == '3' || sessionInformation.rolUser == '4'}">
+                                    <c:if test="${sessionInformation.rolUser == '3' || sessionInformation.rolUser == '4' || sessionInformation.rolUser == 1 }">
                                         <li style="font-size: 5px"><a href="/thyssenplastic/mantenimientoCorrectivo/"><i class="fa fa-list-ol ml-3"></i> Alta Mantenimiento</a></li>
                                     </c:if>
                                     <c:if test="${sessionInformation.rolUser == '4'}">
