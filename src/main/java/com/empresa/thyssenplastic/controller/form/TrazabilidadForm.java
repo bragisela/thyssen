@@ -42,6 +42,7 @@ public class TrazabilidadForm {
     private String estadoBobina;
     private String fechaAltaBobina;
     private String usuarioAltaBobina;
+    private String obsevacionesBobina;
     
     //BULTO
     private String codigoBulto;
@@ -49,6 +50,7 @@ public class TrazabilidadForm {
     private String estadoBulto;
     private String fechaAltaBulto;
     private String usuarioAltaBulto;
+    private String obsevacionesBulto;
 
     //PALLET
     private String codigoPallet;
@@ -57,6 +59,31 @@ public class TrazabilidadForm {
     private String listaCodigoBultos;
     private String fechaAltaPallet;
     private String usuarioAltaPallet;
+    private String obsevacionesPallet;
+
+    public String getObsevacionesBobina() {
+        return obsevacionesBobina;
+    }
+
+    public void setObsevacionesBobina(String obsevacionesBobina) {
+        this.obsevacionesBobina = obsevacionesBobina;
+    }
+
+    public String getObsevacionesBulto() {
+        return obsevacionesBulto;
+    }
+
+    public void setObsevacionesBulto(String obsevacionesBulto) {
+        this.obsevacionesBulto = obsevacionesBulto;
+    }
+
+    public String getObsevacionesPallet() {
+        return obsevacionesPallet;
+    }
+
+    public void setObsevacionesPallet(String obsevacionesPallet) {
+        this.obsevacionesPallet = obsevacionesPallet;
+    }
     
     //REMITO
     private String codigoRemito;

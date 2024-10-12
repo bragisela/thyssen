@@ -230,6 +230,13 @@
                                                         <form:input type="text" path="estadoBobina" class="form-control" disabled="true"/>
                                                     </div>                                                    
                                                 </div>                                                        
+                                                    
+                                                <div class="form-row row">
+                                                    <div class="row col-xs-9 col-sm-3 col-xl-4">
+                                                        <label for="inputFecha">Observaciones</label>
+                                                        <form:textarea path="obsevacionesBobina" class="form-control" disabled="true"/>
+                                                    </div>                                                    
+                                                </div> 
                                             </c:if>                      
 
                                             <p>&nbsp;</p>                                                   
@@ -273,6 +280,13 @@
                                                         <form:input type="text" path="estadoBulto" class="form-control" disabled="true"/>
                                                     </div>                                                    
                                                 </div>                                                        
+                                                    
+                                               <div class="form-row row">
+                                                    <div class="row col-xs-9 col-sm-3 col-xl-4">
+                                                        <label for="inputFecha">Observaciones</label>
+                                                        <form:textarea path="obsevacionesBulto" class="form-control" disabled="true"/>
+                                                    </div>                                                    
+                                                </div> 
                                             </c:if>           
                                             
                                             <p>&nbsp;</p>                                                   
@@ -321,6 +335,12 @@
                                                         <form:input type="text" path="estadoPallet" class="form-control" disabled="true"/>
                                                     </div>                                                    
                                                 </div>                                                        
+                                                <div class="form-row row">
+                                                    <div class="row col-xs-9 col-sm-3 col-xl-4">
+                                                        <label for="inputFecha">Observaciones</label>
+                                                        <form:textarea path="obsevacionesPallet" class="form-control" disabled="true"/>
+                                                    </div>                                                    
+                                                </div> 
                                             </c:if>     
                                             
                                              <p>&nbsp;</p>
