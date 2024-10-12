@@ -35,7 +35,7 @@ public class RemitoForm {
     private String localidad;
     private String provincia;
     private String observaciones;
-    private Boolean isScrap;
+    private String isScrap;
      
     public String getPk() {
         return pk;
@@ -238,11 +238,11 @@ public class RemitoForm {
         this.provincia = provincia;
     }
 
-    public Boolean getIsScrap() {
+    public String getIsScrap() {
         return isScrap;
     }
 
-    public void setIsScrap(Boolean isScrap) {
+    public void setIsScrap(String isScrap) {
         this.isScrap = isScrap;
     }
 

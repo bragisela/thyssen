@@ -4,6 +4,7 @@
     Author     : waltergustavorojo
 --%>
 <%@include file = "/WEB-INF/views/jsp/includes/header.jsp" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 
 <!-- Content Wrapper. Contains page content -->
@@ -13,7 +14,7 @@
 .table {
     width: 90%;
     border-collapse: collapse;
-    margin: 20px 0;
+    margin: 5px 0;
     font-size: 16px;
     color: #333;
     justify-content: center;
@@ -91,11 +92,12 @@
                 <thead>
                     <tr>
                         <th>Orden de produccion</th>
-                        <th>Fecha de Ingreso</th>
+                        <th>Fecha</th>
                         <th>Codigo</th>
                         <th>Peso Inical(kg)</th>
                         <th>Peso Utilizado(kg)</th>
                         <th>Peso Disponible(kg)</th>
+                        <th>Tipo</th>
                         <th>Acciones</th>
                         <!-- Agrega más columnas según las propiedades de OrdenDeProduccionScrapModel -->
                     </tr>
@@ -104,14 +106,36 @@
                     <c:forEach var="scrap" items="${depositoList}">
                         <tr>
                             <td>${scrap.idOrdenDeProduccion}</td>
-                            <td>${scrap.fechaAlta}</td>
+                            <td>
+                                <fmt:formatDate value="${scrap.fechaAlta}" pattern="dd/MM/yyyy" />
+                            </td>
                             <td>${scrap.codigo}</td>
                             <td>${scrap.pesoTotal}</td>
                             <td>${scrap.cantidadUtilizada}</td>
                             <td>${scrap.pesoTotal - scrap.cantidadUtilizada}</td>
-                            <td>
-                                <a href="/thyssenplastic/verMovimientos/${scrap.id}" class="btn btn-primary">Ver movientos</a>
+                             <td>
+                                <c:choose>
+                                    <c:when test="${scrap.idBulto != null}">
+                                        Bulto rechazado
+                                    </c:when>
+                                    <c:when test="${scrap.idBobina != null}">
+                                        Bobina rechazada
+                                    </c:when>
+                                    <c:otherwise>
+                                        Scrap
+                                    </c:otherwise>
+                                </c:choose>
                             </td>
+                            
+                            <td>
+                                
+                                <a class="nav-link active fa fa-eye fa-lg" href="/thyssenplastic/verMovimientos/${scrap.id}" data-toggle="tooltip" data-placement="top" title="Ver movimientos"></a>
+                                <a class="nav-link active fa fa-print fa-lg"
+                                    href="javascript:void(0);" onclick="printEtiquetaScrap(${scrap.id})"
+                                    data-toggle="tooltip" data-placement="top" title="Imprimir" id="imprimirScrap${scrap.id}"></a>  
+
+                            </td>
+
                             <!-- Muestra más datos según las propiedades de OrdenDeProduccionScrapModel -->
                         </tr>
                     </c:forEach>
@@ -131,6 +155,13 @@
         
     </section>                                                
 </div>              
+            
+            <script>
+                function printEtiquetaScrap(ordendeproduccionscrappk) {
+        window.open("/thyssenplastic/ordenDeProduccionDetalle/print/scrap/"+ordendeproduccionscrappk, "Imprimir Etiqueta Scrap", "popup,width=1280,height=800");
+    }
+                
+                </script>
            
 <!-- ./wrapper -->
 

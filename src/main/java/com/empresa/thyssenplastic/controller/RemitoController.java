@@ -378,15 +378,19 @@ public class RemitoController {
             } else {
                 remitoModel.setObservaciones(null);
             }  
-        remitoModel.setCantidadTotal(0);
-        remitoModel.setCantidadTotalBaja(0);
-        if(remitoForm.getIsScrap() != null) {
-                remitoModel.setIsScrap(remitoForm.getIsScrap());
+         
+          remitoModel.setCantidadTotal(0);
+          remitoModel.setCantidadTotalBaja(0);
+         
+         if (remitoForm.getAction().equalsIgnoreCase("add") || remitoForm.getAction().equalsIgnoreCase("remove") ) {
+           
+            if (remitoForm.getIsScrap() != null && remitoForm.getIsScrap().equals("true")) {
+                remitoModel.setIsScrap(true);
             } else {
-                remitoModel.setIsScrap(null);
-            }  
+                remitoModel.setIsScrap(false);
+            }
+        }
 
-        
         if(remitoForm.getAction().equalsIgnoreCase("add") || remitoForm.getAction().equalsIgnoreCase("edit")) {
             remitoService.save(remitoModel);
             
@@ -406,7 +410,7 @@ public class RemitoController {
             }
         }
         
-        if (remitoForm.getIsScrap()) {
+        if (remitoModel.getIsScrap() != null && remitoModel.getIsScrap()) {
             modelAndView.setViewName("redirect:/remitoDetalleScrap/"+remitoModel.getId().toString());
         }else{
             modelAndView.setViewName("redirect:/remitoDetalle/"+remitoModel.getId().toString());
@@ -499,6 +503,12 @@ public class RemitoController {
         if(remito.getObservaciones() != null && !remito.getObservaciones().isEmpty()) {
             remitoForm.setObservaciones(remito.getObservaciones());
         }  
+                
+         if(remito.getIsScrap() != null && remito.getIsScrap()) {
+                    remitoForm.setIsScrap("true");
+                } else {
+                    remitoForm.setIsScrap("false");
+                }  
  
         remitoForm.setOperacion(operacion);        
         
@@ -564,6 +574,8 @@ public class RemitoController {
             remitoDto.setTipoRemito(remito.getTipoRemito());
             remitoDto.setEstado(remitoModel.getEstado());
             remitoDto.setCliente(clientes.get(remitoModel.getIdCliente().toString()));
+            
+            remitoDto.setIsScrap(remitoModel.getIsScrap());
             
             remitosDtos.add(remitoDto);
             

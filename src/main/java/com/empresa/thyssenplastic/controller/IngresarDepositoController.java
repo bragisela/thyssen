@@ -21,6 +21,7 @@ import com.empresa.thyssenplastic.model.OrdenDeProduccionBultoModel;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionModel;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionPalletBultoModel;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionPalletModel;
+import com.empresa.thyssenplastic.model.OrdenDeProduccionScrapModel;
 import com.empresa.thyssenplastic.model.RemitoDetalleModel;
 import com.empresa.thyssenplastic.model.RemitoModel;
 import com.empresa.thyssenplastic.model.TipoModel;
@@ -33,6 +34,7 @@ import com.empresa.thyssenplastic.service.OrdenDeProduccionBobinaService;
 import com.empresa.thyssenplastic.service.OrdenDeProduccionBultoService;
 import com.empresa.thyssenplastic.service.OrdenDeProduccionPalletBultoService;
 import com.empresa.thyssenplastic.service.OrdenDeProduccionPalletService;
+import com.empresa.thyssenplastic.service.OrdenDeProduccionScrapService;
 import com.empresa.thyssenplastic.service.OrdenDeProduccionService;
 import com.empresa.thyssenplastic.service.RemitoDetalleService;
 import com.empresa.thyssenplastic.service.RemitoService;
@@ -55,6 +57,7 @@ import com.empresa.thyssenplastic.service.impl.OrdenDeProduccionBobinaServiceImp
 import com.empresa.thyssenplastic.service.impl.OrdenDeProduccionBultoServiceImpl;
 import com.empresa.thyssenplastic.service.impl.OrdenDeProduccionPalletBultoServiceImpl;
 import com.empresa.thyssenplastic.service.impl.OrdenDeProduccionPalletServiceImpl;
+import com.empresa.thyssenplastic.service.impl.OrdenDeProduccionScrapServiceImpl;
 import com.empresa.thyssenplastic.service.impl.OrdenDeProduccionServiceImpl;
 import com.empresa.thyssenplastic.service.impl.RemitoDetalleServiceImpl;
 import com.empresa.thyssenplastic.service.impl.RemitoServiceImpl;
@@ -346,6 +349,17 @@ public class IngresarDepositoController {
         ingresarDepositoModel.setIdDeposito(Integer.valueOf(ingresarDepositoForm.getIdDeposito()));
         
         
+        System.out.print("DEPOSITOOOO" + ingresarDepositoForm.getIdDeposito());
+        
+        TipoModel verificarDeposito = tipoService.getByPk(Integer.parseInt(ingresarDepositoForm.getIdDeposito()));
+        
+        boolean esDepositoScrap = false;
+        
+        if (verificarDeposito.getValor().equalsIgnoreCase("Scrap")){
+            esDepositoScrap = true;
+        }
+       
+       
         if(ingresarDepositoForm.getAction().equalsIgnoreCase("add") || ingresarDepositoForm.getAction().equalsIgnoreCase("edit")) {
             ingresarDepositoService.save(ingresarDepositoModel);
             
@@ -354,6 +368,49 @@ public class IngresarDepositoController {
                 if(bobina != null) {
                     bobina.setIdDeposito(Integer.valueOf(ingresarDepositoForm.getIdDeposito()));
                     ordenDeProduccionBobinaService.save(bobina); 
+                }
+                
+                 if(bobina != null && esDepositoScrap ) {
+                    OrdenDeProduccionScrapService ordenDeProduccionScrapService = new OrdenDeProduccionScrapServiceImpl();     
+                    OrdenDeProduccionScrapModel ordenDeProduccionScrapModel = null;
+                    ordenDeProduccionScrapModel = new OrdenDeProduccionScrapModel();
+                    
+                    // Por ejemplo, asignar el ID de la Orden de Producción
+                    ordenDeProduccionScrapModel.setId(null);
+                    ordenDeProduccionScrapModel.setIdOrdenDeProduccion(bobina.getIdOrdenDeProduccion()); // Asegúrate de tener el ID disponible
+                    ordenDeProduccionScrapModel.setFechaAlta(new Date()); // Asignar la fecha actual
+                    ordenDeProduccionScrapModel.setEstado("Nuevo"); // Estado inicial
+                    ordenDeProduccionScrapModel.setIdUsuarioAlta(Integer.valueOf(Utils.getUserLoggedId(req))); // Obtener el usuario logueado
+
+                    // Asignar valores manualmente a los campos del Scrap
+                    ordenDeProduccionScrapModel.setIdOrigen(null); // Ejemplo: Origen del Scrap, si tienes el valor
+                    ordenDeProduccionScrapModel.setIdTipoMaterial(null); // Ejemplo: Tipo de material del Scrap
+                    ordenDeProduccionScrapModel.setIdMotivo(null); // Ejemplo: Motivo del Scrap
+                    ordenDeProduccionScrapModel.setIdFormato(null); // Ejemplo: Formato del Scrap
+
+                    // Si es recuperable
+                    ordenDeProduccionScrapModel.setEsRecuperable(Boolean.FALSE); // O asignarlo manualmente según la lógica
+
+                    // Si es material impreso
+                    ordenDeProduccionScrapModel.setMaterialImpreso(Boolean.FALSE); // O asignarlo manualmente
+
+                    // Peso total del Scrap (valor simulado)
+                    ordenDeProduccionScrapModel.setPesoTotal(bobina.getPesoNeto()); //Asignar el peso total manualmente
+                    ordenDeProduccionScrapModel.setCantidadUtilizada(0.0);
+
+                    ordenDeProduccionScrapModel.setIdBobina(bobina.getId());
+
+                    // Observaciones
+                    ordenDeProduccionScrapModel.setObservaciones("Scrap creado manualmente sin formulario");
+                    System.out.println("ID antes de persistir: " + ordenDeProduccionScrapModel.getId());
+
+                    // Paso 3: Guardar el Scrap
+                    ordenDeProduccionScrapService.save(ordenDeProduccionScrapModel);
+                    //        // Asignar un código único basado en su ID, si es un nuevo Scrap
+                    if (ordenDeProduccionScrapModel.getId() != null) {
+                        ordenDeProduccionScrapModel.setCodigo("S" + ordenDeProduccionScrapModel.getId());
+                        ordenDeProduccionScrapService.save(ordenDeProduccionScrapModel); // Guardar nuevamente con el código generado
+                    }
                 }
             }
             
@@ -370,7 +427,50 @@ public class IngresarDepositoController {
                     
                       ordenDeProduccionBobinaService.save(bobina);                        
                     }
+                    if(esDepositoScrap && bobina != null) {
+                        OrdenDeProduccionScrapService ordenDeProduccionScrapService = new OrdenDeProduccionScrapServiceImpl();     
+                        OrdenDeProduccionScrapModel ordenDeProduccionScrapModel = null;
+                        ordenDeProduccionScrapModel = new OrdenDeProduccionScrapModel();
+
+                        // Por ejemplo, asignar el ID de la Orden de Producción
+                        ordenDeProduccionScrapModel.setId(null);
+                        ordenDeProduccionScrapModel.setIdOrdenDeProduccion(bulto.getIdOrdenDeProduccion()); // Asegúrate de tener el ID disponible
+                        ordenDeProduccionScrapModel.setFechaAlta(new Date()); // Asignar la fecha actual
+                        ordenDeProduccionScrapModel.setEstado("Nuevo"); // Estado inicial
+                        ordenDeProduccionScrapModel.setIdUsuarioAlta(Integer.valueOf(Utils.getUserLoggedId(req))); // Obtener el usuario logueado
+
+                        // Asignar valores manualmente a los campos del Scrap
+                        ordenDeProduccionScrapModel.setIdOrigen(null); // Ejemplo: Origen del Scrap, si tienes el valor
+                        ordenDeProduccionScrapModel.setIdTipoMaterial(null); // Ejemplo: Tipo de material del Scrap
+                        ordenDeProduccionScrapModel.setIdMotivo(null); // Ejemplo: Motivo del Scrap
+                        ordenDeProduccionScrapModel.setIdFormato(null); // Ejemplo: Formato del Scrap
+
+                        // Si es recuperable
+                        ordenDeProduccionScrapModel.setEsRecuperable(Boolean.FALSE); // O asignarlo manualmente según la lógica
+
+                        // Si es material impreso
+                        ordenDeProduccionScrapModel.setMaterialImpreso(Boolean.FALSE); // O asignarlo manualmente
+
+                        // Peso total del Scrap (valor simulado)
+                        ordenDeProduccionScrapModel.setPesoTotal(bobina.getPesoNeto()); //Asignar el peso total manualmente
+                        ordenDeProduccionScrapModel.setCantidadUtilizada(0.0);
+
+                        ordenDeProduccionScrapModel.setIdBulto(bulto.getId());
+
+                        // Observaciones
+                        ordenDeProduccionScrapModel.setObservaciones("Scrap creado manualmente sin formulario");
+                        System.out.println("ID antes de persistir: " + ordenDeProduccionScrapModel.getId());
+
+                        // Paso 3: Guardar el Scrap
+                        ordenDeProduccionScrapService.save(ordenDeProduccionScrapModel);
+                        
+                        if (ordenDeProduccionScrapModel.getId() != null) {
+                            ordenDeProduccionScrapModel.setCodigo("S" + ordenDeProduccionScrapModel.getId());
+                            ordenDeProduccionScrapService.save(ordenDeProduccionScrapModel); // Guardar nuevamente con el código generado
+                        }
+                    }
                 }
+                 
             }
             if(ingresarDepositoForm.getTipo().equalsIgnoreCase("pallet")) {
                 OrdenDeProduccionPalletModel pallet = ordenDeProduccionPalletService.getByPk(Integer.valueOf(ingresarDepositoForm.getIdPallet()));
@@ -1294,12 +1394,29 @@ public class IngresarDepositoController {
         if(ingresarDepositoModel.getIdPallet() != null) {
           ingresarDepositoForm.setTipo("pallet");
         } 
+        
+         OrdenDeProduccionScrapService ordenDeProduccionScrapService = new OrdenDeProduccionScrapServiceImpl();  
               
         
         if(ingresarDepositoForm.getAction().equalsIgnoreCase("add") || ingresarDepositoForm.getAction().equalsIgnoreCase("edit")) {
             int depositoNuevo = 61;
             if(ingresarDepositoForm.getTipo().equalsIgnoreCase("bobina")) {
                 OrdenDeProduccionBobinaModel bobina = ordenDeProduccionBobinaService.getByPk(Integer.valueOf(ingresarDepositoForm.getIdBobina()));
+                
+                String estadoActual = bobina.getEstado();
+                
+                        if ("rechazado".equalsIgnoreCase(estadoActual)) {
+                        OrdenDeProduccionScrapModel ordenDeProduccionScrapModel = null;
+
+                        // Obtener el objeto de scrap por su clave primaria (PK)
+                        ordenDeProduccionScrapModel = ordenDeProduccionScrapService.getByIdBobina(bobina.getId());
+
+                        // Eliminar el objeto de scrap
+                        ordenDeProduccionScrapService.delete(ordenDeProduccionScrapModel);
+                    }
+                    
+                    
+                boolean esNuevoYScrapBobina = false;
                 
                 if(ingresarDepositoForm.getEstadoNuevo() != null) {
                     String valorNuevo = ingresarDepositoForm.getEstadoNuevo();
@@ -1323,10 +1440,11 @@ public class IngresarDepositoController {
                         TipoModel tipoNuevo12 = tipoService.getByValor("Scrap");
                         if (tipoNuevo12 != null) {
                             depositoNuevo = tipoNuevo12.getId();
+                            esNuevoYScrapBobina = true;
                         }
                     }
                     if(ingresarDepositoForm.getEstadoNuevo().equals("sinmesurar")) {
-                        TipoModel tipoNuevo13 = tipoService.getByValor("Sin Mesurar");
+                        TipoModel tipoNuevo13 = tipoService.getByValor("Campo");
                         if (tipoNuevo13 != null) {
                             depositoNuevo = tipoNuevo13.getId();
                         }
@@ -1340,16 +1458,72 @@ public class IngresarDepositoController {
                     ingresarDepositoModel.setIdDeposito(depositoNuevo);
                     ordenDeProduccionBobinaService.save(bobina);
                     ingresarDepositoService.save(ingresarDepositoModel);
+                    
+                    if (esNuevoYScrapBobina) {
+                    //OrdenDeProduccionScrapService ordenDeProduccionScrapService = new OrdenDeProduccionScrapServiceImpl();     
+                    OrdenDeProduccionScrapModel ordenDeProduccionScrapModel = null;
+                    ordenDeProduccionScrapModel = new OrdenDeProduccionScrapModel();
+                    
+                    // Por ejemplo, asignar el ID de la Orden de Producción
+                    ordenDeProduccionScrapModel.setId(null);
+                    ordenDeProduccionScrapModel.setIdOrdenDeProduccion(bobina.getIdOrdenDeProduccion()); // Asegúrate de tener el ID disponible
+                    ordenDeProduccionScrapModel.setFechaAlta(new Date()); // Asignar la fecha actual
+                    ordenDeProduccionScrapModel.setEstado("Nuevo"); // Estado inicial
+                    ordenDeProduccionScrapModel.setIdUsuarioAlta(Integer.valueOf(Utils.getUserLoggedId(req))); // Obtener el usuario logueado
+
+                    // Asignar valores manualmente a los campos del Scrap
+                    ordenDeProduccionScrapModel.setIdOrigen(null); // Ejemplo: Origen del Scrap, si tienes el valor
+                    ordenDeProduccionScrapModel.setIdTipoMaterial(null); // Ejemplo: Tipo de material del Scrap
+                    ordenDeProduccionScrapModel.setIdMotivo(null); // Ejemplo: Motivo del Scrap
+                    ordenDeProduccionScrapModel.setIdFormato(null); // Ejemplo: Formato del Scrap
+
+                    // Si es recuperable
+                    ordenDeProduccionScrapModel.setEsRecuperable(Boolean.FALSE); // O asignarlo manualmente según la lógica
+
+                    // Si es material impreso
+                    ordenDeProduccionScrapModel.setMaterialImpreso(Boolean.FALSE); // O asignarlo manualmente
+
+                    // Peso total del Scrap (valor simulado)
+                    ordenDeProduccionScrapModel.setPesoTotal(bobina.getPesoNeto()); //Asignar el peso total manualmente
+                    ordenDeProduccionScrapModel.setCantidadUtilizada(0.0);
+
+                    ordenDeProduccionScrapModel.setIdBobina(bobina.getId());
+
+                    // Observaciones
+                    ordenDeProduccionScrapModel.setObservaciones("Scrap creado manualmente sin formulario");
+                    System.out.println("ID antes de persistir: " + ordenDeProduccionScrapModel.getId());
+
+                    // Paso 3: Guardar el Scrap
+                    ordenDeProduccionScrapService.save(ordenDeProduccionScrapModel);
+                    //        // Asignar un código único basado en su ID, si es un nuevo Scrap
+                    if (ordenDeProduccionScrapModel.getId() != null) {
+                        ordenDeProduccionScrapModel.setCodigo("S" + ordenDeProduccionScrapModel.getId());
+                        ordenDeProduccionScrapService.save(ordenDeProduccionScrapModel); // Guardar nuevamente con el código generado
+                    }
+                        
+                    }
                 }
             }
             
             if(ingresarDepositoForm.getTipo().equalsIgnoreCase("bulto")) {
                 OrdenDeProduccionBultoModel bulto = ordenDeProduccionBultoService.getByPk(Integer.valueOf(ingresarDepositoForm.getIdBulto()));
-              
                 
+                String estadoActual = bulto.getEstado();
+                
+                        if ("rechazado".equalsIgnoreCase(estadoActual)) {
+                        OrdenDeProduccionScrapModel ordenDeProduccionScrapModel = null;
+
+                        // Obtener el objeto de scrap por su clave primaria (PK)
+                        ordenDeProduccionScrapModel = ordenDeProduccionScrapService.getByIdBulto(bulto.getId());
+                        // Eliminar el objeto de scrap
+                        ordenDeProduccionScrapService.delete(ordenDeProduccionScrapModel);
+                    }
+              
+                boolean esNuevoYScrap = false;
                 
                 if(ingresarDepositoForm.getEstadoNuevo() != null) {
                     String valorNuevo = ingresarDepositoForm.getEstadoNuevo();
+                    
                     
             
                     if(ingresarDepositoForm.getEstadoNuevo().equals("ok")) {
@@ -1370,10 +1544,11 @@ public class IngresarDepositoController {
                         TipoModel tipoNuevo12 = tipoService.getByValor("Scrap");
                         if (tipoNuevo12 != null) {
                             depositoNuevo = tipoNuevo12.getId();
+                            esNuevoYScrap = true;
                         }
                     }
                     if(ingresarDepositoForm.getEstadoNuevo().equals("sinmesurar")) {
-                        TipoModel tipoNuevo13 = tipoService.getByValor("Sin Mesurar");
+                        TipoModel tipoNuevo13 = tipoService.getByValor("Campo");
                         if (tipoNuevo13 != null) {
                             depositoNuevo = tipoNuevo13.getId();
                         }
@@ -1386,7 +1561,7 @@ public class IngresarDepositoController {
                 
                 if(bulto != null && !ingresarDepositoForm.getEstadoNuevo().equalsIgnoreCase("-1")) {
                     
-                    bulto.setEstado("ok");
+                    bulto.setEstado(ingresarDepositoForm.getEstadoNuevo());
                     bulto.setIdDeposito(depositoNuevo);
                     
                     ingresarDepositoModel.setIdDeposito(depositoNuevo);
@@ -1404,7 +1579,54 @@ public class IngresarDepositoController {
                       
                     
                       ordenDeProduccionBobinaService.save(bobina2);                        
+                      
+                      if (esNuevoYScrap) {
+                    //OrdenDeProduccionScrapService ordenDeProduccionScrapService = new OrdenDeProduccionScrapServiceImpl();     
+                    OrdenDeProduccionScrapModel ordenDeProduccionScrapModel = null;
+                    ordenDeProduccionScrapModel = new OrdenDeProduccionScrapModel();
+                    
+                    // Por ejemplo, asignar el ID de la Orden de Producción
+                    ordenDeProduccionScrapModel.setId(null);
+                    ordenDeProduccionScrapModel.setIdOrdenDeProduccion(bobina2.getIdOrdenDeProduccion()); // Asegúrate de tener el ID disponible
+                    ordenDeProduccionScrapModel.setFechaAlta(new Date()); // Asignar la fecha actual
+                    ordenDeProduccionScrapModel.setEstado("Nuevo"); // Estado inicial
+                    ordenDeProduccionScrapModel.setIdUsuarioAlta(Integer.valueOf(Utils.getUserLoggedId(req))); // Obtener el usuario logueado
+
+                    // Asignar valores manualmente a los campos del Scrap
+                    ordenDeProduccionScrapModel.setIdOrigen(null); // Ejemplo: Origen del Scrap, si tienes el valor
+                    ordenDeProduccionScrapModel.setIdTipoMaterial(null); // Ejemplo: Tipo de material del Scrap
+                    ordenDeProduccionScrapModel.setIdMotivo(null); // Ejemplo: Motivo del Scrap
+                    ordenDeProduccionScrapModel.setIdFormato(null); // Ejemplo: Formato del Scrap
+
+                    // Si es recuperable
+                    ordenDeProduccionScrapModel.setEsRecuperable(Boolean.FALSE); // O asignarlo manualmente según la lógica
+
+                    // Si es material impreso
+                    ordenDeProduccionScrapModel.setMaterialImpreso(Boolean.FALSE); // O asignarlo manualmente
+
+                    // Peso total del Scrap (valor simulado)
+                    ordenDeProduccionScrapModel.setPesoTotal(bobina2.getPesoNeto()); //Asignar el peso total manualmente
+                    ordenDeProduccionScrapModel.setCantidadUtilizada(0.0);
+
+                    ordenDeProduccionScrapModel.setIdBulto(bulto.getId());
+
+                    // Observaciones
+                    ordenDeProduccionScrapModel.setObservaciones("Scrap creado manualmente sin formulario");
+                    System.out.println("ID antes de persistir: " + ordenDeProduccionScrapModel.getId());
+
+                    // Paso 3: Guardar el Scrap
+                    ordenDeProduccionScrapService.save(ordenDeProduccionScrapModel);
+                    //        // Asignar un código único basado en su ID, si es un nuevo Scrap
+                    if (ordenDeProduccionScrapModel.getId() != null) {
+                        ordenDeProduccionScrapModel.setCodigo("S" + ordenDeProduccionScrapModel.getId());
+                        ordenDeProduccionScrapService.save(ordenDeProduccionScrapModel); // Guardar nuevamente con el código generado
                     }
+                        
+                    }
+                    }
+                    
+                 
+                    
                 }
             }
             if(ingresarDepositoForm.getTipo().equalsIgnoreCase("pallet")) {
@@ -1440,7 +1662,7 @@ public class IngresarDepositoController {
                            }
                        }
                        if(ingresarDepositoForm.getEstadoNuevo().equals("sinmesurar")) {
-                           TipoModel tipoNuevo13 = tipoService.getByValor("Sin Mesurar");
+                           TipoModel tipoNuevo13 = tipoService.getByValor("Campo");
                            if (tipoNuevo13 != null) {
                                depositoNuevo = tipoNuevo13.getId();
                            }

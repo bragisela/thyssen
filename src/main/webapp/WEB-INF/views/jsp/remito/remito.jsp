@@ -117,7 +117,7 @@
                                                 </div> 
                                                 <div class="row col-xs-9 col-sm-3 col-xl-4">
                                                     <label for="inputIsScrap">Es Scrap</label>
-                                                    <form:select path="isScrap" class="form-control" disabled="${disabledAlta}">
+                                                    <form:select path="isScrap" class="form-control" disabled="${action == 'edit'}">
                                                         <form:option value="false" label="No" />
                                                         <form:option value="true" label="Sí" />
                                                     </form:select>
@@ -369,6 +369,7 @@
         if(idTransporte == '-1') {
             $("#idChofer").empty();
             $("#idChofer").append( new Option("Seleccionar...","-1"));
+            console.log("entro")
             
             return;
         }

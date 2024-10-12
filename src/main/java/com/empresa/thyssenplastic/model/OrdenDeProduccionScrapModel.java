@@ -27,6 +27,12 @@ public class OrdenDeProduccionScrapModel {
 
     @Column(name = "idOrdenDeProduccion")
     private Integer idOrdenDeProduccion;
+    
+    @Column(name = "idBobina")
+    private Integer idBobina;
+    
+     @Column(name = "idBulto")
+    private Integer idBulto;
 
     @Column(name = "fechaAlta")
     private Date fechaAlta;
@@ -83,6 +89,23 @@ public class OrdenDeProduccionScrapModel {
     public void setId(Integer id) {
         this.id = id;
     }
+    
+    public Integer getIdBobina() {
+        return idBobina;
+    }
+
+    public void setIdBobina(Integer idBobina) {
+        this.idBobina = idBobina;
+    }
+    
+    public Integer getIdBulto() {
+        return idBulto;
+    }
+
+    public void setIdBulto(Integer idBulto) {
+        this.idBulto = idBulto;
+    }
+
 
     public Date getFechaAlta() {
         return fechaAlta;

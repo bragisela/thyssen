@@ -18,6 +18,10 @@ public interface OrdenDeProduccionScrapDao extends GenericDao {
     
     OrdenDeProduccionScrapModel getByPk(Integer pk);
     
+    OrdenDeProduccionScrapModel getByIdBobina(Integer idBobina);
+    
+    OrdenDeProduccionScrapModel getByIdBulto(Integer idBulto);
+    
     OrdenDeProduccionScrapModel getByCode(String codigo);
     
     List<OrdenDeProduccionScrapModel> getAllByOrdenDeProduccion(Integer idOrdenDeProduccion);

@@ -19,11 +19,11 @@ import org.hibernate.query.Query;
  */
 public class OrdenDeProduccionScrapDaoImpl extends GenericDaoImpl implements OrdenDeProduccionScrapDao {
     
-        public List<OrdenDeProduccionScrapModel> getAll() {
+    public List<OrdenDeProduccionScrapModel> getAll() {
         List<OrdenDeProduccionScrapModel> ordenDeProduccionScrap = new ArrayList<OrdenDeProduccionScrapModel>();
         try {
             Session session = HibernateUtil.getSessionFactory().openSession();
-            ordenDeProduccionScrap = session.createQuery("from OrdenDeProduccionScrapModel ", OrdenDeProduccionScrapModel.class).list();                        
+            ordenDeProduccionScrap = session.createQuery("from OrdenDeProduccionScrapModel o ORDER BY o.fechaAlta DESC", OrdenDeProduccionScrapModel.class).list();                        
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -35,7 +35,7 @@ public class OrdenDeProduccionScrapDaoImpl extends GenericDaoImpl implements Ord
         List<OrdenDeProduccionScrapModel> ordenDeProduccionScrap = new ArrayList<OrdenDeProduccionScrapModel>();
         try {
             Session session = HibernateUtil.getSessionFactory().openSession();
-            ordenDeProduccionScrap = session.createQuery("from OrdenDeProduccionScrapModel", OrdenDeProduccionScrapModel.class)
+            ordenDeProduccionScrap = session.createQuery("from OrdenDeProduccionScrapModel o ORDER BY o.fechaAlta DESC", OrdenDeProduccionScrapModel.class)
                                             .setFirstResult((pageNumber - 1) * pageSize)
                                             .setMaxResults(pageSize)
                                             .list();
@@ -122,6 +122,48 @@ public class OrdenDeProduccionScrapDaoImpl extends GenericDaoImpl implements Ord
 
         return ordenDeProduccionScrap;
     }
+    
+    public OrdenDeProduccionScrapModel getByIdBobina(Integer idBobina) {
+        OrdenDeProduccionScrapModel ordenDeProduccionScrap = null;        
+        try {
+            if(idBobina != null){
+                Session session = HibernateUtil.getSessionFactory().openSession();
+                Query query = session.createQuery("from OrdenDeProduccionScrapModel WHERE idBobina=:idBobina");
+                query.setInteger("idBobina", idBobina);
+                
+                List<OrdenDeProduccionScrapModel> ordenDeProduccionScrapList = query.list();
+                if(ordenDeProduccionScrapList != null && !ordenDeProduccionScrapList.isEmpty()) {
+                    ordenDeProduccionScrap = ordenDeProduccionScrapList.get(0);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return ordenDeProduccionScrap;
+    }
+    
+    public OrdenDeProduccionScrapModel getByIdBulto(Integer idBulto) {
+        OrdenDeProduccionScrapModel ordenDeProduccionScrap = null;        
+        try {
+            if(idBulto != null){
+                Session session = HibernateUtil.getSessionFactory().openSession();
+                Query query = session.createQuery("from OrdenDeProduccionScrapModel WHERE idBulto=:idBulto");
+                query.setInteger("idBulto", idBulto);
+                
+                List<OrdenDeProduccionScrapModel> ordenDeProduccionScrapList = query.list();
+                if(ordenDeProduccionScrapList != null && !ordenDeProduccionScrapList.isEmpty()) {
+                    ordenDeProduccionScrap = ordenDeProduccionScrapList.get(0);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return ordenDeProduccionScrap;
+    }
+    
+    
 
     public List<OrdenDeProduccionScrapModel> getAllByOrdenDeProduccion(Integer idOrdenDeProduccion) {
         

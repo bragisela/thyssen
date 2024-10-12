@@ -97,6 +97,30 @@ public class OrdenDeProduccionScrapServiceImpl implements OrdenDeProduccionScrap
 
         return ordenDeProduccion;
     }
+    
+    public OrdenDeProduccionScrapModel getByIdBobina(Integer idBobina) {
+        OrdenDeProduccionScrapModel ordenDeProduccion = null;
+        try {
+            OrdenDeProduccionScrapDao ordenDeProduccionScrapDao = new OrdenDeProduccionScrapDaoImpl();
+            ordenDeProduccion = ordenDeProduccionScrapDao.getByIdBobina(idBobina);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return ordenDeProduccion;
+    }
+    
+    public OrdenDeProduccionScrapModel getByIdBulto(Integer idBulto) {
+        OrdenDeProduccionScrapModel ordenDeProduccion = null;
+        try {
+            OrdenDeProduccionScrapDao ordenDeProduccionScrapDao = new OrdenDeProduccionScrapDaoImpl();
+            ordenDeProduccion = ordenDeProduccionScrapDao.getByIdBulto(idBulto);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return ordenDeProduccion;
+    }
 
     public OrdenDeProduccionScrapModel getByCode(String codigo) {
         OrdenDeProduccionScrapModel ordenDeProduccion = null;

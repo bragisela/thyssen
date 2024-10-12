@@ -663,11 +663,19 @@
  
     const esUtilizadaAlCien = document.getElementById('cantidadAUtilizar');
     console.log(esUtilizadaAlCien);
+    
+    //console.log(esUtilizadaAlCien);
     const selectElement = document.getElementById('inputIsScrap');
-    if (selectElement.value === 'false' && cantidadAUtilizar > maxCantidad) {
+       if (selectElement.value === 'false' && cantidadAUtilizar > maxCantidad) {
         alert('La cantidad debe ser menor o igual a ' + maxCantidad + '.');
         return;
         }
+        
+        if (selectElement.value === 'false' && cantidadAUtilizar <= 0) {
+        alert('Ingrese un valor mayor a 0');
+        return;
+        }
+       
 
         if(action == 'remove') {
             if(confirm('Desea eliminarlo')) {

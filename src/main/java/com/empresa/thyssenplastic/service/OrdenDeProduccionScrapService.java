@@ -24,6 +24,10 @@ public interface OrdenDeProduccionScrapService {
     
     OrdenDeProduccionScrapModel getByCode(String codigo);
     
+    OrdenDeProduccionScrapModel getByIdBobina(Integer idBobina);
+    
+    OrdenDeProduccionScrapModel getByIdBulto(Integer idBulto);
+    
     List<OrdenDeProduccionScrapModel> getAllByOrdenDeProduccion(Integer idOrdenDeProduccion);
     
     List<OrdenDeProduccionScrapModel> getAllPaginated(int pageNumber, int pageSize);
