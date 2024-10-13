@@ -1210,7 +1210,7 @@
                                                                                                     <a class="nav-link active fa fa-print fa-lg"
                                                                                                        href="javascript:void(0);" onclick="printEtiquetaScrap(${ordendeproduccionscrap.pk})"
                                                                                                         data-toggle="tooltip" data-placement="top" title="Imprimir" id="imprimirScrap${ordendeproduccionscrap.pk}"></a>                                                                                                        
-                                                                                                    <c:if test = "${operacion == 'alta' && estadoOrderProduccion != 'Completado' && rol == 'oficina'}">
+                                                                                                    <c:if test = "${operacion == 'alta' && estadoOrderProduccion != 'Completado' && rol == 'oficina' && ordendeproduccionscrap.puedoBorrarlo}">
                                                                                                         <a class="nav-link active fa fa-trash fa-lg"
                                                                                                             href="/thyssenplastic/ordenDeProduccionDetalle/removeScrap/${ordendeproduccionscrap.pk}"
                                                                                                             data-toggle="tooltip" data-placement="top" title="Eliminar"></a>                                                                                                            
