@@ -75,7 +75,7 @@
                                                     <label for="inputFecha">Bobina <i>${idBobina}</i></i></label>
                                                 </div>
                                                 <div class="row col-xs-12 col-sm-12 col-xl-12">
-                                                    <label for="inputFecha">Orden de Producción <i>${idOrdenDeProduccion}</i> - Cliente <i>${clienteLabel}</i> - Artículo <i>${idArticulo} (${articuloLabel})</i> - Ficha Técnica Versión <i>${fichaTecnicaVersionLabel}</i></label>
+                                                    <label for="inputFecha">Orden de Producción <i>${idOrdenDeProduccion}</i> - Cliente <i>${clienteLabel}</i> - Artículo <i>(${articuloLabel})</i> - Ficha Técnica Versión <i>${fichaTecnicaVersionLabel}</i></label>
                                                 </div>                                                                                                    
                                             </div>
                                                 
