@@ -27,7 +27,9 @@
                                         <c:set var = "disabledAlta" value = "true"/>
                                         <c:set var = "disabledCierre" value = "true"/>
                                         <c:set var = "cerradoTab" value = "#cerradoTab"/>
+                                        <c:set var = "disabledHoraArranque" value = "true"/>
                                         <c:if test = "${operacion == 'alta'}">
+                                            <c:set var = "disabledHoraArranque" value = "false"/>                                            
                                             <c:set var = "disabledAlta" value = "false"/>
                                             <c:set var = "disabledCierre" value = "true"/>
                                             <c:set var = "cerradoTab" value = "#"/>
@@ -37,7 +39,7 @@
                                             <c:if test = "${action == 'new'}">
                                                 <c:set var = "disabledCierre" value = "true"/>
                                             </c:if>        
-                                            <c:if test = "${action == 'edit'}">                                                
+                                            <c:if test = "${action == 'edit'}">
                                                 <c:set var = "disabledCierre" value = "false"/>
                                             </c:if>                                                    
                                         </c:if>
@@ -46,9 +48,13 @@
                                             <c:set var = "disabledCierre" value = "true"/>
                                             <c:set var = "cerradoTab" value = "#cerradoTab"/>
                                         </c:if>
-
+                                        
+                                        <c:if test = "${action == 'edit'}">
+                                            <c:set var = "disabledHoraArranque" value = "false"/>
+                                        </c:if>
+                                        
                                         ${action}
-
+                                        
                                         <ul class="nav nav-tabs">
                                             <!--PESTAÑA ABIERTO-->
                                             <li class="active"><a data-toggle="tab" href="#abiertoTab">Abierto</a></li>
@@ -121,7 +127,7 @@
                                                     </div>
                                                     <div class="row col-xs-9 col-sm-3 col-xl-4" >
                                                         <label for="inputArticulo">Hora de arranque</label>
-                                                        <form:input type="time" path="horaArranque" class="form-control" required="required" placeholder="" disabled="${disabledAlta}" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')"/>                                                        
+                                                        <form:input type="time" path="horaArranque" class="form-control" placeholder="" disabled="${disabledHoraArranque}" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')"/>                 
                                                     </div>
                                                 </div>
                                                     
@@ -155,7 +161,7 @@
                                                 <div class="form-row row">
                                                     <div class="row col-xs-9 col-sm-3 col-xl-4" >
                                                         <label for="inputArticulo">Hora Arranque</label>
-                                                        <form:input type="time" path="horaArranque" class="form-control" required="required" placeholder="" disabled="${disabledCierre}" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')"/>                                                        
+                                                        <form:input type="time" path="horaArranque" class="form-control" required="required" placeholder="" disabled="${disabledCierre}" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')"/>
                                                     </div>
                                                 </div>
                                                 -->
@@ -275,7 +281,7 @@
                                                 <c:out value="${mantenimientocorrectivo.estado}" />
                                             </td>                                                                                                                                                                                                                            
                                             <td>
-                                                <c:if test = "${operacion == 'cierre' && mantenimientocorrectivo.estado == 'Abierto'}">
+                                                <c:if test = "${(operacion == 'cierre' || operacion == 'view' )&& mantenimientocorrectivo.estado == 'Abierto'}">
                                                     <a class="nav-link active fa fa-pencil-square-o fa-lg"
                                                         href="/thyssenplastic/mantenimientoCorrectivo/edit/${mantenimientocorrectivo.pk}"
                                                         data-toggle="tooltip" data-placement="top" title="Editar"></a>
