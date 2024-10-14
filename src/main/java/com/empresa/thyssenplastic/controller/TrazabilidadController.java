@@ -690,6 +690,9 @@ public class TrazabilidadController {
         if(bobina.getFechaAlta() != null) {
             trazabilidadForm.setFechaAltaBobina(bobina.getFechaAlta().toString());
         }        
+        if(bobina.getObservaciones() != null) {
+            trazabilidadForm.setObsevacionesBobina(bobina.getObservaciones());
+        } 
     }    
 
     private void setDatosBulto(TrazabilidadForm trazabilidadForm, OrdenDeProduccionBultoModel bulto, UserService userService, TipoService tipoService) {
@@ -712,6 +715,10 @@ public class TrazabilidadController {
         if(bulto.getFechaAlta() != null) {
             trazabilidadForm.setFechaAltaBulto(bulto.getFechaAlta().toString());
         }        
+        
+        if(bulto.getObservaciones() != null) {
+            trazabilidadForm.setObsevacionesBulto(bulto.getObservaciones());
+        } 
         
     }
     
@@ -740,6 +747,9 @@ public class TrazabilidadController {
             }
         }
         trazabilidadForm.setListaCodigoBultos(listaCodigos);
+        if(pallet.getObservaciones() != null) {
+            trazabilidadForm.setObsevacionesPallet(pallet.getObservaciones());
+        } 
     }
     
     private void setDatosRemito(TrazabilidadForm trazabilidadForm, RemitoModel remito, UserService userService) {
