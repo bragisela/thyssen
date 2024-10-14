@@ -21,13 +21,32 @@ public class RemitoDto implements Serializable {
     private String estado;
     private String referenciaAdministrativa;
     private String canDelete;
+    private String canDeleteScrap;
     private String itemsRecepcionados;
     private String tipoRemito;
     private Integer cantidadTotal;
     private Integer cantidadTotalBaja;
     private String localidad;
     private String provincia;
+    private Boolean isScrap;
 
+    public Boolean getIsScrap() {
+        return isScrap;
+    }
+    
+
+    public void setIsScrap(Boolean isScrap) {
+        this.isScrap = isScrap;
+    }
+    
+     public String getCanDeleteScrap() {
+        return canDeleteScrap;
+    }
+
+    public void setCanDeleteScrap(String canDeleteScrap) {
+        this.canDeleteScrap = canDeleteScrap;
+    }
+    
     public String getLocalidad() {
         return localidad;
     }

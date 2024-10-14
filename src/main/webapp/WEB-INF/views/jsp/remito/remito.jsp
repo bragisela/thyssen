@@ -115,9 +115,20 @@
                                                     <label for="inputFecha">Observaciones</label>
                                                     <form:input type="text" path="observaciones" class="form-control" placeholder="" maxlength="100" disabled="${disabledAlta}"/>
                                                 </div> 
+                                                <div class="row col-xs-9 col-sm-3 col-xl-4">
+                                                    <label for="inputIsScrap">Es Scrap</label>
+                                                    <form:select path="isScrap" class="form-control" disabled="${action == 'edit'}">
+                                                        <form:option value="false" label="No" />
+                                                        <form:option value="true" label="Sí" />
+                                                    </form:select>
+                                                </div>
+                                                
+                                          
+                                            
                                                  
                                             </div>
-                                            
+                                                
+                            
                                                 
   
                                         </div>                                        
@@ -159,6 +170,7 @@
                                         <th>CLIENTE</th>
                                         <th>REF ADMINISTRATIVA</th>
                                         <th>ESTADO</th>
+                                        <th>ES SCRAP</th>
                                         <th style="text-align: center">ACCIONES</th>
                                     </tr>
                                 </thead>
@@ -186,21 +198,44 @@
                                                 <c:out value="${remito.estado}" />
                                             </td>                                                                                                                                                                                
                                             <td>
+                                                <c:choose>
+                                                    <c:when test="${remito.isScrap == true}">
+                                                        Sí
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        No
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </td>
+                                            <td>
                                                 <c:if test = "${rol == 'oficina' && operacion == 'alta' && remito.estado == 'Nuevo'}">
                                                     <a class="nav-link active fa fa-pencil-square-o fa-lg"
                                                         href="/thyssenplastic/remito/edit/${remito.pk}"
                                                         data-toggle="tooltip" data-placement="top" title="Editar"></a>
                                                 </c:if>                                                        
-                                                <c:if test = "${rol == 'oficina' && operacion == 'alta' && remito.estado == 'Nuevo' && remito.canDelete == 'true'}">
+                                                <c:if test = "${rol == 'oficina' && operacion == 'alta' && remito.estado == 'Nuevo' && remito.canDelete == 'true' && remito.canDeleteScrap == 'true'}">
                                                     <a class="nav-link active fa fa-trash fa-lg"
                                                         href="/thyssenplastic/remito/remove/${remito.pk}"
                                                         data-toggle="tooltip" data-placement="top" title="Eliminar"></a>
                                                 </c:if>                                                                                                        
                                                
                                                 <c:if test = "${(rol == 'oficina' || (rol == 'deposito' &&  remito.estado == 'Abierto')) && (operacion == 'alta' || operacion == 'recepcion')}">
-                                                    <a class="nav-link active fa fa-navicon fa-lg"
+                                                    
+                                                        
+                                                         <c:choose>
+                                                    <c:when test="${remito.isScrap == true}">
+                                                        <a class="nav-link active fa fa-navicon fa-lg"
+                                                        href="/thyssenplastic/remitoDetalleScrap/${remito.pk}"
+                                                        data-toggle="tooltip" data-placement="top" title="Items"></a>
+                                                        
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <a class="nav-link active fa fa-navicon fa-lg"
                                                         href="/thyssenplastic/remitoDetalle/${remito.pk}"
                                                         data-toggle="tooltip" data-placement="top" title="Items"></a>
+                                                        
+                                                    </c:otherwise>
+                                                </c:choose>
                                                 </c:if>                                                                                                                                                            
                                                 <c:if test = "${rol == 'oficina' && operacion == 'alta' && remito.estado == 'Nuevo'}">
                                                     <a class="nav-link active fa fa-clock-o fa-lg"
@@ -210,9 +245,19 @@
                                                 
                                                                                                   
                                                 <c:if test = "${(rol == 'deposito' || rol == 'oficina')}">
-                                                    <a class="nav-link active fa fa-print fa-lg"
-                                                       href="javascript:void(0);" onclick="printRemito(${remito.pk})"
-                                                        data-toggle="tooltip" data-placement="top" title="Imprimir"></a>
+                                                    <c:choose>
+                                                        <c:when test="${remito.isScrap}">
+                                                            <a class="nav-link active fa fa-print fa-lg"
+                                                               href="javascript:void(0);" onclick="printRemitoScrap(${remito.pk})"
+                                                               data-toggle="tooltip" data-placement="top" title="Imprimir"></a>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <a class="nav-link active fa fa-print fa-lg"
+                                                               href="javascript:void(0);" onclick="printRemito(${remito.pk})"
+                                                               data-toggle="tooltip" data-placement="top" title="Imprimir"></a>
+                                                        </c:otherwise>
+                                                    </c:choose>
+
                                                 </c:if>
                                                 
                                                 <c:if test = "${rol == 'oficina' && operacion == 'alta' && remito.estado == 'Abierto' && (remito.cantidadTotalBaja >= remito.cantidadTotal)}">
@@ -324,6 +369,7 @@
         if(idTransporte == '-1') {
             $("#idChofer").empty();
             $("#idChofer").append( new Option("Seleccionar...","-1"));
+            console.log("entro")
             
             return;
         }
@@ -414,6 +460,10 @@
 
     function printRemito(remitopk) {
         window.open("/thyssenplastic/remito/print/"+remitopk, "Imprimir Remito", "popup,width=1024,height=800");
+    }
+    
+    function printRemitoScrap(remitopk) {
+        window.open("/thyssenplastic/remito2/print/"+remitopk, "Imprimir Remito", "popup,width=1024,height=800");
     }
 
 

@@ -6,6 +6,7 @@ package com.empresa.thyssenplastic.service.impl;
 
 import com.empresa.thyssenplastic.dao.OrdenDeProduccionScrapDao;
 import com.empresa.thyssenplastic.dao.impl.OrdenDeProduccionScrapDaoImpl;
+import com.empresa.thyssenplastic.dto.DepositoScrapDto;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionScrapModel;
 import com.empresa.thyssenplastic.service.OrdenDeProduccionScrapService;
 import java.util.ArrayList;
@@ -48,6 +49,30 @@ public class OrdenDeProduccionScrapServiceImpl implements OrdenDeProduccionScrap
 
         return ordenDeProducciones;
     }
+    
+    public List<OrdenDeProduccionScrapModel> getAllPaginated(int pageNumber, int pageSize) {
+        List<OrdenDeProduccionScrapModel> ordenDeProducciones = new ArrayList<OrdenDeProduccionScrapModel>();
+        try {
+            OrdenDeProduccionScrapDao ordenDeProduccionScrapDao = new OrdenDeProduccionScrapDaoImpl();
+            ordenDeProducciones = ordenDeProduccionScrapDao.getAllPaginated(pageNumber,pageSize);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return ordenDeProducciones;
+    }
+    
+    public List<DepositoScrapDto> getResumenPorOrdenDeProduccion(int pageNumber, int pageSize) {
+        List<DepositoScrapDto> ordenDeProducciones = new ArrayList<DepositoScrapDto>();
+        try {
+            OrdenDeProduccionScrapDao ordenDeProduccionScrapDao = new OrdenDeProduccionScrapDaoImpl();
+            ordenDeProducciones = ordenDeProduccionScrapDao.getResumenPorOrdenDeProduccion(pageNumber,pageSize);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return ordenDeProducciones;
+    }
 
     public List<OrdenDeProduccionScrapModel> getAllByOrdenDeProduccion(Integer idOrdenDeProduccion) {
         List<OrdenDeProduccionScrapModel> ordenDeProducciones = new ArrayList<OrdenDeProduccionScrapModel>();
@@ -72,6 +97,30 @@ public class OrdenDeProduccionScrapServiceImpl implements OrdenDeProduccionScrap
 
         return ordenDeProduccion;
     }
+    
+    public OrdenDeProduccionScrapModel getByIdBobina(Integer idBobina) {
+        OrdenDeProduccionScrapModel ordenDeProduccion = null;
+        try {
+            OrdenDeProduccionScrapDao ordenDeProduccionScrapDao = new OrdenDeProduccionScrapDaoImpl();
+            ordenDeProduccion = ordenDeProduccionScrapDao.getByIdBobina(idBobina);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return ordenDeProduccion;
+    }
+    
+    public OrdenDeProduccionScrapModel getByIdBulto(Integer idBulto) {
+        OrdenDeProduccionScrapModel ordenDeProduccion = null;
+        try {
+            OrdenDeProduccionScrapDao ordenDeProduccionScrapDao = new OrdenDeProduccionScrapDaoImpl();
+            ordenDeProduccion = ordenDeProduccionScrapDao.getByIdBulto(idBulto);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return ordenDeProduccion;
+    }
 
     public OrdenDeProduccionScrapModel getByCode(String codigo) {
         OrdenDeProduccionScrapModel ordenDeProduccion = null;
@@ -84,6 +133,18 @@ public class OrdenDeProduccionScrapServiceImpl implements OrdenDeProduccionScrap
 
         return ordenDeProduccion;
     }
+    
+//    public List<OrdenDeProduccionScrapModel> getAllPaginatedWithCode(String codigo, int pageNumber, int pageSize) {
+//        List<OrdenDeProduccionScrapModel> ordenDeProducciones = new ArrayList<OrdenDeProduccionScrapModel>();
+//        try {
+//            OrdenDeProduccionScrapDao ordenDeProduccionScrapDao = new OrdenDeProduccionScrapDaoImpl();
+//            ordenDeProducciones = ordenDeProduccionScrapDao.getAllPaginatedWithCode(codigo, pageSize, pageSize);
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//
+//        return ordenDeProducciones;
+//    }
     
     /*
     public List<OrdenDeProduccionScrapModel> getAllAvailableByOrdenDeProduccion(Integer idOrdenDeProduccion) {

@@ -34,6 +34,7 @@ import com.empresa.thyssenplastic.model.OrdenDeProduccionPalletModel;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionScrapModel;
 import com.empresa.thyssenplastic.model.TipoModel;
 import com.empresa.thyssenplastic.dto.GraficoBobinaDto;
+import com.empresa.thyssenplastic.model.RemitoDetalleScrapModel;
 import com.empresa.thyssenplastic.model.UserModel;
 import com.empresa.thyssenplastic.service.OrdenDeProduccionBobinaService;
 import com.empresa.thyssenplastic.service.GraficoBobinaService;
@@ -63,6 +64,7 @@ import com.empresa.thyssenplastic.service.impl.OrdenDeProduccionPalletBultoServi
 import com.empresa.thyssenplastic.service.impl.OrdenDeProduccionPalletServiceImpl;
 import com.empresa.thyssenplastic.service.impl.OrdenDeProduccionScrapServiceImpl;
 import com.empresa.thyssenplastic.service.ActivacionManualService;
+import com.empresa.thyssenplastic.service.RemitoDetalleScrapService;
 import com.empresa.thyssenplastic.service.impl.ActivacionManualServiceImpl;
 import com.empresa.thyssenplastic.utils.Utils;
 import java.util.ArrayList;
@@ -73,6 +75,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import com.empresa.thyssenplastic.service.impl.OrdenDeProduccionServiceImpl;
+import com.empresa.thyssenplastic.service.impl.RemitoDetalleScrapServiceImpl;
 import com.empresa.thyssenplastic.service.impl.TipoServiceImpl;
 import com.empresa.thyssenplastic.service.impl.UserServiceImpl;
 import java.text.SimpleDateFormat;
@@ -807,6 +810,14 @@ public class OrdenDeProduccionDetalleController {
                 }                
                 ordenDeProduccionScrapDto.setPesoTotal(ordenDeProduccionScrapModel.getPesoTotal().toString());
                 
+                RemitoDetalleScrapService remitoDetalleScrapService = new RemitoDetalleScrapServiceImpl();
+                List<RemitoDetalleScrapModel> remitosScrapDetalles = remitoDetalleScrapService.getAllByIdOrdenDeProduccionScrap(ordenDeProduccionScrapModel.getId());
+                
+                boolean puedoEliminarScrap = (remitosScrapDetalles.isEmpty() && ordenDeProduccionScrapModel.getIdBulto() == null && ordenDeProduccionScrapModel.getIdBobina() == null);
+                
+                ordenDeProduccionScrapDto.setPuedoBorrarlo(puedoEliminarScrap);
+                
+                
                 ordenDeProduccionScrapsDtos.add(ordenDeProduccionScrapDto);
                 
                
@@ -1330,6 +1341,13 @@ public class OrdenDeProduccionDetalleController {
                     ordenDeProduccionScrapDto.setMaterialImpreso("No");
                 }                
                 ordenDeProduccionScrapDto.setPesoTotal(ordenDeProduccionScrapModel.getPesoTotal().toString());
+                
+                RemitoDetalleScrapService remitoDetalleScrapService = new RemitoDetalleScrapServiceImpl();
+                List<RemitoDetalleScrapModel> remitosScrapDetalles = remitoDetalleScrapService.getAllByIdOrdenDeProduccionScrap(ordenDeProduccionScrapModel.getId());
+                
+                boolean puedoEliminarScrap = (remitosScrapDetalles.isEmpty() && ordenDeProduccionScrapModel.getIdBulto() == null && ordenDeProduccionScrapModel.getIdBobina() == null);
+                
+                ordenDeProduccionScrapDto.setPuedoBorrarlo(puedoEliminarScrap);
                 
                 ordenDeProduccionScrapsDtos.add(ordenDeProduccionScrapDto);
                 
@@ -1920,6 +1938,8 @@ public class OrdenDeProduccionDetalleController {
             } else {
                 ordenDeProduccionScrapModel.setObservaciones(null);
             }                            
+            
+            ordenDeProduccionScrapModel.setCantidadUtilizada(0.0);
             
             System.out.println("*** Paso 3");
             if(ordenDeProduccionDetalleForm.getAction().equalsIgnoreCase("add") || ordenDeProduccionDetalleForm.getAction().equalsIgnoreCase("edit")) {
@@ -5323,6 +5343,13 @@ public class OrdenDeProduccionDetalleController {
                 }                
                 ordenDeProduccionScrapDto.setPesoTotal(ordenDeProduccionScrapModel.getPesoTotal().toString());
                 
+                RemitoDetalleScrapService remitoDetalleScrapService = new RemitoDetalleScrapServiceImpl();
+                List<RemitoDetalleScrapModel> remitosScrapDetalles = remitoDetalleScrapService.getAllByIdOrdenDeProduccionScrap(ordenDeProduccionScrapModel.getId());
+                
+                boolean puedoEliminarScrap = (remitosScrapDetalles.isEmpty() && ordenDeProduccionScrapModel.getIdBulto() == null && ordenDeProduccionScrapModel.getIdBobina() == null);
+                
+                ordenDeProduccionScrapDto.setPuedoBorrarlo(puedoEliminarScrap);
+                
                 ordenDeProduccionScrapsDtos.add(ordenDeProduccionScrapDto);
                 
                
@@ -5692,6 +5719,13 @@ public class OrdenDeProduccionDetalleController {
                     ordenDeProduccionScrapDto.setMaterialImpreso("No");
                 }                
                 ordenDeProduccionScrapDto.setPesoTotal(ordenDeProduccionScrapModel.getPesoTotal().toString());
+                
+                RemitoDetalleScrapService remitoDetalleScrapService = new RemitoDetalleScrapServiceImpl();
+                List<RemitoDetalleScrapModel> remitosScrapDetalles = remitoDetalleScrapService.getAllByIdOrdenDeProduccionScrap(ordenDeProduccionScrapModel.getId());
+                
+                boolean puedoEliminarScrap = (remitosScrapDetalles.isEmpty() && ordenDeProduccionScrapModel.getIdBulto() == null && ordenDeProduccionScrapModel.getIdBobina() == null);
+                
+                ordenDeProduccionScrapDto.setPuedoBorrarlo(puedoEliminarScrap);
                 
                 ordenDeProduccionScrapsDtos.add(ordenDeProduccionScrapDto);
                 

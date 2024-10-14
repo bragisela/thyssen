@@ -27,6 +27,16 @@ public class OrdenDeProduccionScrapDto implements Serializable {
     private String estado;
     private String estadoLabel;
     
+    private Boolean puedoBorrarlo;
+
+    public Boolean getPuedoBorrarlo() {
+        return puedoBorrarlo;
+    }
+
+    public void setPuedoBorrarlo(Boolean puedoBorrarlo) {
+        this.puedoBorrarlo = puedoBorrarlo;
+    }
+    
     public String getPk() {
         return pk;
     }

@@ -4,6 +4,7 @@
  */
 package com.empresa.thyssenplastic.dao;
 
+import com.empresa.thyssenplastic.dto.DepositoScrapDto;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionScrapModel;
 import java.util.List;
 
@@ -17,9 +18,18 @@ public interface OrdenDeProduccionScrapDao extends GenericDao {
     
     OrdenDeProduccionScrapModel getByPk(Integer pk);
     
+    OrdenDeProduccionScrapModel getByIdBobina(Integer idBobina);
+    
+    OrdenDeProduccionScrapModel getByIdBulto(Integer idBulto);
+    
     OrdenDeProduccionScrapModel getByCode(String codigo);
     
     List<OrdenDeProduccionScrapModel> getAllByOrdenDeProduccion(Integer idOrdenDeProduccion);
+    List<OrdenDeProduccionScrapModel> getAllPaginated(int pageNumber, int pageSize);
+    
+    //List<OrdenDeProduccionScrapModel> getAllPaginatedWithCode(String codigo, int pageNumber, int pageSize);
+    
+    List<DepositoScrapDto> getResumenPorOrdenDeProduccion(int pageNumber, int pageSize);
     
     /*
     List<OrdenDeProduccionScrapModel> getAllAvailableByOrdenDeProduccion(Integer idOrdenDeProduccion);
