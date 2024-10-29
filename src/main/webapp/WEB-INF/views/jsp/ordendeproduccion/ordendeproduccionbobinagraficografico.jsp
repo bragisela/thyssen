@@ -275,7 +275,7 @@
                     'font-size': '15px'
                     },
                     {
-                    text: 'Articulo' + idArticulo + `(${articuloLabel}) `,
+                    text: 'Articulo  ' + `(${articuloLabel}) `,
                     x: '1%',
                     y: '15%',
                     'font-size': '15px'

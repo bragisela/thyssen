@@ -33,7 +33,7 @@ public class MantenimientoCorrectivoForm {
     private String estadoLabel;
     private String fechaDeReparacionDesde;
     private String fechaDeReparacionHasta;
-    private String intervaloReparacion;
+    private Integer intervaloReparacion;
 
     public String getPk() {
         return pk;
@@ -219,11 +219,11 @@ public class MantenimientoCorrectivoForm {
         this.fechaDeReparacionHasta = fechaDeReparacionHasta;
     }
 
-    public String getIntervaloReparacion() {
+    public Integer getIntervaloReparacion() {
         return intervaloReparacion;
     }
 
-    public void setIntervaloReparacion(String intervaloReparacion) {
+    public void setIntervaloReparacion(Integer intervaloReparacion) {
         this.intervaloReparacion = intervaloReparacion;
     }
 
