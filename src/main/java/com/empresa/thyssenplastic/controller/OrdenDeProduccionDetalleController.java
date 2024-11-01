@@ -1676,7 +1676,6 @@ public class OrdenDeProduccionDetalleController {
                 ordenDeProduccionBultoModel.setObservaciones(null);
             }
             
-                        
             System.out.println("*** Paso 3");
 
             OrdenDeProduccionBultoModel existe = ordenDeProduccionBultoService.getByOrdenDeProduccionBobina(bobinaSelected.getId());
@@ -1965,6 +1964,28 @@ public class OrdenDeProduccionDetalleController {
                     return modelAndView;                                
                 }
             }            
+        }
+        
+        
+        OrdenDeProduccionBultoService ordenDeProduccionBultoService = new OrdenDeProduccionBultoServiceImpl();
+        OrdenDeProduccionBultoModel ordenDeProduccionBultoModel = ordenDeProduccionBultoService.getByPk(Integer.valueOf(id));
+        OrdenDeProduccionBobinaService ordenDeProduccionBobinaService = new OrdenDeProduccionBobinaServiceImpl();
+        if(ordenDeProduccionDetalleForm.getPesoTotalBobina() != null) {
+            OrdenDeProduccionBobinaModel bobinaModel = ordenDeProduccionBobinaService.getByPk(ordenDeProduccionBultoModel.getIdOrdenDeProduccionBobina());
+            if(bobinaModel == null) {
+                modelAndView.setViewName("error");
+                modelAndView.addObject("errorMessage", "Error: No se encuentra bulto para bobina.");
+                return modelAndView;                                                            
+            }                    
+
+
+            String test = ordenDeProduccionDetalleForm.getPesoTotalBobinaBulto();
+
+
+            bobinaModel.setPesoTotal(Double.parseDouble(ordenDeProduccionDetalleForm.getPesoTotalBobinaBulto()));
+
+            ordenDeProduccionBobinaService.save(bobinaModel);
+
         }
         
         String tipo = ordenDeProduccionDetalleForm.getTipoDetalle();
@@ -3555,7 +3576,12 @@ public class OrdenDeProduccionDetalleController {
             ordenDeProduccionDetalleForm.setIdBobinaSelected(ordenDeProduccionBulto.getIdOrdenDeProduccionBobina().toString());   
         }        
         ordenDeProduccionDetalleForm.setCodigoBultoLabel(ordenDeProduccionBulto.getCodigo());
-
+        
+        OrdenDeProduccionBobinaService ordenDeProduccionBobinaService2 = new OrdenDeProduccionBobinaServiceImpl();
+        OrdenDeProduccionBobinaModel ordenDeProduccionBobina = ordenDeProduccionBobinaService2.getByPk(ordenDeProduccionBulto.getIdOrdenDeProduccionBobina());
+        
+        ordenDeProduccionDetalleForm.setPesoTotalBobinaBulto(ordenDeProduccionBobina.getPesoTotal().toString());
+        //
         model.addAttribute("ordenDeProduccionDetalleForm", ordenDeProduccionDetalleForm);  
         model.addAttribute("titleOrdenDeProduccion", "Editar Orden de Producción Bulto");
         model.addAttribute("buttonLabel", "Guardar");        
