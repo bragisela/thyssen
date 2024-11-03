@@ -33,6 +33,8 @@ public class OrdenDeProduccionDetalleForm {
     //BOBINA
     private String pesoConoBobina;
     private String pesoTotalBobina;
+    private String pesoTotalBobinaBulto;
+
     private String pesoNetoBobina;
     private String espesorBobina;
     private String estadoBobina;
@@ -176,6 +178,14 @@ public class OrdenDeProduccionDetalleForm {
 
     public void setPesoConoBobina(String pesoConoBobina) {
         this.pesoConoBobina = pesoConoBobina;
+    }
+    
+    public String getPesoTotalBobinaBulto() {
+        return pesoTotalBobinaBulto;
+    }
+
+    public void setPesoTotalBobinaBulto(String pesoTotalBobinaBulto) {
+        this.pesoTotalBobinaBulto = pesoTotalBobinaBulto;
     }
 
     public String getPesoTotalBobina() {

@@ -683,6 +683,13 @@
                                                                             <form:options items="${plegadoraList}" />
                                                                         </form:select>
                                                                     </div>                                                                        
+                                                                    <div class="row col-xs-9 col-sm-3 col-xl-4">
+                                                                        <label>Peso Total (kg)</label>
+                                                                        <form:input type="number" path="pesoTotalBobinaBulto" step="0.01" class="form-control" placeholder="Peso Total ..." disabled="${disabledAlta}" onChange="calculatePesoNetoBobina()"/>
+                                                                    </div>
+                                                                    
+                                                                    
+                                                                    
                                                                 </div>
                                                                     
                                                                 
