@@ -28,6 +28,7 @@
                                         <c:set var = "disabledCierre" value = "true"/>
                                         <c:set var = "cerradoTab" value = "#cerradoTab"/>
                                         <c:set var = "disabledHoraArranque" value = "true"/>
+                                        <c:set var = "disabledIntervaloReparacion" value = "true"/>
                                         <c:if test = "${operacion == 'alta'}">
                                             <c:set var = "disabledHoraArranque" value = "false"/>                                            
                                             <c:set var = "disabledAlta" value = "false"/>
@@ -50,7 +51,10 @@
                                         </c:if>
                                         
                                         <c:if test = "${action == 'edit'}">
-                                            <c:set var = "disabledHoraArranque" value = "false"/>
+                                            <c:if test = "${operacion != 'cierre'}">
+                                                <c:set var = "disabledHoraArranque" value = "false"/>
+                                                <c:set var = "disabledIntervaloReparacion" value = "false"/>
+                                            </c:if>
                                         </c:if>
                                         
                                         ${action}
@@ -181,7 +185,7 @@
                                                 <div class="form-row row">
                                                     <div class="row col-xs-9 col-sm-3 col-xl-3" >
                                                         <label for="inputArticulo">Tiempo de reparación (min)</label>
-                                                        <form:input type="number" path="intervaloReparacion" id="intervaloReparacion" class="form-control" required="required" placeholder="" disabled="${disabledCierre}" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')" onfocusout="calculateDiffrence()"/>
+                                                        <form:input type="number" path="intervaloReparacion" id="intervaloReparacion" class="form-control" required="required" placeholder="" disabled="${disabledIntervaloReparacion}" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')" onfocusout="calculateDiffrence()"/>
                                                     </div>                                                    
                                                 </div>
                                                 <p>    
@@ -246,7 +250,7 @@
                                         <th>HORA PARADA</th>
                                         <th>FECHA REPARACION DESDE</th>
                                         <th>FECHA REPARACION HASTA</th>
-                                        <th>INTERVALO REPARACION</th>
+                                        <th>TIEMPO DE REPARACION</th>
                                         <th>ESTADO</th>
                                         <th style="text-align: center">ACCIONES</th>
                                     </tr>
@@ -311,7 +315,8 @@
         $('#mantenimientoscorrectivoTable').DataTable({
             language: {
                 "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-            }            
+            },
+            order: [[0, 'desc']]
         });
         
         var tipo = $("#tipo").val();
@@ -375,6 +380,7 @@
             var form = document.getElementById("myForm");
             form.submit();
 	} else {
+            console.log("sin submit");
             $("#myForm")[0].reportValidity();
 	}        
     }

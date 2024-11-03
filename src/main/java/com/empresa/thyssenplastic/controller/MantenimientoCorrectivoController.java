@@ -236,6 +236,15 @@ public class MantenimientoCorrectivoController {
             } else {
                 mantenimientoCorrectivoModel.setHoraArranque(null);
             }
+            if(mantenimientoCorrectivoForm.getIntervaloReparacion() != null && !(mantenimientoCorrectivoForm.getIntervaloReparacion() == null)) {
+                mantenimientoCorrectivoModel.setIntervaloReparacion(mantenimientoCorrectivoForm.getIntervaloReparacion());
+            } else {
+                mantenimientoCorrectivoModel.setIntervaloReparacion(null);
+            }
+            
+            //Aca getIntervaloReparacion
+            
+            
         }
         
         if(operacion.equalsIgnoreCase("alta") ) {
@@ -275,6 +284,11 @@ public class MantenimientoCorrectivoController {
                 mantenimientoCorrectivoModel.setHoraArranque(mantenimientoCorrectivoForm.getHoraArranque());
             } else {
                 mantenimientoCorrectivoModel.setHoraArranque(null);
+            }
+            if(mantenimientoCorrectivoForm.getIntervaloReparacion() != null && !(mantenimientoCorrectivoForm.getIntervaloReparacion() == null)) {
+                mantenimientoCorrectivoModel.setIntervaloReparacion(mantenimientoCorrectivoForm.getIntervaloReparacion());
+            } else {
+                mantenimientoCorrectivoModel.setPrioridad(null);
             }
             
             
@@ -325,7 +339,7 @@ public class MantenimientoCorrectivoController {
             } else {
                 mantenimientoCorrectivoModel.setFechaDeReparacionHasta(null);
             }
-            if(mantenimientoCorrectivoForm.getIntervaloReparacion() != null && !mantenimientoCorrectivoForm.getIntervaloReparacion().isEmpty()) {
+            if(mantenimientoCorrectivoForm.getIntervaloReparacion() != null && !(mantenimientoCorrectivoForm.getIntervaloReparacion() == 0)) {
                 mantenimientoCorrectivoModel.setIntervaloReparacion(Integer.valueOf(mantenimientoCorrectivoForm.getIntervaloReparacion()));
             } else {
                 mantenimientoCorrectivoModel.setIntervaloReparacion(null);
@@ -423,7 +437,7 @@ public class MantenimientoCorrectivoController {
             mantenimientoCorrectivoForm.setFechaDeReparacionHasta(mantenimientoCorrectivo.getFechaDeReparacionHasta());
         }        
         if(mantenimientoCorrectivo.getIntervaloReparacion() != null) {
-            mantenimientoCorrectivoForm.setIntervaloReparacion(mantenimientoCorrectivo.getIntervaloReparacion().toString());
+            mantenimientoCorrectivoForm.setIntervaloReparacion(mantenimientoCorrectivo.getIntervaloReparacion());
         }        
         if(mantenimientoCorrectivo.getHoraArranque() != null) {
             mantenimientoCorrectivoForm.setHoraArranque(mantenimientoCorrectivo.getHoraArranque());
@@ -768,7 +782,7 @@ public class MantenimientoCorrectivoController {
             mantenimientoCorrectivoForm.setFechaDeReparacionHasta(mantenimientoCorrectivo.getFechaDeReparacionHasta());
         }        
         if(mantenimientoCorrectivo.getIntervaloReparacion() != null) {
-            mantenimientoCorrectivoForm.setIntervaloReparacion(mantenimientoCorrectivo.getIntervaloReparacion().toString());
+            mantenimientoCorrectivoForm.setIntervaloReparacion(mantenimientoCorrectivo.getIntervaloReparacion());
         }        
         
         mantenimientoCorrectivoForm.setIdUserAlta(mantenimientoCorrectivo.getIdUserAlta().toString());
