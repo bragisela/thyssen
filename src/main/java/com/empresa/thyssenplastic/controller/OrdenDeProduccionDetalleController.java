@@ -1980,7 +1980,8 @@ public class OrdenDeProduccionDetalleController {
 
 
             String test = ordenDeProduccionDetalleForm.getPesoTotalBobinaBulto();
-
+            
+            bobinaModel.setPesoNeto(Double.parseDouble(ordenDeProduccionDetalleForm.getPesoTotalBobinaBulto()) - bobinaModel.getPesoCono());
 
             bobinaModel.setPesoTotal(Double.parseDouble(ordenDeProduccionDetalleForm.getPesoTotalBobinaBulto()));
 
