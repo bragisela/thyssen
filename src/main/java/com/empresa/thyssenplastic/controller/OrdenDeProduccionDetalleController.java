@@ -1970,7 +1970,11 @@ public class OrdenDeProduccionDetalleController {
         OrdenDeProduccionBultoService ordenDeProduccionBultoService = new OrdenDeProduccionBultoServiceImpl();
         OrdenDeProduccionBultoModel ordenDeProduccionBultoModel = ordenDeProduccionBultoService.getByPk(Integer.valueOf(id));
         OrdenDeProduccionBobinaService ordenDeProduccionBobinaService = new OrdenDeProduccionBobinaServiceImpl();
-        if(ordenDeProduccionDetalleForm.getPesoTotalBobina() != null) {
+        
+        // Chequeo que ordenDeProduccionBultoModel no sea nulo, porque cuando guardan desde el guardar de Bobina el siguiente bloque no debe 
+        // ejecutarse. Solo en caso del guardar de Bulto debe ingresar.
+        if(ordenDeProduccionDetalleForm.getPesoTotalBobina() != null && ordenDeProduccionBultoModel != null) {
+                        
             OrdenDeProduccionBobinaModel bobinaModel = ordenDeProduccionBobinaService.getByPk(ordenDeProduccionBultoModel.getIdOrdenDeProduccionBobina());
             if(bobinaModel == null) {
                 modelAndView.setViewName("error");
