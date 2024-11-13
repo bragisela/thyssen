@@ -4788,6 +4788,295 @@ public class OrdenDeProduccionDetalleController {
         return "/ordendeproduccion/ordendeproducciondetalle";
     }    
     
+    @RequestMapping(value = "/ordenDeProduccionDetalle/editScrap/{ordenDeProduccionScrapPk}", method = RequestMethod.GET)
+    public String editOrdenDeProduccionScrap(@PathVariable String ordenDeProduccionScrapPk, HttpServletRequest req, ModelMap model) throws Exception {
+             if(!Utils.isAutenticated(req)) {
+            model.addAttribute("userForm", new UserForm());         
+            return "/login/login";            
+        }
+
+        if(ordenDeProduccionScrapPk == null) {
+            model.addAttribute("errorMessage", "Error: OrdenDeProduccion inválido");         
+            return "/error";                
+        }
+        
+        String operacion = "edit";                
+        String displayActionButton = "block";
+        String displayActionButtonScrap = "block";
+
+        OrdenDeProduccionScrapService ordenDeProduccionScrapService = new OrdenDeProduccionScrapServiceImpl();   
+        OrdenDeProduccionScrapModel ordenDeProduccionScrap = ordenDeProduccionScrapService.getByPk(Integer.valueOf(ordenDeProduccionScrapPk));
+        if(ordenDeProduccionScrap == null) {
+            model.addAttribute("errorMessage", "Error: Orden De Produccion Scrap inválido. No ha sido encontrado.");         
+            return "/error";    
+        }
+        
+        OrdenDeProduccionService ordenDeProduccionService = new OrdenDeProduccionServiceImpl();   
+        OrdenDeProduccionModel ordenDeProduccion = ordenDeProduccionService.getByPk(Integer.valueOf(ordenDeProduccionScrap.getIdOrdenDeProduccion()));
+        if(ordenDeProduccion == null) {
+            model.addAttribute("errorMessage", "Error: OrdenDeProduccion inválido. No ha sido encontrado.");         
+            return "/error";    
+        }
+        
+        /*
+        if(!ordenDeProduccion.getEstado().equalsIgnoreCase("Abierto") && !ordenDeProduccion.getEstado().equalsIgnoreCase("Fabricacion")) {
+            model.addAttribute("errorMessage", "Error: estado de orden incorrecto.");         
+            return "/error";                            
+        }
+        */
+        
+        ClienteService clienteService = new ClienteServiceImpl();
+        ClienteModel cliente = clienteService.getByPk(ordenDeProduccion.getIdCliente());
+        if(cliente == null) {
+            model.addAttribute("errorMessage", "Error: cliente no encontrado");         
+            return "/error";                            
+        }
+
+        ArticuloService articuloService = new ArticuloServiceImpl();
+        ArticuloModel articulo = articuloService.getByPk(ordenDeProduccion.getIdArticulo());
+        if(articulo == null) {
+            model.addAttribute("errorMessage", "Error: articulo no encontrado");         
+            return "/error";                            
+        }
+        
+        ArticuloFichaTecnicaService articuloFichaTecnicaService = new ArticuloFichaTecnicaServiceImpl();
+        ArticuloFichaTecnicaModel articuloFichaTecnica = articuloFichaTecnicaService.getByPk(ordenDeProduccion.getIdFichaTecnica());
+        if(articuloFichaTecnica == null) {
+            model.addAttribute("errorMessage", "Error: ficha tecnica no encontrada");         
+            return "/error";                            
+        }
+        
+        UserService userService = new UserServiceImpl();   
+        Integer userId = Integer.valueOf(Utils.getUserLoggedId(req));
+        UserModel user = userService.getUserById(userId);
+
+        if(user.getRol() != Utils.ROL_OFICINA && user.getRol() != Utils.ROL_PLANTA && user.getRol() != Utils.ROL_DEPOSITO) {
+            model.addAttribute("errorMessage", "Error: usuario no permite esta operación.");         
+            return "/error";                                                                
+        }
+        
+        String rol = "";
+        if(user.getRol() == Utils.ROL_PLANTA) {
+            rol = "planta";
+        }
+        if(user.getRol() == Utils.ROL_OFICINA) {
+            rol = "oficina";
+        }
+        if(user.getRol() == Utils.ROL_DEPOSITO) {
+            rol = "deposito";
+        }
+
+        
+        OrdenDeProduccionDetalleForm ordenDeProduccionDetalleForm = new OrdenDeProduccionDetalleForm();
+        ordenDeProduccionDetalleForm.setPk(ordenDeProduccionScrap.getId().toString());
+        ordenDeProduccionDetalleForm.setAction("edit");        
+        ordenDeProduccionDetalleForm.setOperacion("edit");   
+        ordenDeProduccionDetalleForm.setTipoDetalle("scrap");
+        ordenDeProduccionDetalleForm.setImprimir("false");
+        
+        ordenDeProduccionDetalleForm.setFechaAltaOrdenDeProduccion(ordenDeProduccion.getFechaAlta().toString().replace(" 00:00:00.0", ""));
+        ordenDeProduccionDetalleForm.setEstadoOrdenDeProduccion(ordenDeProduccion.getEstado());
+        ordenDeProduccionDetalleForm.setIdOrdenProduccion(ordenDeProduccion.getId().toString());
+        ordenDeProduccionDetalleForm.setIdCliente(ordenDeProduccion.getIdCliente().toString());
+        ordenDeProduccionDetalleForm.setIdArticulo(ordenDeProduccion.getIdArticulo().toString());
+        ordenDeProduccionDetalleForm.setIdFichaTecnica(ordenDeProduccion.getIdFichaTecnica().toString());
+        ordenDeProduccionDetalleForm.setPesoTecnicoArticulo(articuloFichaTecnica.getPeso().toString());
+        ordenDeProduccionDetalleForm.setMetrosArticulo(articuloFichaTecnica.getMetros().toString());
+        ordenDeProduccionDetalleForm.setAltoArticulo(articulo.getAlto().toString());
+        ordenDeProduccionDetalleForm.setEspesorArticulo(articulo.getEspesor().toString());
+        ordenDeProduccionDetalleForm.setAnchoArticulo(articulo.getAncho().toString());
+
+        TipoService tipoService = new TipoServiceImpl();
+        
+        String origen = "";
+        String tipoMaterial = "";
+        String motivo = "";
+        String formato = "";        
+        if(ordenDeProduccionScrap.getIdOrigen() != null) {
+            TipoModel origenModel = tipoService.getByPk(ordenDeProduccionScrap.getIdOrigen());
+            if(origenModel != null) {
+                origen = origenModel.getId().toString();
+            }
+        }       
+        ordenDeProduccionDetalleForm.setIdOrigenScrap(origen);
+        if(ordenDeProduccionScrap.getIdTipoMaterial() != null) {
+            TipoModel origenModel = tipoService.getByPk(ordenDeProduccionScrap.getIdTipoMaterial());
+            if(origenModel != null) {
+                tipoMaterial = origenModel.getId().toString();
+            }
+        }                        
+        ordenDeProduccionDetalleForm.setIdTipoMaterialScrap(tipoMaterial);
+        if(ordenDeProduccionScrap.getIdMotivo() != null) {
+            TipoModel origenModel = tipoService.getByPk(ordenDeProduccionScrap.getIdMotivo());
+            if(origenModel != null) {
+                motivo = origenModel.getId().toString();
+            }
+        }                        
+        ordenDeProduccionDetalleForm.setIdMotivoScrap(motivo);
+        if(ordenDeProduccionScrap.getIdFormato() != null) {
+            TipoModel origenModel = tipoService.getByPk(ordenDeProduccionScrap.getIdFormato());
+            if(origenModel != null) {
+                formato = origenModel.getId().toString();
+            }
+        }             
+        ordenDeProduccionDetalleForm.setIdFormatoScrap(formato);
+        if(ordenDeProduccionScrap.getEsRecuperable() != null && ordenDeProduccionScrap.getEsRecuperable()) {
+            ordenDeProduccionDetalleForm.setEsRecuperableScrap("1");
+        }else {
+            ordenDeProduccionDetalleForm.setEsRecuperableScrap("0");
+        }
+        if(ordenDeProduccionScrap.getMaterialImpreso() != null && ordenDeProduccionScrap.getMaterialImpreso()) {
+            ordenDeProduccionDetalleForm.setMaterialImpresoScrap("1");
+        }else {
+            ordenDeProduccionDetalleForm.setMaterialImpresoScrap("0");
+        }
+        if(ordenDeProduccionScrap.getPesoTotal() != null) {
+            ordenDeProduccionDetalleForm.setPesoTotalScrap(ordenDeProduccionScrap.getPesoTotal().toString());
+        }
+        if(ordenDeProduccionScrap.getObservaciones() != null) {
+            ordenDeProduccionDetalleForm.setObservacionesScrap(ordenDeProduccionScrap.getObservaciones().toString());
+        }
+                
+
+        model.addAttribute("ordenDeProduccionDetalleForm", ordenDeProduccionDetalleForm);  
+        model.addAttribute("titleOrdenDeProduccion", "Ver Orden de Producción Scrap");
+        model.addAttribute("buttonLabel", "Guardar");
+        model.addAttribute("ordenDeProduccionScrapName", "Ver Scrap " + ordenDeProduccionScrap.getCodigo());        
+
+        Map<String,String> origenScrapList = new LinkedHashMap<String,String>();
+        List<TipoModel> origenScrapModel = tipoService.getByType("origenScrap");       
+        if(origenScrapModel != null && !origenScrapModel.isEmpty()){
+            for(TipoModel tipoModel :origenScrapModel) {
+                origenScrapList.put(tipoModel.getId().toString(), tipoModel.getValor());
+            }
+        }
+
+        Map<String,String> tipoMaterialScrapList = new LinkedHashMap<String,String>();
+        List<TipoModel> tipoMaterialScrapModel = tipoService.getByType("tipoMaterialScrap");       
+        if(tipoMaterialScrapModel != null && !tipoMaterialScrapModel.isEmpty()){
+            for(TipoModel tipoModel :tipoMaterialScrapModel) {
+                tipoMaterialScrapList.put(tipoModel.getId().toString(), tipoModel.getValor());
+            }
+        }
+
+        Map<String,String> motivoScrapList = new LinkedHashMap<String,String>();
+        List<TipoModel> motivoScrapModel = tipoService.getByType("motivoScrap");       
+        if(motivoScrapModel != null && !motivoScrapModel.isEmpty()){
+            for(TipoModel tipoModel :motivoScrapModel) {
+                motivoScrapList.put(tipoModel.getId().toString(), tipoModel.getValor());
+            }
+        }
+
+        Map<String,String> formatoScrapList = new LinkedHashMap<String,String>();
+        List<TipoModel> formatoScrapModel = tipoService.getByType("formatoScrap");       
+        if(formatoScrapModel != null && !formatoScrapModel.isEmpty()){
+            for(TipoModel tipoModel :formatoScrapModel) {
+                formatoScrapList.put(tipoModel.getId().toString(), tipoModel.getValor());
+            }
+        }        
+        List<OrdenDeProduccionScrapModel> ordenDeProduccionScrapsModel = ordenDeProduccionScrapService.getAllByOrdenDeProduccion(ordenDeProduccion.getId());       
+        List<OrdenDeProduccionScrapDto> ordenDeProduccionScrapsDtos = new ArrayList<OrdenDeProduccionScrapDto>();        
+        
+        if(ordenDeProduccionScrapsModel != null && !ordenDeProduccionScrapsModel.isEmpty()) {
+            for(OrdenDeProduccionScrapModel ordenDeProduccionScrapModel: ordenDeProduccionScrapsModel) {
+                OrdenDeProduccionScrapDto ordenDeProduccionScrapDto = new OrdenDeProduccionScrapDto();
+                ordenDeProduccionScrapDto.setPk(ordenDeProduccionScrapModel.getId().toString());
+                ordenDeProduccionScrapDto.setFechaAlta(ordenDeProduccionScrapModel.getFechaAlta().toString().replace(".0", ""));
+                ordenDeProduccionScrapDto.setCodigo(ordenDeProduccionScrapModel.getCodigo());
+                String origen2 = "";
+                if(ordenDeProduccionScrapModel.getIdOrigen() != null) {
+                    TipoModel origenModel = tipoService.getByPk(ordenDeProduccionScrapModel.getIdOrigen());
+                    if(origenModel != null) {
+                        origen2 = origenModel.getValor();
+                    }
+                }                        
+                ordenDeProduccionScrapDto.setOrigen(origen2);
+                String tipoMaterial2 = "";
+                if(ordenDeProduccionScrapModel.getIdTipoMaterial() != null) {
+                    TipoModel tipoMaterialModel = tipoService.getByPk(ordenDeProduccionScrapModel.getIdTipoMaterial());
+                    if(tipoMaterialModel != null) {
+                        tipoMaterial2 = tipoMaterialModel.getValor();
+                    }
+                }                                        
+                ordenDeProduccionScrapDto.setTipoMaterial(tipoMaterial2);
+                String motivo2 = "";
+                if(ordenDeProduccionScrapModel.getIdMotivo() != null) {
+                    TipoModel motivoModel = tipoService.getByPk(ordenDeProduccionScrapModel.getIdMotivo());
+                    if(motivoModel != null) {
+                        motivo2 = motivoModel.getValor();
+                    }
+                }                                                        
+                ordenDeProduccionScrapDto.setMotivo(motivo2);
+                String formato2 = "";
+                if(ordenDeProduccionScrapModel.getIdFormato() != null) {
+                    TipoModel formatoModel = tipoService.getByPk(ordenDeProduccionScrapModel.getIdFormato());
+                    if(formatoModel != null) {
+                        formato2 = formatoModel.getValor();
+                    }
+                }                                                                        
+                ordenDeProduccionScrapDto.setFormato(formato2);
+                if(ordenDeProduccionScrapModel.getEsRecuperable()) {
+                    ordenDeProduccionScrapDto.setEsRecuperable("Si");
+                } else {
+                    ordenDeProduccionScrapDto.setEsRecuperable("No");
+                }
+                if(ordenDeProduccionScrapModel.getMaterialImpreso()) {
+                    ordenDeProduccionScrapDto.setMaterialImpreso("Si");
+                } else {
+                    ordenDeProduccionScrapDto.setMaterialImpreso("No");
+                }                
+                ordenDeProduccionScrapDto.setPesoTotal(ordenDeProduccionScrapModel.getPesoTotal().toString());
+                
+                RemitoDetalleScrapService remitoDetalleScrapService = new RemitoDetalleScrapServiceImpl();
+                List<RemitoDetalleScrapModel> remitosScrapDetalles = remitoDetalleScrapService.getAllByIdOrdenDeProduccionScrap(ordenDeProduccionScrapModel.getId());
+                
+                boolean puedoEliminarScrap = (remitosScrapDetalles.isEmpty() && ordenDeProduccionScrapModel.getIdBulto() == null && ordenDeProduccionScrapModel.getIdBobina() == null);
+                
+                ordenDeProduccionScrapDto.setPuedoBorrarlo(puedoEliminarScrap);
+                
+                ordenDeProduccionScrapsDtos.add(ordenDeProduccionScrapDto);
+                
+               
+                this.cantidadScrap = ordenDeProduccionScrapsDtos.size();
+               
+                
+                System.out.println("*** ordenDeProduccionScrapsDtos size:"+ordenDeProduccionScrapsDtos.size());
+               
+
+            }
+        }
+             
+        model.addAttribute("displayButtonCambiarEstadoFabricacion", "none");        
+        model.addAttribute("displayButtonCambiarEstadoEmpaque", "none");    
+        model.addAttribute("displayButtonCambiarEstadoPallet", "none");    
+        model.addAttribute("displayButtonCambiarEstadoCompletado", "none");    
+
+        model.addAttribute("origenScrapList", origenScrapList);
+        model.addAttribute("tipoMaterialScrapList", tipoMaterialScrapList);
+        model.addAttribute("motivoScrapList", motivoScrapList);
+        model.addAttribute("formatoScrapList", formatoScrapList);
+        
+        model.addAttribute("tipoDetalle", "scrap");
+        model.addAttribute("idOrdenDeProduccion", ordenDeProduccion.getId().toString());        
+        model.addAttribute("clienteLabel", cliente.getRazonSocial());
+        model.addAttribute("idArticulo", articulo.getId());
+        model.addAttribute("articuloLabel", articulo.getDenominacion());
+        model.addAttribute("fichaTecnicaVersionLabel", articuloFichaTecnica.getVersion());
+        
+        model.addAttribute("displayUser", "none");
+        model.addAttribute("rol", rol);
+        model.addAttribute("action", "edit");
+        model.addAttribute("displayActionButton", displayActionButton);
+        model.addAttribute("displayActionButtonScrap", displayActionButtonScrap);
+        model.addAttribute("operacion", operacion);        
+        model.addAttribute("ordenDeProduccionScraps", ordenDeProduccionScrapsDtos);
+        
+        model.addAttribute("cantidadScrap", this.cantidadScrap);
+            
+                                                                                                              
+        return "/ordendeproduccion/ordendeproducciondetalle";    
+    }
+    
     @RequestMapping(value = "/ordenDeProduccionDetalle/viewpallet/{ordenDeProduccionPalletPk}", method = RequestMethod.GET)
     public String viewOrdenDeProduccionPallet(@PathVariable String ordenDeProduccionPalletPk, HttpServletRequest req, ModelMap model) throws Exception {
                 
