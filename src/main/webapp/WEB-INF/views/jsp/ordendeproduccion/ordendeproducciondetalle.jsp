@@ -262,17 +262,13 @@
                                                     <c:set var = "tabScrapsActiva" value = "active"/>  
                                                     <c:set var = "tabBobinasDisabled" value = "disabled disabledTab"/>      
                                                     <c:set var = "tabBultosDisabled" value = "disabled disabledTab"/>  
-                                                    <c:set var = "tabPalletsDisabled" value = "disabled disabledTab"/>                                                  
-                                                    <c:set var = "tabScrapsDisabled" value = ""/>  
-                                                    <c:set var = "disabledObservacionesBobina" value = "true"/>
-                                                    <c:set var = "disabledEstadoBobina" value = "true"/>
-                                                    <c:set var = "disabledObservacionesBulto" value = "true"/>
-                                                    <c:set var = "disabledEstadoBulto" value = "true"/>   
-                                                    <c:set var = "disabledObservacionesPallet" value = "true"/>
-                                                    <c:set var = "disabledEstadoPallet" value = "true"/>                                                                                            
-                                                    <c:set var = "disabledObservacionesScrap" value = "false"/>
-                                                    <c:set var = "disabledEstadoScrap" value = "false"/>                                                                                                                                                
-                                                    <c:set var = "classDivPallet" value = "in active"/>
+                                                    <c:set var = "tabPalletsDisabled" value = "disabled disabledTab"/>                                                                                                  
+                                                    <c:set var = "tabScrapsDisabled" value = ""/> 
+                                                    <c:set var = "classDivBobina" value = ""/>
+                                                    <c:set var = "classDivBulto" value = ""/>    
+                                                    <c:set var = "classDivPallet" value = ""/>
+                                                    <c:set var = "classDivScrap" value = "in active"/>
+                                                
                                                 </c:if>                                                                                                                                        
                                             </c:if>
                                         </c:if>
@@ -1065,7 +1061,7 @@
                                                             <div class="container">
                                                                 <p>&nbsp;</p>
                                                                 
-                                                                ${ordenDeProduccionScrapName}
+                                                                ${ordenDeProduccionScrapName}111111111
 
                                                                 <p>&nbsp;</p>
                                                                 
@@ -1221,7 +1217,12 @@
                                                                                                         <a class="nav-link active fa fa-trash fa-lg"
                                                                                                             href="/thyssenplastic/ordenDeProduccionDetalle/removeScrap/${ordendeproduccionscrap.pk}"
                                                                                                             data-toggle="tooltip" data-placement="top" title="Eliminar"></a>                                                                                                            
-                                                                                                    </c:if>                                                                                                                                                                
+                                                                                                    </c:if>                        
+                                                                                                     <c:if test = "${(rol == 'planta' && ordendeproduccionpallet.estaEnDeposito == 'false' && operacion == 'alta' && estadoOrderProduccion != 'Completado') || (rol == 'oficina' && operacion == 'alta' && estadoOrderProduccion != 'Completado')}">
+                                                                                                        <a class="nav-link active fa fa-pencil-square-o fa-lg"
+                                                                                                            href="/thyssenplastic/ordenDeProduccionDetalle/editScrap/${ordendeproduccionscrap.pk}"
+                                                                                                            data-toggle="tooltip" data-placement="top" title="Editar"></a>
+                                                                                                    </c:if>
                                                                                                 </td>
                                                                                             </tr>
                                                                                         </c:forEach>
