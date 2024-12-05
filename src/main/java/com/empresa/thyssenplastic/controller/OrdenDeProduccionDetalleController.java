@@ -449,8 +449,9 @@ public class OrdenDeProduccionDetalleController {
         } else {
             ordenDeProduccionDetalleForm.setAltoArticulo("No disponible");
         }
+        // Aca
         if(articulo.getEspesor() != null) {
-            ordenDeProduccionDetalleForm.setEspesorArticulo(articulo.getEspesor().toString());
+            ordenDeProduccionDetalleForm.setEspesorArticulo(articuloFichaTecnica.getEspesorArticulo().toString()); //articulo.getEspesor().toString());
         } else {
             ordenDeProduccionDetalleForm.setEspesorArticulo("No disponible");
         }
