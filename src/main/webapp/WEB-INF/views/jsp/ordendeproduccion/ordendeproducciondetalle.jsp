@@ -988,6 +988,7 @@
                                                                                             <th>FECHA ALTA</th>
                                                                                             <th>CANT. BULTOS</th>
                                                                                             <th>PESO TOTAL</th>
+                                                                                            <th>PESO NETO (total)</th>
                                                                                             <th>CALIDAD</th>
                                                                                             
                                                                                             <th style="text-align: center">ACCIONES</th>
@@ -1028,6 +1029,9 @@
                                                                                                 <td>
                                                                                                     <c:out value="${ordendeproduccionpallet.pesoTotal}" />
                                                                                                 </td>                                            
+                                                                                                <td>
+                                                                                                    <c:out value="${ordendeproduccionpallet.pesoNeto}" />
+                                                                                                </td> 
                                                                                                 <td>
                                                                                                     <c:out value="${ordendeproduccionpallet.estadoLabel}" />
                                                                                                 </td>

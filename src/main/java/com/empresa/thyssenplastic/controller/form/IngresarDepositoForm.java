@@ -4,12 +4,15 @@
  */
 package com.empresa.thyssenplastic.controller.form;
 
+import java.util.List;
+
 /**
  *
  * @author gusta
  */
 public class IngresarDepositoForm {
     
+    private List<String> codigos; // Lista de códigos
     private String pk;
     private String codigo;
     private String fechaAlta;
@@ -28,6 +31,14 @@ public class IngresarDepositoForm {
 
     public String getPk() {
         return pk;
+    }
+
+    public List<String> getCodigos() {
+        return codigos;
+    }
+
+    public void setCodigos(List<String> codigos) {
+        this.codigos = codigos;
     }
 
     public void setPk(String pk) {
