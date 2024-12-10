@@ -69,6 +69,7 @@
                                                                     <form:hidden path="idBobina" class="form-control"/>
                                                                     <form:hidden path="idPallet" class="form-control"/>
                                                                     <form:hidden path="tipo" class="form-control"/>
+                                                                    <form:hidden path="codigos" id="codigos" class="form-control" />
                                                                     <li class="list-group-item">
                                                                         <label for="inputRubro" class="text-info p-3">Depósito</label>
                                                                         <form:select path="idDeposito" id="idDeposito" class="form-control" required="required" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')" readonly="true">
@@ -107,7 +108,7 @@
                                                                         <div class="form-row row">
                                                                             <div class="col-xs-12 col-sm-6 col-md-6">
                                                                                 <label for="inputFecha_alta" style="padding-top: 10px; margin-left: 20px;">Código</label>
-                                                                                <form:input type="text" path="codigo" style="margin-left: 20px; padding: 8px; flex: 1; border: 1px solid #ddd; border-radius: 4px; margin-right: 8px; box-sizing: border-box;" placeholder=""/>
+                                                                                <form:input type="text" path="codigo" style="margin-left: 20px; padding: 8px; flex: 1; border: 1px solid #ddd; border-radius: 4px; margin-right: 8px; box-sizing: border-box;" placeholder="" />
                                                                             </div>
                                                                             <div class="col-xs-12 col-sm-4 col-md-4" style="margin-top: 33px">
                                                                                 <button type="button" style="padding: 8px; flex: 1; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; background-color: #3FBFBF; color: #fff" onClick="buscarCodigo()">Buscar</button>
@@ -177,7 +178,10 @@
                                                 </div>
 
                                                 <div class="modal-footer bg-light">
-                                                    <button id="miBoton" type="button" class="btn btn-primary" onclick="callController()">${buttonLabel}</button> 
+                                                    <button id="miBoton" type="button" class="btn btn-primary" onclick="callController()">
+                                                        <span id="botonTexto">Guardar</span>
+                                                        <span id="loadingSpinner" class="spinner-border spinner-border-sm" style="display: none;"></span>
+                                                    </button> 
                                                     </form:form>
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar/Cancelar</button>
                                                 </div>
@@ -218,6 +222,7 @@
                                                     <form:hidden path="idBobina" class="form-control"/>
                                                     <form:hidden path="idPallet" class="form-control"/>
                                                     <form:hidden path="tipo" class="form-control"/>
+                                                   
                                                     
                                                    <div id="divBulto">
                                                     <label>Seleccione el bulto:</label>
@@ -416,6 +421,16 @@
     }
     
     function callController() {
+        
+        
+        var boton = $("#miBoton");
+        var botonTexto = $("#botonTexto");
+        var loadingSpinner = $("#loadingSpinner");
+
+        
+        boton.prop("disabled", true);
+        botonTexto.text("Guardando...");
+        loadingSpinner.show();
                         
         var idBobina = $("#idBobina").val();
         var idBulto = $("#idBulto").val();
@@ -423,10 +438,10 @@
         var tipo = $("#tipo").val();
         
                 
-        if((idBobina == '-1' || idBobina == '') && (idBulto == '-1' || idBulto == '') && (idPallet == '-1' || idPallet == '')) {
-            alert('Debe buscar un bulto o pallet.');
-            return;
-        }
+//        if((idBobina == '-1' || idBobina == '') && (idBulto == '-1' || idBulto == '') && (idPallet == '-1' || idPallet == '')) {
+//            alert('Debe buscar un bulto o pallet.');
+//            return;
+//        }
         
         var action = $( "#action" ).val();
 
@@ -438,6 +453,7 @@
         } else {
             if($("#myForm")[0].checkValidity()) {
                 var form = document.getElementById("myForm");
+                console.log(form);
                 form.submit();
             } else {
                 $("#myForm")[0].reportValidity();
@@ -445,10 +461,22 @@
         }        
     }
     
+    let codigosIngresados = [];
+    let cantidadAcumulados = [];
+    let pesosAcumulados = [];
+    
+    function actualizarCampoCodigos() {
+        document.getElementById("codigos").value = codigosIngresados.join(",");
+    }
+
+    
     function buscarCodigo() {
 
         var codigo = $("#codigo").val();
         
+        let sumaPesos = 0;
+        let cantidadporunidad = 0;
+             
         var orden = document.getElementById('codigoOrdenProduccion').innerText;
         
         
@@ -457,8 +485,17 @@
             return;
         }
         
+               
+        var dep = $("#idDeposito").val();
+
+        // Construir la URL
+        var sUrl = '/thyssenplastic/ingresarDeposito/findBultoOPallet/' + codigo + '/' + orden;
+
+        // Si hay un depósito almacenado, lo agregamos a la URL
+        if (depositoActual) {
+            sUrl += '/' + dep;
+        }
         
-        var sUrl = '/thyssenplastic/ingresarDeposito/findBultoOPallet/'+codigo+'/'+orden;
         $.ajax({
             async: true,
             type: 'GET',
@@ -470,7 +507,6 @@
             $("#idBulto").val('-1');
             $("#idPallet").val('-1');
             $("#tipo").val('-1');
-            $("#idDeposito").val("-1");
             
             
             if(responseText.length > 0) {                    
@@ -514,79 +550,121 @@
                 }
                 if(item.tipo == '-7') {
                     alert('El pallet ingresado ya se encuentra en el deposito');
+                    $("#codigo").val('');
+                    $("#codigoBobinaResultado").text('');
                     return;
                 }
-                if(item.tipo == 'bulto') {
-                    $("#idBulto").val(item.id);
-                    $("#depositoActual").val(item.depositoActual);
-                    
-                    var bultos = item.bultos;
-                    if (bultos && bultos.length > 0) {
-                        // Limpiar la tabla antes de agregar nuevas filas
-                        $("#dinamic").empty();
-                        var sumaPesos = 0;
-                        cantidadporunidad = 0;
-
-                        // Iterar sobre la lista de bultos y agregar filas a la tabla
-                        for (var i = 0; i < bultos.length; i++) {
-                            var bulto = bultos[i];
-                            sumaPesos += parseFloat(bulto.pesoNeto);
-                            cantidadporunidad = cantidadporunidad + 1;
-                            $("#dinamic").append("<tr><td>-" + bulto.estaEnPalletLabel + "</td><td>" + "bulto" + "</td><td>" + bulto.codigo + "</td><td>" + bulto.pesoNeto + "</td></tr>");
-                        }
-                        
-                        $("#pesoTotal").text(sumaPesos);
-                        $("#unidades").text(cantidadporunidad);
-                    }
+                if(item.tipo == '-8') {
+                    alert('El código de bulto ingresado pertenece a otro depósito');
+                    $("#codigo").val('');
+                    $("#codigoBobinaResultado").text('');
+                    return;
                 }
+                if(item.tipo == '-9') {
+                    alert('El código de bobina ingresado pertenece a otro depósito');
+                    $("#codigo").val('');
+                    $("#codigoBobinaResultado").text('');
+                    return;
+                }
+                if(item.tipo == '-10') {
+                    alert('El código de pallet ingresado pertenece a otro depósito');
+                    $("#codigo").val('');
+                    $("#codigoBobinaResultado").text('');
+                    return;
+                }
+                // Verifica si el código ya existe en el array
+                if (codigosIngresados.includes(codigo)) {
+                    $("#codigo").val('');
+                    $("#codigoBobinaResultado").text('');
+                    $("#tipo").val(item.tipo);
+                    alert("El código ya fue ingresado. Por favor, ingrese un código diferente.");
+                    return; // No agrega el código duplicado
+                }
+                
+
                 if(item.tipo == 'pallet') {
+                    console.log("Ejecutando código para pallet");
                     $("#idPallet").val(item.id);
                     $("#depositoActual").val(item.depositoActual);
-                    // Acceder a la lista de bultos y actualizar la tabla
+
                     var bultos = item.bultos;
                     if (bultos && bultos.length > 0) {
-                        // Limpiar la tabla antes de agregar nuevas filas
-                        $("#dinamic").empty();
-                        var sumaPesos = 0;
-                        cantidadporunidad = 0;
-
-                        // Iterar sobre la lista de bultos y agregar filas a la tabla
+                        // NO vaciar la tabla aquí, solo agregar las filas
+                        cantidadAcumulados.push(bultos.length); 
                         for (var i = 0; i < bultos.length; i++) {
                             var bulto = bultos[i];
-                            sumaPesos += parseFloat(bulto.pesoNeto);
-                            cantidadporunidad = cantidadporunidad + 1;
+                            sumaPesos += parseFloat(bulto.pesoNeto);  // Acumulamos el peso neto de los bultos
+                            cantidadporunidad = cantidadporunidad + 1;  // Incrementamos la cantidad de unidades
+                            pesosAcumulados.push(bulto.pesoNeto);
+                            console.log(pesosAcumulados);
+                            
+
+                            // Agregar la fila a la tabla
                             $("#dinamic").append("<tr><td>P" + item.id + "</td><td>" + "bulto" + "</td><td>" + bulto.codigo + "</td><td>" + bulto.pesoNeto + "</td></tr>");
                         }
-                        
-                        $("#pesoTotal").text(sumaPesos);
-                        $("#unidades").text(cantidadporunidad);
                     }
                 }
+
                 if(item.tipo === 'bobina') {
                     $("#idBobina").val(item.id);
                     $("#depositoActual").val(item.depositoActual);
                     console.log(item.bobobina);
-                    
+
                     var bobina = item.bobobina;
                     if (bobina) {
-                        // Limpiar la tabla antes de agregar nuevas filas
-                        $("#dinamic").empty();
-                        var sumaPesos = parseFloat(bobina.pesoNeto) || 0; // Initialize sumaPesos with the weight of the single bobina
-                        cantidadporunidad = 1; // Since there is only one bobina
+                        sumaPesos += parseFloat(bobina.pesoNeto) || 0; // Acumulamos el peso neto de la bobina
+                        cantidadporunidad = cantidadporunidad + 1; // Solo hay una bobina
+                         cantidadAcumulados.push(1); 
+                         pesosAcumulados.push(bobina.pesoNeto);
 
                         // Agregar fila a la tabla para la única bobina
                         $("#dinamic").append("<tr><td>" + bobina.estaEnBultoLabel + "</td><td>" + "bobina" + "</td><td>" + bobina.codigo + "</td><td>" + bobina.pesoNeto + "</td></tr>");
-
-                        $("#pesoTotal").text(sumaPesos);
-                        $("#unidades").text(cantidadporunidad);
-                    } else {
-                        // Handle the case when bobina is null or undefined
-                        console.log("No bobina found.");
                     }
                 }
+
+                if(item.tipo == 'bulto') {
+                    $("#idBulto").val(item.id);
+                    $("#depositoActual").val(item.depositoActual);
+
+                    var bultos = item.bultos;
+                    if (bultos && bultos.length > 0) {
+                        // NO vaciar la tabla aquí, solo agregar las filas
+                        for (var i = 0; i < bultos.length; i++) {
+                            var bulto = bultos[i];
+                            sumaPesos += parseFloat(bulto.pesoNeto);  // Acumulamos el peso neto de los bultos
+                            cantidadporunidad = cantidadporunidad + 1;  // Incrementamos la cantidad de unidades
+                            cantidadAcumulados.push(1); 
+                            pesosAcumulados.push(bulto.pesoNeto);
+                            
+                            
+                            
+
+                            // Agregar la fila a la tabla
+                            $("#dinamic").append("<tr><td>-" + bulto.estaEnPalletLabel + "</td><td>" + "bulto" + "</td><td>" + bulto.codigo + "</td><td>" + bulto.pesoNeto + "</td></tr>");
+                        }
+                    }
+                }
+
+         
+                
+                let cantidadporunidad2 = cantidadAcumulados.reduce((total, valor) => total + valor, 0);
+                $("#unidades").text(cantidadporunidad2); 
+                
+                let pesoTotal2 = pesosAcumulados.reduce((total, valor) => total + parseFloat(valor), 0);
+                
+                $("#pesoTotal").text(pesoTotal2);
+
+             
+                if (codigosIngresados.length === 0) {
+                    $("#idDeposito").val(item.idDeposito);
+                }
+                
+                codigosIngresados.push(codigo);
+                actualizarCampoCodigos();
+                $("#codigo").val('');
+                $("#codigoBobinaResultado").text('');
                 $("#tipo").val(item.tipo);
-                $("#idDeposito").val(item.idDeposito);
-                                
+         
             }            
         })
         .fail( function (jqXHR, status, error) {
@@ -624,6 +702,9 @@
         $('#miModal').on('hidden.bs.modal', function (event) {
         console.log('Evento hidden.bs.modal ejecutado');
         // Vacía el contenido del modal
+         codigosIngresados = [];
+         cantidadAcumulados = [];  // Para almacenar los pesos
+         pesosAcumulados = [];  // Para almacenar los pesos
         $('#codigoOrdenProduccion').empty();
         $('#listCodigosOrdenProduccion').empty();
         $('#denominacion').empty();

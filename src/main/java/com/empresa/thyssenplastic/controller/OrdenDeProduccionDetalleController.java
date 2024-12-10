@@ -733,6 +733,7 @@ public class OrdenDeProduccionDetalleController {
                 } 
 
                 Double pesoTotal = 0.0;
+                Double pesoNeto = 0.0;
                 if(!palletbultoList.isEmpty()) {
                     for(OrdenDeProduccionPalletBultoModel palletbulto: palletbultoList) {
                         OrdenDeProduccionBultoModel bulto = ordenDeProduccionBultoService.getByPk(palletbulto.getIdOrdenDeProduccionBulto());
@@ -740,10 +741,12 @@ public class OrdenDeProduccionDetalleController {
                             OrdenDeProduccionBobinaModel bobina = ordenDeProduccionBobinaService.getByPk(bulto.getIdOrdenDeProduccionBobina());
                             if(bobina != null) {
                                 pesoTotal += bobina.getPesoTotal();
+                                pesoNeto += bobina.getPesoNeto();
                             }
                         }
                     }
                 }
+                ordenDeProduccionPalletDto.setPesoNeto(pesoNeto.toString());
                 ordenDeProduccionPalletDto.setPesoTotal(pesoTotal.toString());
                 
                 ordenDeProduccionPalletsDtos.add(ordenDeProduccionPalletDto);
@@ -1269,6 +1272,7 @@ public class OrdenDeProduccionDetalleController {
       
 
                 Double pesoTotal = 0.0;
+                Double pesoNeto = 0.0;
                 if(!palletbultoList.isEmpty()) {
                     for(OrdenDeProduccionPalletBultoModel palletbulto: palletbultoList) {
                         OrdenDeProduccionBultoModel bulto = ordenDeProduccionBultoService.getByPk(palletbulto.getIdOrdenDeProduccionBulto());
@@ -1276,11 +1280,13 @@ public class OrdenDeProduccionDetalleController {
                             OrdenDeProduccionBobinaModel bobina = ordenDeProduccionBobinaService.getByPk(bulto.getIdOrdenDeProduccionBobina());
                             if(bobina != null) {
                                 pesoTotal += bobina.getPesoTotal();
+                                pesoNeto += bobina.getPesoNeto();
                             }
                         }
                     }
                 }
                 ordenDeProduccionPalletDto.setPesoTotal(pesoTotal.toString());
+                ordenDeProduccionPalletDto.setPesoNeto(pesoNeto.toString());
                   
                 ordenDeProduccionPalletsDtos.add(ordenDeProduccionPalletDto);
                 System.out.println("*** ordenDeProduccionPalletsDtos sizehh:"+ordenDeProduccionPalletsDtos.size());
@@ -3729,6 +3735,7 @@ public class OrdenDeProduccionDetalleController {
                ordenDeProduccionPalletDto.setListaCodigoBultos(listaCodigos);
 
                 Double pesoTotal = 0.0;
+                Double pesoNeto = 0.0;
                 if(!palletbultoList.isEmpty()) {
                     for(OrdenDeProduccionPalletBultoModel palletbulto: palletbultoList) {
                         OrdenDeProduccionBultoModel bulto = ordenDeProduccionBultoService.getByPk(palletbulto.getIdOrdenDeProduccionBulto());
@@ -3736,10 +3743,12 @@ public class OrdenDeProduccionDetalleController {
                             OrdenDeProduccionBobinaModel bobina = ordenDeProduccionBobinaService.getByPk(bulto.getIdOrdenDeProduccionBobina());
                             if(bobina != null) {
                                 pesoTotal += bobina.getPesoTotal();
+                                pesoNeto += bobina.getPesoNeto();
                             }
                         }
                     }
                 }
+                ordenDeProduccionPalletDto.setPesoNeto(pesoNeto.toString());
                 ordenDeProduccionPalletDto.setPesoTotal(pesoTotal.toString());
 
                 ordenDeProduccionPalletsDtos.add(ordenDeProduccionPalletDto);
@@ -4038,6 +4047,7 @@ public class OrdenDeProduccionDetalleController {
                ordenDeProduccionPalletDto.setListaCodigoBultos(listaCodigos);
 
                 Double pesoTotal = 0.0;
+                Double pesoNeto = 0.0;
                 if(!palletbultoList.isEmpty()) {
                     for(OrdenDeProduccionPalletBultoModel palletbulto: palletbultoList) {
                         OrdenDeProduccionBultoModel bulto = ordenDeProduccionBultoService.getByPk(palletbulto.getIdOrdenDeProduccionBulto());
@@ -4045,10 +4055,12 @@ public class OrdenDeProduccionDetalleController {
                             OrdenDeProduccionBobinaModel bobina = ordenDeProduccionBobinaService.getByPk(bulto.getIdOrdenDeProduccionBobina());
                             if(bobina != null) {
                                 pesoTotal += bobina.getPesoTotal();
+                                pesoNeto += bobina.getPesoNeto();
                             }
                         }
                     }
                 }
+                ordenDeProduccionPalletDto.setPesoNeto(pesoNeto.toString());
                 ordenDeProduccionPalletDto.setPesoTotal(pesoTotal.toString());
                 
                 ordenDeProduccionPalletsDtos.add(ordenDeProduccionPalletDto);
@@ -4329,6 +4341,7 @@ public class OrdenDeProduccionDetalleController {
                 ordenDeProduccionPalletDto.setCantidadBultos(String.valueOf(palletbultoList.size()));
 
                 Double pesoTotal = 0.0;
+                Double pesoNeto = 0.0;
                 if(!palletbultoList.isEmpty()) {
                     for(OrdenDeProduccionPalletBultoModel palletbulto: palletbultoList) {
                         OrdenDeProduccionBultoModel bulto = ordenDeProduccionBultoService.getByPk(palletbulto.getIdOrdenDeProduccionBulto());
@@ -4336,11 +4349,13 @@ public class OrdenDeProduccionDetalleController {
                             OrdenDeProduccionBobinaModel bobina = ordenDeProduccionBobinaService.getByPk(bulto.getIdOrdenDeProduccionBobina());
                             if(bobina != null) {
                                 pesoTotal += bobina.getPesoTotal();
+                                pesoNeto += bobina.getPesoNeto();
                             }
                         }
                     }
                 }
                 ordenDeProduccionPalletDto.setPesoTotal(pesoTotal.toString());
+                ordenDeProduccionPalletDto.setPesoNeto(pesoNeto.toString());
                 
                 ordenDeProduccionPalletsDtos.add(ordenDeProduccionPalletDto);
                 System.out.println("*** ordenDeProduccionPalletsDtos size:"+ordenDeProduccionPalletsDtos.size());
@@ -4734,6 +4749,7 @@ public class OrdenDeProduccionDetalleController {
                
 
                 Double pesoTotal = 0.0;
+                Double pesoNeto = 0.0;
                 if(!palletbultoList.isEmpty()) {
                     for(OrdenDeProduccionPalletBultoModel palletbulto: palletbultoList) {
                         OrdenDeProduccionBultoModel bulto = ordenDeProduccionBultoService.getByPk(palletbulto.getIdOrdenDeProduccionBulto());
@@ -4741,10 +4757,12 @@ public class OrdenDeProduccionDetalleController {
                             OrdenDeProduccionBobinaModel bobina = ordenDeProduccionBobinaService.getByPk(bulto.getIdOrdenDeProduccionBobina());
                             if(bobina != null) {
                                 pesoTotal += bobina.getPesoTotal();
+                                pesoNeto += bobina.getPesoNeto();
                             }
                         }
                     }
                 }
+                ordenDeProduccionPalletDto.setPesoNeto(pesoNeto.toString());
                 ordenDeProduccionPalletDto.setPesoTotal(pesoTotal.toString());
                 
                 ordenDeProduccionPalletsDtos.add(ordenDeProduccionPalletDto);
@@ -5265,6 +5283,7 @@ public class OrdenDeProduccionDetalleController {
                ordenDeProduccionPalletDto.setListaCodigoBultos(listaCodigos);
 
                 Double pesoTotal = 0.0;
+                Double pesoNeto = 0.0;
                 if(!palletbultoList.isEmpty()) {
                     for(OrdenDeProduccionPalletBultoModel palletbulto: palletbultoList) {
                         OrdenDeProduccionBultoModel bulto = ordenDeProduccionBultoService.getByPk(palletbulto.getIdOrdenDeProduccionBulto());
@@ -5272,10 +5291,12 @@ public class OrdenDeProduccionDetalleController {
                             OrdenDeProduccionBobinaModel bobina = ordenDeProduccionBobinaService.getByPk(bulto.getIdOrdenDeProduccionBobina());
                             if(bobina != null) {
                                 pesoTotal += bobina.getPesoTotal();
+                                pesoNeto += bobina.getPesoNeto();
                             }
                         }
                     }
                 }
+                ordenDeProduccionPalletDto.setPesoNeto(pesoNeto.toString());
                 ordenDeProduccionPalletDto.setPesoTotal(pesoTotal.toString());
                 
                 ordenDeProduccionPalletsDtos.add(ordenDeProduccionPalletDto);

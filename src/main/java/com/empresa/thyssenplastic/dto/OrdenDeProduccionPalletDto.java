@@ -20,6 +20,7 @@ public class OrdenDeProduccionPalletDto implements Serializable {
     private String fechaAlta;
     private String codigo;
     private String pesoTotal;
+    private String pesoNeto;
     private String cantidadBultos;
     private String estado;
     private String estadoLabel;   
@@ -27,6 +28,16 @@ public class OrdenDeProduccionPalletDto implements Serializable {
     private  List<String> listaBultos;
     private Map<String, String> mapaBultos;
     private Boolean estaEnDeposito;
+
+    public String getPesoNeto() {
+        return pesoNeto;
+    }
+
+    public void setPesoNeto(String pesoNeto) {
+        this.pesoNeto = pesoNeto;
+    }
+    
+    
 
     public Map<String, String> getMapaBultos() {
         return mapaBultos;
