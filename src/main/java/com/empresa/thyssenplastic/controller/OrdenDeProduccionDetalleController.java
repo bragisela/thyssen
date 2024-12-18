@@ -449,7 +449,6 @@ public class OrdenDeProduccionDetalleController {
         } else {
             ordenDeProduccionDetalleForm.setAltoArticulo("No disponible");
         }
-        // Aca
         if(articulo.getEspesor() != null) {
             ordenDeProduccionDetalleForm.setEspesorArticulo(articuloFichaTecnica.getEspesorArticulo().toString()); //articulo.getEspesor().toString());
         } else {
@@ -461,7 +460,7 @@ public class OrdenDeProduccionDetalleController {
             ordenDeProduccionDetalleForm.setAnchoArticulo("No disponible");
         }
         if(articulo.getEspesor() != null) {
-            ordenDeProduccionDetalleForm.setEspesorBobina(articulo.getEspesor().toString());
+            ordenDeProduccionDetalleForm.setEspesorBobina(articuloFichaTecnica.getEspesorArticulo().toString());
         } else {
             ordenDeProduccionDetalleForm.setEspesorBobina("No disponible");
         }
