@@ -91,6 +91,7 @@
                                                                     <form:hidden path="depositoActual" class="form-control"/>
                                                                     <form:hidden path="tipo" class="form-control"/>
                                                                    <form:hidden path="idOrdenDeProduccionE" class="form-control"/>
+                                                                   <form:hidden path="codigos" id="codigos" class="form-control" />
                                                                 </ul>
                                                             </div>
                                                             
@@ -177,7 +178,12 @@
                                                 </div>
 
                                                 <div class="modal-footer bg-light">
-                                                    <button id="miBoton" type="button" class="btn btn-primary" onclick="callController2()">Dar de baja</button> 
+                                                    <button id="miBoton" type="button" class="btn btn-primary" onclick="callController2()">
+                                                        <span id="botonTexto">Dar de baja</span>
+                                                        <span id="loadingSpinner" class="spinner-border spinner-border-sm" style="display: none;"></span>
+                                                    </button> 
+                                                    
+                                                    
                                                     </form:form>
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar/Cancelar</button>
                                                 </div>
@@ -518,6 +524,9 @@
     $('#miModalEgreso').on('hidden.bs.modal', function (event) {
         console.log('Evento hidden.bs.modal ejecutado');
         // Vacía el contenido del modal
+        codigosIngresadosEgreso = [];
+        cantidadAcumuladosEgreso = [];  // Para almacenar los pesos
+        pesosAcumuladosEgreso = [];  // Para almacenar los pesos
         $('#codigo').empty();
         $('#listCodigosOrdenProduccion').empty();
         $('#denominacion').empty();
@@ -567,6 +576,7 @@
     
         $('#miModal').on('hidden.bs.modal', function (event) {
         console.log('Evento hidden.bs.modal ejecutado');
+        // Vacía el contenido del modal
         // Vacía el contenido del modal
         $('#codigoOrdenProduccion').empty();
         $('#listCodigosOrdenProduccion').empty();
@@ -645,6 +655,15 @@
     
     
     function callController2() {
+        
+        var boton = $("#miBoton");
+        var botonTexto = $("#botonTexto");
+        var loadingSpinner = $("#loadingSpinner");
+
+        
+        boton.prop("disabled", true);
+        botonTexto.text("Realizando Baja...");
+        loadingSpinner.show();
                         
         var idBobina = $("#idBobina").val();
         var idBulto = $("#idBulto").val();
@@ -666,7 +685,7 @@
         } else {
             if($("#myFormm")[0].checkValidity()) {
                 var formm = document.getElementById("myFormm");
-                //console.log(formm);
+                
                 formm.submit();
             } else {
                 $("#myFormm")[0].reportValidity();
@@ -674,14 +693,24 @@
         }        
     }
     
+    let codigosIngresadosEgreso = [];
+    let cantidadAcumuladosEgreso = [];
+    let pesosAcumuladosEgreso = [];
+    
+    function actualizarCampoCodigos() {
+        document.getElementById("codigos").value = codigosIngresadosEgreso.join(",");
+    }
+    
     function buscarCodigo() {
 
         var codigo = $("#codigo").val();
         var orden = $("#idOrdenDeProduccionE").val();
-        console.log(orden);
         
         //var orden = document.getElementById('idOrdenDeProduccionE').innerText;
         //var orden = 28;
+        
+        let sumaPesos = 0;
+        let cantidadporunidad = 0;
         
         
         if(codigo == '' || codigo == null || codigo == undefined) {
@@ -774,76 +803,92 @@
                     $("#codigoBobinaResultado").text('');
                     return;
                 }
+                // Verifica si el código ya existe en el array
+                if (codigosIngresadosEgreso.includes(codigo)) {
+                    $("#codigo").val('');
+                    $("#codigoBobinaResultado").text('');
+                    $("#tipo").val(item.tipo);
+                    alert("El código ya fue ingresado. Por favor, ingrese un código diferente.");
+                    return; // No agrega el código duplicado
+                }
                 if(item.tipo == 'bulto') {
                     $("#idBulto").val(item.id);
                     $("#depositoActual").val(item.depositoActual);
-                    
+
                     var bultos = item.bultos;
                     if (bultos && bultos.length > 0) {
-                        // Limpiar la tabla antes de agregar nuevas filas
-                        $("#dinamic").empty();
-                        var sumaPesos = 0;
-                        cantidadporunidad = 0;
-
-                        // Iterar sobre la lista de bultos y agregar filas a la tabla
+                        // NO vaciar la tabla aquí, solo agregar las filas
                         for (var i = 0; i < bultos.length; i++) {
                             var bulto = bultos[i];
-                            sumaPesos += parseFloat(bulto.pesoNeto);
-                            cantidadporunidad = cantidadporunidad + 1;
+                            sumaPesos += parseFloat(bulto.pesoNeto);  // Acumulamos el peso neto de los bultos
+                            cantidadporunidad = cantidadporunidad + 1;  // Incrementamos la cantidad de unidades
+                            cantidadAcumuladosEgreso.push(1); 
+                            pesosAcumuladosEgreso.push(bulto.pesoNeto);
+                            
+                            
+                            
+
+                            // Agregar la fila a la tabla
                             $("#dinamic").append("<tr><td>-" + bulto.estaEnPalletLabel + "</td><td>" + "bulto" + "</td><td>" + bulto.codigo + "</td><td>" + bulto.pesoNeto + "</td></tr>");
                         }
-                        
-                        $("#pesoTotal").text(sumaPesos);
-                        $("#unidades").text(cantidadporunidad);
                     }
                 }
                 if(item.tipo == 'pallet') {
                     $("#idPallet").val(item.id);
                     $("#depositoActual").val(item.depositoActual);
-                    // Acceder a la lista de bultos y actualizar la tabla
+
                     var bultos = item.bultos;
                     if (bultos && bultos.length > 0) {
-                        // Limpiar la tabla antes de agregar nuevas filas
-                        $("#dinamic").empty();
-                        var sumaPesos = 0;
-                        cantidadporunidad = 0;
-
-                        // Iterar sobre la lista de bultos y agregar filas a la tabla
+                        // NO vaciar la tabla aquí, solo agregar las filas
+                        cantidadAcumuladosEgreso.push(bultos.length); 
                         for (var i = 0; i < bultos.length; i++) {
                             var bulto = bultos[i];
-                            sumaPesos += parseFloat(bulto.pesoNeto);
-                            cantidadporunidad = cantidadporunidad + 1;
+                            sumaPesos += parseFloat(bulto.pesoNeto);  // Acumulamos el peso neto de los bultos
+                            cantidadporunidad = cantidadporunidad + 1;  // Incrementamos la cantidad de unidades
+                            pesosAcumuladosEgreso.push(bulto.pesoNeto);
+                            
+
+                            // Agregar la fila a la tabla
                             $("#dinamic").append("<tr><td>P" + item.id + "</td><td>" + "bulto" + "</td><td>" + bulto.codigo + "</td><td>" + bulto.pesoNeto + "</td></tr>");
                         }
-                        
-                        $("#pesoTotal").text(sumaPesos);
-                        $("#unidades").text(cantidadporunidad);
                     }
                 }
+                
                 if(item.tipo === 'bobina') {
-                    console.log("este", item.id);
                     $("#idBobina").val(item.id);
                     $("#depositoActual").val(item.depositoActual);
                     console.log(item.bobobina);
-                    
+
                     var bobina = item.bobobina;
                     if (bobina) {
-                        // Limpiar la tabla antes de agregar nuevas filas
-                        $("#dinamic").empty();
-                        var sumaPesos = parseFloat(bobina.pesoNeto) || 0; // Initialize sumaPesos with the weight of the single bobina
-                        cantidadporunidad = 1; // Since there is only one bobina
+                        sumaPesos += parseFloat(bobina.pesoNeto) || 0; // Acumulamos el peso neto de la bobina
+                        cantidadporunidad = cantidadporunidad + 1; // Solo hay una bobina
+                         cantidadAcumuladosEgreso.push(1); 
+                         pesosAcumuladosEgreso.push(bobina.pesoNeto);
 
                         // Agregar fila a la tabla para la única bobina
                         $("#dinamic").append("<tr><td>" + bobina.estaEnBultoLabel + "</td><td>" + "bobina" + "</td><td>" + bobina.codigo + "</td><td>" + bobina.pesoNeto + "</td></tr>");
-
-                        $("#pesoTotal").text(sumaPesos);
-                        $("#unidades").text(cantidadporunidad);
-                    } else {
-                        // Handle the case when bobina is null or undefined
-                        console.log("No bobina found.");
                     }
                 }
-                $("#tipo").val(item.tipo);    
+                $("#tipo").val(item.tipo);   
+                
+                let cantidadporunidad2 = cantidadAcumuladosEgreso.reduce((total, valor) => total + valor, 0);
+                $("#unidades").text(cantidadporunidad2); 
+                
+                let pesoTotal2 = pesosAcumuladosEgreso.reduce((total, valor) => total + parseFloat(valor), 0);
+                
+                $("#pesoTotal").text(pesoTotal2);
+
+             
+                if (codigosIngresadosEgreso.length === 0) {
+                    $("#idDeposito").val(item.idDeposito);
+                }
+                
+                codigosIngresadosEgreso.push(codigo);
+                actualizarCampoCodigos();
+                $("#codigo").val('');
+                $("#codigoBobinaResultado").text('');
+                $("#tipo").val(item.tipo);
                                 
             }            
         })

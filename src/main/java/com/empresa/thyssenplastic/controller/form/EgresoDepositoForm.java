@@ -4,6 +4,8 @@
  */
 package com.empresa.thyssenplastic.controller.form;
 
+import java.util.List;
+
 /**
  *
  * @author gusta
@@ -23,6 +25,7 @@ public class EgresoDepositoForm {
     private String operacion;
     private String action;
     private String idOrdenDeProduccionE;
+    private List<String> codigos;
 
     public String getIdRemito() {
         return idRemito;
@@ -30,6 +33,14 @@ public class EgresoDepositoForm {
 
     public void setIdRemito(String idRemito) {
         this.idRemito = idRemito;
+    }
+    
+    public List<String> getCodigos() {
+        return codigos;
+    }
+
+    public void setCodigos(List<String> codigos) {
+        this.codigos = codigos;
     }
    
 
