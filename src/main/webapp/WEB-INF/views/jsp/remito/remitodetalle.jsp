@@ -81,6 +81,17 @@
                                                                     <li class="list-group-item">Articulo 2<span id="denominacion" class="font-weight-bold text-success"></span></li>
                                                                     <li class="list-group-item">Lote: <span id="codigoOrdenProduccion" class="font-weight-bold text-primary"></span></li>
                                                                     <li class="list-group-item">Deposito: <span id="deposito" class="font-weight-bold text-primary"></span></li>
+                                                                    
+                                                                    <li class="list-group-item">
+                                                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                                                            <span>Cantidad a dar de baja: <span id="inputCantidadBaja" class="font-weight-bold text-success">10</span></span>
+                                                                            <div class="progress-container">
+                                                                                <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                                                            </div>
+                                                                            <span id="progressPercentage" style="font-size: 10px; font-weight: bold;">0% completado</span>
+                                                                        </div>
+                                                                    </li>
+
                                                                     <form:form class="form-horizontal" method="post" action="/thyssenplastic/egresoDeposito/addOrEditOrRemove" modelAttribute="egresoDepositoForm" id="myFormm">
                                                                     <form:hidden path="pk" class="form-control"/>
                                                                     <form:hidden path="action" class="form-control"/>
@@ -91,6 +102,7 @@
                                                                     <form:hidden path="depositoActual" class="form-control"/>
                                                                     <form:hidden path="tipo" class="form-control"/>
                                                                    <form:hidden path="idOrdenDeProduccionE" class="form-control"/>
+                                                                   <form:hidden path="codigos" id="codigos" class="form-control" />
                                                                 </ul>
                                                             </div>
                                                             
@@ -177,7 +189,12 @@
                                                 </div>
 
                                                 <div class="modal-footer bg-light">
-                                                    <button id="miBoton" type="button" class="btn btn-primary" onclick="callController2()">Dar de baja</button> 
+                                                    <button id="miBoton" type="button" class="btn btn-primary" onclick="callController2()">
+                                                        <span id="botonTexto">Dar de baja</span>
+                                                        <span id="loadingSpinner" class="spinner-border spinner-border-sm" style="display: none;"></span>
+                                                    </button> 
+                                                    
+                                                    
                                                     </form:form>
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar/Cancelar</button>
                                                 </div>
@@ -319,6 +336,7 @@
                                         <th style="text-align: center">LOTE</th>
                                         <th style="text-align: center">DEPOSITO</th>
                                         <th style="text-align: center">CANTIDAD</th>
+                                        
                                         <th style="text-align: center">Estado Baja</th>
                                         
                                         <c:if test = "${estadoRemito == 'abierto' || estadoRemito == 'nuevo' || estadoRemito == 'cerrado'}">
@@ -346,6 +364,7 @@
                                             <td style="text-align: center">
                                                 <c:out value="${remitoDetalle.cantidad}" />
                                             </td>
+                                           
                                             <td style="text-align: center">
                                                 <c:if test="${Integer.valueOf(remitoDetalle.cantidadBaja) >= Integer.valueOf(remitoDetalle.cantidad)}">
                                                     <span style="font-size: 20px; color: #49ad3a"; class="fa fa-check-circle text-success" title="Todos los ítems han sido dados de baja"></span>
@@ -372,6 +391,7 @@
                                                             data-deposito-idB="${remitoDetalle.deposito}"
                                                             data-loteB="${remitoDetalle.lote}"
                                                             data-remito="${remitoDetalle.pk}"
+                                                            data-baja="${remitoDetalle.cantidad - remitoDetalle.cantidadBaja}"
                                                             >
 
                                                            Nueva Baja
@@ -443,7 +463,7 @@
         
         ocultarCargando();
             searchBobinaAutomatically2();
-            }, 3000);
+            }, 2000);
         }
         
     function mostrarCargando() {
@@ -518,6 +538,10 @@
     $('#miModalEgreso').on('hidden.bs.modal', function (event) {
         console.log('Evento hidden.bs.modal ejecutado');
         // Vacía el contenido del modal
+        codigosIngresadosEgreso = [];
+        cantidadAcumuladosEgreso = [];  // Para almacenar los pesos
+        pesosAcumuladosEgreso = [];  // Para almacenar los pesos
+        cantidadDisponible = 0;
         $('#codigo').empty();
         $('#listCodigosOrdenProduccion').empty();
         $('#denominacion').empty();
@@ -568,6 +592,7 @@
         $('#miModal').on('hidden.bs.modal', function (event) {
         console.log('Evento hidden.bs.modal ejecutado');
         // Vacía el contenido del modal
+        // Vacía el contenido del modal
         $('#codigoOrdenProduccion').empty();
         $('#listCodigosOrdenProduccion').empty();
         $('#denominacion').empty();
@@ -584,11 +609,13 @@
         $('.btn-agregarE').on('click', function () {
             var depositoIdEEE = $(this).data('deposito-idB');
             var loteIdEEE = $(this).data('loteB');
-            console.log("hola");
             
             var depositoIdE = $(this).attr('data-deposito-idB');
             var loteIdE = $(this).attr('data-loteB');
             var remitoId = $(this).attr('data-remito');
+            var remitoCantidadBaja = $(this).attr('data-baja');
+            
+            $('#inputCantidadBaja').text(remitoCantidadBaja);
             $('#depositoActual').val(depositoIdE);
             $('#idOrdenDeProduccionE').val(loteIdE);
             $('#idRemito').val(remitoId);
@@ -597,6 +624,28 @@
 
             $('#deposito').text(depositoIdE);
             
+        });
+        
+        // Función para actualizar el progreso
+        function actualizarProgreso(actual, total) {
+            var porcentaje = Math.round((actual / total) * 100);
+            $('#progressBar').css('width', porcentaje + '%');
+            $('#progressPercentage').text(porcentaje + '% completado');
+        }
+        
+        var cantidadDisponible = 0 ;
+        
+        var cantidadProgresada = 0; // Cantidad acumulada para actualizar el progreso
+        
+       
+        $('#miModalEgreso').on('show.bs.modal', function () {
+            
+            var cantidadBajaAccedida = $('#inputCantidadBaja').text();
+            cantidadDisponible = parseFloat(cantidadBajaAccedida);
+            
+             cantidadProgresada = 0; // Reinicia el progreso al abrir el modal
+             actualizarProgreso(0, cantidadDisponible); // Resetea la barra de progreso
+          
         });
 
 
@@ -645,17 +694,21 @@
     
     
     function callController2() {
+        
+        var boton = $("#miBoton");
+        var botonTexto = $("#botonTexto");
+        var loadingSpinner = $("#loadingSpinner");
+
+        
+        boton.prop("disabled", true);
+        botonTexto.text("Realizando Baja...");
+        loadingSpinner.show();
                         
         var idBobina = $("#idBobina").val();
         var idBulto = $("#idBulto").val();
         var idPallet = $("#idPallet").val();
         var tipo = $("#tipo").val();
-                
-        if((idBobina == '-1' || idBobina == '') && (idBulto == '-1' || idBulto == '') && (idPallet == '-1' || idPallet == '')) {
-            alert('Debe buscar un bulto o pallet.');
-            return;
-        }
-        
+               
         var action = $( "#action" ).val();
 
         if(action == 'remove') {
@@ -666,7 +719,7 @@
         } else {
             if($("#myFormm")[0].checkValidity()) {
                 var formm = document.getElementById("myFormm");
-                //console.log(formm);
+                
                 formm.submit();
             } else {
                 $("#myFormm")[0].reportValidity();
@@ -674,14 +727,26 @@
         }        
     }
     
+    let codigosIngresadosEgreso = [];
+    let cantidadAcumuladosEgreso = [];
+    let pesosAcumuladosEgreso = [];  
+    
+    //console.log(remitoCantidadBaja);
+    
+    
+    function actualizarCampoCodigos() {
+        document.getElementById("codigos").value = codigosIngresadosEgreso.join(",");
+    }
+    
+    
     function buscarCodigo() {
 
         var codigo = $("#codigo").val();
         var orden = $("#idOrdenDeProduccionE").val();
-        console.log(orden);
-        
-        //var orden = document.getElementById('idOrdenDeProduccionE').innerText;
-        //var orden = 28;
+        var depositoRequest = $('#depositoActual').val();
+       
+        let sumaPesos = 0;
+        let cantidadporunidad = 0;
         
         
         if(codigo == '' || codigo == null || codigo == undefined) {
@@ -690,7 +755,7 @@
         }
         
         
-        var sUrl = '/thyssenplastic/egresoDeposito/findBultoOPallet/'+codigo+'/'+orden;
+        var sUrl = '/thyssenplastic/egresoDeposito/findBultoOPallet/'+codigo+'/'+orden + '/' + depositoRequest;
         $.ajax({
             async: true,
             type: 'GET',
@@ -774,76 +839,137 @@
                     $("#codigoBobinaResultado").text('');
                     return;
                 }
+                if(item.tipo == '-25') {
+                    alert('El codigo de bulto ingresado no pertenece al deposito correspondiente');
+                    $("#codigo").val('');
+                    $("#codigoBobinaResultado").text('');
+                    return;
+                }
+                if(item.tipo == '-26') {
+                    alert('El codigo de pallet ingresado no pertenece al deposito correspondiente');
+                    $("#codigo").val('');
+                    $("#codigoBobinaResultado").text('');
+                    return;
+                }
+                if(item.tipo == '-27') {
+                    alert('El codigo de bobina ingresada no pertenece al deposito correspondiente');
+                    $("#codigo").val('');
+                    $("#codigoBobinaResultado").text('');
+                    return;
+                }
+                // Verifica si el código ya existe en el array
+                if (codigosIngresadosEgreso.includes(codigo)) {
+                    $("#codigo").val('');
+                    $("#codigoBobinaResultado").text('');
+                    $("#tipo").val(item.tipo);
+                    alert("El código ya fue ingresado. Por favor, ingrese un código diferente.");
+                    return; // No agrega el código duplicado
+                }
+                
+                // Verifica si la cantidad acumulada + la cantidad que se desea agregar supera la cantidad disponible
+                let cantidadAgregar = 0;
+                if(item.tipo === 'bulto') {
+                    cantidadAgregar = 1;
+                } else if(item.tipo === 'pallet') {
+                    var bultos = item.bultos;
+                    cantidadAgregar = bultos.length; // En este caso, es el número de bultos dentro del pallet
+                } else if(item.tipo === 'bobina') {
+                    cantidadAgregar = 1; // Solo hay una bobina
+                }
+                // Comprobamos si la cantidad acumulada más la nueva cantidad supera la cantidad disponible
+                let cantidadTotal = cantidadAcumuladosEgreso.reduce((total, valor) => total + valor, 0) + cantidadAgregar;
+
+                if(cantidadTotal > cantidadDisponible) {
+                    alert('El codigo ingresado supera la cantidad a dar de baja, Recuerde que pueda dar de baja solo la cantidad establecida en el remito.');
+                    $("#codigo").val('');
+                    $("#codigoBobinaResultado").text('');
+                    return; // Detenemos el proceso si no hay suficiente cantidad disponible
+                }
+                
+                // Actualizar el progreso acumulado
+                cantidadProgresada += cantidadAgregar;
+                actualizarProgreso(cantidadProgresada, cantidadDisponible);
+                
                 if(item.tipo == 'bulto') {
                     $("#idBulto").val(item.id);
                     $("#depositoActual").val(item.depositoActual);
-                    
+
                     var bultos = item.bultos;
                     if (bultos && bultos.length > 0) {
-                        // Limpiar la tabla antes de agregar nuevas filas
-                        $("#dinamic").empty();
-                        var sumaPesos = 0;
-                        cantidadporunidad = 0;
-
-                        // Iterar sobre la lista de bultos y agregar filas a la tabla
+                        // NO vaciar la tabla aquí, solo agregar las filas
                         for (var i = 0; i < bultos.length; i++) {
                             var bulto = bultos[i];
-                            sumaPesos += parseFloat(bulto.pesoNeto);
-                            cantidadporunidad = cantidadporunidad + 1;
+                            sumaPesos += parseFloat(bulto.pesoNeto);  // Acumulamos el peso neto de los bultos
+                            cantidadporunidad = cantidadporunidad + 1;  // Incrementamos la cantidad de unidades
+                            cantidadAcumuladosEgreso.push(1); 
+                            pesosAcumuladosEgreso.push(bulto.pesoNeto);
+                          
+                            
+                            
+
+                            // Agregar la fila a la tabla
                             $("#dinamic").append("<tr><td>-" + bulto.estaEnPalletLabel + "</td><td>" + "bulto" + "</td><td>" + bulto.codigo + "</td><td>" + bulto.pesoNeto + "</td></tr>");
                         }
-                        
-                        $("#pesoTotal").text(sumaPesos);
-                        $("#unidades").text(cantidadporunidad);
                     }
                 }
                 if(item.tipo == 'pallet') {
                     $("#idPallet").val(item.id);
                     $("#depositoActual").val(item.depositoActual);
-                    // Acceder a la lista de bultos y actualizar la tabla
+
                     var bultos = item.bultos;
                     if (bultos && bultos.length > 0) {
-                        // Limpiar la tabla antes de agregar nuevas filas
-                        $("#dinamic").empty();
-                        var sumaPesos = 0;
-                        cantidadporunidad = 0;
-
-                        // Iterar sobre la lista de bultos y agregar filas a la tabla
+                        // NO vaciar la tabla aquí, solo agregar las filas
+                        cantidadAcumuladosEgreso.push(bultos.length); 
                         for (var i = 0; i < bultos.length; i++) {
                             var bulto = bultos[i];
-                            sumaPesos += parseFloat(bulto.pesoNeto);
-                            cantidadporunidad = cantidadporunidad + 1;
+                            sumaPesos += parseFloat(bulto.pesoNeto);  // Acumulamos el peso neto de los bultos
+                            cantidadporunidad = cantidadporunidad + 1;  // Incrementamos la cantidad de unidades
+                            pesosAcumuladosEgreso.push(bulto.pesoNeto);
+                            
+                            
+
+                            // Agregar la fila a la tabla
                             $("#dinamic").append("<tr><td>P" + item.id + "</td><td>" + "bulto" + "</td><td>" + bulto.codigo + "</td><td>" + bulto.pesoNeto + "</td></tr>");
                         }
-                        
-                        $("#pesoTotal").text(sumaPesos);
-                        $("#unidades").text(cantidadporunidad);
                     }
                 }
+                
                 if(item.tipo === 'bobina') {
-                    console.log("este", item.id);
                     $("#idBobina").val(item.id);
                     $("#depositoActual").val(item.depositoActual);
                     console.log(item.bobobina);
-                    
+
                     var bobina = item.bobobina;
                     if (bobina) {
-                        // Limpiar la tabla antes de agregar nuevas filas
-                        $("#dinamic").empty();
-                        var sumaPesos = parseFloat(bobina.pesoNeto) || 0; // Initialize sumaPesos with the weight of the single bobina
-                        cantidadporunidad = 1; // Since there is only one bobina
+                        sumaPesos += parseFloat(bobina.pesoNeto) || 0; // Acumulamos el peso neto de la bobina
+                        cantidadporunidad = cantidadporunidad + 1; // Solo hay una bobina
+                         cantidadAcumuladosEgreso.push(1); 
+                         pesosAcumuladosEgreso.push(bobina.pesoNeto);
+                         
 
                         // Agregar fila a la tabla para la única bobina
                         $("#dinamic").append("<tr><td>" + bobina.estaEnBultoLabel + "</td><td>" + "bobina" + "</td><td>" + bobina.codigo + "</td><td>" + bobina.pesoNeto + "</td></tr>");
-
-                        $("#pesoTotal").text(sumaPesos);
-                        $("#unidades").text(cantidadporunidad);
-                    } else {
-                        // Handle the case when bobina is null or undefined
-                        console.log("No bobina found.");
                     }
                 }
-                $("#tipo").val(item.tipo);    
+                $("#tipo").val(item.tipo);   
+                
+                let cantidadporunidad2 = cantidadAcumuladosEgreso.reduce((total, valor) => total + valor, 0);
+                $("#unidades").text(cantidadporunidad2); 
+                
+                let pesoTotal2 = pesosAcumuladosEgreso.reduce((total, valor) => total + parseFloat(valor), 0);
+                
+                $("#pesoTotal").text(pesoTotal2);
+
+             
+                if (codigosIngresadosEgreso.length === 0) {
+                    $("#idDeposito").val(item.idDeposito);
+                }
+                
+                codigosIngresadosEgreso.push(codigo);
+                actualizarCampoCodigos();
+                $("#codigo").val('');
+                $("#codigoBobinaResultado").text('');
+                $("#tipo").val(item.tipo);
                                 
             }            
         })
@@ -999,6 +1125,42 @@
         position: absolute;
         left: -9999px; /* Mueve el elemento fuera de la pantalla */
     }
+    
+    /* Contenedor de la barra de progreso */
+.progress-container {
+    width: 150px; /* Tamaño ajustado */
+    background-color: #f5f5f5;
+    border-radius: 25px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    height: 20px;
+    position: relative; /* Para posicionar el texto */
+}
+
+/* Barra de progreso */
+.progress-bar {
+    height: 100%;
+    background-color: #28a745;
+    width: 0%;
+    transition: width 0.5s ease-in-out;
+    border-radius: 25px 0 0 25px;
+}
+
+/* Texto dentro de la barra (opcional) */
+.progress-text {
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+    line-height: 20px;
+    position: absolute;
+    width: 100%;
+}
+
+/* Ajuste del porcentaje al lado */
+#progressPercentage {
+    color: #555; /* Texto gris oscuro */
+}
+
     
     </style>
 

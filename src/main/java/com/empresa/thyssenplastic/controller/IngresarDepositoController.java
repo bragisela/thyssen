@@ -514,18 +514,18 @@ public class IngresarDepositoController {
             }
 
         
-        if(id.equalsIgnoreCase("-1")) {
-            ingresarDepositoModel = new IngresarDepositoModel();
-            ingresarDepositoModel.setFechaAlta(new Date());
-            ingresarDepositoModel.setIdUsuarioAlta(user.getId());
-        } else {
-            ingresarDepositoModel = ingresarDepositoService.getByPk(Integer.valueOf(id));
-            if(ingresarDepositoModel == null) {
-                modelAndView.setViewName("error");
-                modelAndView.addObject("errorMessage", "Error: id de ingresarDeposito inválido.");
-                return modelAndView;                
-            } 
-        } 
+//        if(id.equalsIgnoreCase("-1")) {
+//            ingresarDepositoModel = new IngresarDepositoModel();
+//            ingresarDepositoModel.setFechaAlta(new Date());
+//            ingresarDepositoModel.setIdUsuarioAlta(user.getId());
+//        } else {
+//            ingresarDepositoModel = ingresarDepositoService.getByPk(Integer.valueOf(id));
+//            if(ingresarDepositoModel == null) {
+//                modelAndView.setViewName("error");
+//                modelAndView.addObject("errorMessage", "Error: id de ingresarDeposito inválido.");
+//                return modelAndView;                
+//            } 
+//        } 
          
 //        if(ingresarDepositoForm.getTipo().equalsIgnoreCase("bulto")) {
 //            ingresarDepositoModel.setIdBulto(Integer.valueOf(ingresarDepositoForm.getIdBulto()));
@@ -741,8 +741,8 @@ public class IngresarDepositoController {
             return modelAndView;            
         }
         
-        
-        
+       
+  
         EgresoDepositoService egresoDepositoService = new EgresoDepositoServiceImpl();        
         OrdenDeProduccionBobinaService ordenDeProduccionBobinaService = new OrdenDeProduccionBobinaServiceImpl();
         OrdenDeProduccionBultoService ordenDeProduccionBultoService = new OrdenDeProduccionBultoServiceImpl();
@@ -755,154 +755,146 @@ public class IngresarDepositoController {
             
         EgresoDepositoModel egresoDepositoModel = null;
         
-        if(id.equalsIgnoreCase("-1")) {
-            egresoDepositoModel = new EgresoDepositoModel();
-            egresoDepositoModel.setFechaBaja(new Date());
-            egresoDepositoModel.setIdUsuarioBaja(user.getId());
-        } else {
-            egresoDepositoModel = egresoDepositoService.getByPk(Integer.valueOf(id));
-            if(egresoDepositoModel == null) {
-                modelAndView.setViewName("error");
-                modelAndView.addObject("errorMessage", "Error: id de ingresarDeposito inválido.");
-                return modelAndView;                
-            } 
-        } 
+        List<String> codigos = egresoDepositoForm.getCodigos();
+       
+        
+        RemitoDetalleService remitoDetalleService = new RemitoDetalleServiceImpl();
          
-        if(egresoDepositoForm.getTipo().equalsIgnoreCase("bulto")) {
-            egresoDepositoModel.setIdBulto(Integer.valueOf(egresoDepositoForm.getIdBulto()));
-            
-        } 
-        if(egresoDepositoForm.getTipo().equalsIgnoreCase("pallet")) {
-            egresoDepositoModel.setIdPallet(Integer.valueOf(egresoDepositoForm.getIdPallet()));
-        }
         
-        if(egresoDepositoForm.getTipo().equalsIgnoreCase("bobina")) {
-            egresoDepositoModel.setIdBobina(Integer.valueOf(egresoDepositoForm.getIdBobina()));
-        }
-        
-        String valor=null;
-        if(egresoDepositoForm.getDepositoActual() != null) {
-            valor = egresoDepositoForm.getDepositoActual();
-        }
-        
-        //TipoService tipoService = new TipoServiceImpl();
-
-            TipoModel tipo = tipoService.getByValor(valor);
-            int idDeposito = -1;
-            if (tipo != null) {
-                idDeposito = tipo.getId();
-            } else { 
-            }
-           
-     
-        //if(egresoDepositoForm.getIdRemito() != null) {
-            //remitoid = Integer.parseInt(egresoDepositoForm.getIdRemito());
-        //}
-        
-        
-        int numeroEntero = Integer.parseInt(egresoDepositoForm.getIdRemito());
-        
-        egresoDepositoModel.setIdRemito(numeroEntero);
-        
-        egresoDepositoModel.setIdDeposito(idDeposito);
-        
-        RemitoDetalleService remitoDetalleService = new RemitoDetalleServiceImpl();  
-        RemitoDetalleModel remitoAmodificar = remitoDetalleService.getByPk(numeroEntero);
-        
-        RemitoService remitoService = new RemitoServiceImpl();  
-        RemitoModel remitoAmodificarNoDetalle = remitoService.getByPk(remitoAmodificar.getIdRemito());
-        
-
-        if(egresoDepositoForm.getAction().equalsIgnoreCase("add") || egresoDepositoForm.getAction().equalsIgnoreCase("edit")) {
-            egresoDepositoService.save(egresoDepositoModel);
-            
-            if(egresoDepositoForm.getTipo().equalsIgnoreCase("bobina")) {
-                OrdenDeProduccionBobinaModel bobina = ordenDeProduccionBobinaService.getByPk(Integer.valueOf(egresoDepositoForm.getIdBobina()));
-                if(bobina != null) {
-                    bobina.setIdRemito(numeroEntero);
-                    //bobina.setIdDeposito(Integer.valueOf(egresoDepositoForm.getIdDeposito()));
-                    ordenDeProduccionBobinaService.save(bobina); 
-                    remitoAmodificar.setCantidadBaja(remitoAmodificar.getCantidadBaja() +  1);
-                    remitoDetalleService.save(remitoAmodificar);
-                    
-                    remitoAmodificarNoDetalle.setCantidadTotalBaja(remitoAmodificarNoDetalle.getCantidadTotalBaja() +  1);
-                    remitoService.save(remitoAmodificarNoDetalle);
+        if (codigos != null && !codigos.isEmpty()) {
+            for (String codigo : codigos) { 
+                egresoDepositoModel = new EgresoDepositoModel();
+                String valor=null;
+                if(egresoDepositoForm.getDepositoActual() != null) {
+                    valor = egresoDepositoForm.getDepositoActual();
                 }
-            }
-            
-            if(egresoDepositoForm.getTipo().equalsIgnoreCase("bulto")) {
-                OrdenDeProduccionBultoModel bulto = ordenDeProduccionBultoService.getByPk(Integer.valueOf(egresoDepositoForm.getIdBulto()));
-                if(bulto != null) {
-                    bulto.setIdRemito(numeroEntero);
-                    //bulto.setIdDeposito(Integer.valueOf(egresoDepositoForm.getIdDeposito()));
-                    
-                    ordenDeProduccionBultoService.save(bulto);
-                    
-                    remitoAmodificar.setCantidadBaja(remitoAmodificar.getCantidadBaja() +  1);
-                    remitoDetalleService.save(remitoAmodificar);
-                    
-                    remitoAmodificarNoDetalle.setCantidadTotalBaja(remitoAmodificarNoDetalle.getCantidadTotalBaja() +  1);
-                    remitoService.save(remitoAmodificarNoDetalle);
-                    
-                    OrdenDeProduccionBobinaModel bobina = ordenDeProduccionBobinaService.getByPk(bulto.getIdOrdenDeProduccionBobina());
-                    if(bobina != null) {
-                      bobina.setIdRemito(numeroEntero);
-                    
-                      ordenDeProduccionBobinaService.save(bobina);                        
+
+
+                    TipoModel tipo = tipoService.getByValor(valor);
+                    int idDeposito = -1;
+                    if (tipo != null) {
+                        idDeposito = tipo.getId();
+                    } else { 
                     }
-                }
-            }
-            if(egresoDepositoForm.getTipo().equalsIgnoreCase("pallet")) {
-                OrdenDeProduccionPalletModel pallet = ordenDeProduccionPalletService.getByPk(Integer.valueOf(egresoDepositoForm.getIdPallet()));
-                if(pallet != null) {
-              
-                    pallet.setIdRemito(numeroEntero);
+
+
+                int numeroEntero = Integer.parseInt(egresoDepositoForm.getIdRemito());
+                
+                egresoDepositoModel.setFechaBaja(new Date());
+                egresoDepositoModel.setIdUsuarioBaja(user.getId());
+
+                egresoDepositoModel.setIdRemito(numeroEntero);
+
+                egresoDepositoModel.setIdDeposito(idDeposito);
+                
+                
+                  
+                RemitoDetalleModel remitoAmodificar = remitoDetalleService.getByPk(numeroEntero);
+                
+                RemitoService remitoService = new RemitoServiceImpl();  
+                RemitoModel remitoAmodificarNoDetalle = remitoService.getByPk(remitoAmodificar.getIdRemito());
+                
+                
+                if(egresoDepositoForm.getAction().equalsIgnoreCase("add") || egresoDepositoForm.getAction().equalsIgnoreCase("edit")) {
+                    if (codigo.startsWith("B")) {
+                        OrdenDeProduccionBobinaModel bobina = ordenDeProduccionBobinaService.getByCode(codigo);
+                        if(bobina != null) {
+                           egresoDepositoModel.setIdBobina(bobina.getId());
+                           egresoDepositoService.save(egresoDepositoModel);
+                           bobina.setIdRemito(numeroEntero);
+                           ordenDeProduccionBobinaService.save(bobina); 
+                           remitoAmodificar.setCantidadBaja(remitoAmodificar.getCantidadBaja() +  1);
+                           remitoDetalleService.save(remitoAmodificar);
                     
-                    ordenDeProduccionPalletService.save(pallet);
-                    List<OrdenDeProduccionPalletBultoModel> palletBultos = ordenDeProduccionPalletBultoService.getAllByOrdenDeProduccionPalletAndNotRemito(pallet.getId());
-                    remitoAmodificar.setCantidadBaja(remitoAmodificar.getCantidadBaja() +  palletBultos.size());
-                    remitoDetalleService.save(remitoAmodificar);
-                    
-                    remitoAmodificarNoDetalle.setCantidadTotalBaja(remitoAmodificarNoDetalle.getCantidadTotalBaja() +  palletBultos.size());
-                    remitoService.save(remitoAmodificarNoDetalle);
-                     
-                    if(palletBultos != null && !palletBultos.isEmpty()) {
-                        for(OrdenDeProduccionPalletBultoModel palletBulto :palletBultos) {                            
-                            OrdenDeProduccionBultoModel bulto = ordenDeProduccionBultoService.getByPk(palletBulto.getIdOrdenDeProduccionBulto());
-                            if(bulto != null) {
-                                //bulto.setIdDeposito(Integer.valueOf(egresoDepositoForm.getIdDeposito()));
-                                bulto.setIdRemito(numeroEntero);
+                           remitoAmodificarNoDetalle.setCantidadTotalBaja(remitoAmodificarNoDetalle.getCantidadTotalBaja() +  1);
+                           remitoService.save(remitoAmodificarNoDetalle);
+                        }
+                         
+                    }
+                    if (codigo.startsWith("R")) { 
+                        OrdenDeProduccionBultoModel bulto = ordenDeProduccionBultoService.getByCode(codigo);
+                        if(bulto != null) {
+                           egresoDepositoModel.setIdBulto(bulto.getId());
+                           egresoDepositoService.save(egresoDepositoModel);
+                           
+                           bulto.setIdRemito(numeroEntero);
 
-                                ordenDeProduccionBultoService.save(bulto);
+                            ordenDeProduccionBultoService.save(bulto);
 
-                               OrdenDeProduccionBobinaModel bobina = ordenDeProduccionBobinaService.getByPk(bulto.getIdOrdenDeProduccionBobina());
-                               if(bobina != null) {
-                                    //bobina.setIdDeposito(Integer.valueOf(egresoDepositoForm.getIdDeposito()));
-                                    bobina.setIdRemito(numeroEntero);
+                            remitoAmodificar.setCantidadBaja(remitoAmodificar.getCantidadBaja() +  1);
+                            remitoDetalleService.save(remitoAmodificar);
 
-                                    ordenDeProduccionBobinaService.save(bobina);                        
-                               }
-                           }
-                            
+                            remitoAmodificarNoDetalle.setCantidadTotalBaja(remitoAmodificarNoDetalle.getCantidadTotalBaja() +  1);
+                            remitoService.save(remitoAmodificarNoDetalle);
+
+                            OrdenDeProduccionBobinaModel bobina = ordenDeProduccionBobinaService.getByPk(bulto.getIdOrdenDeProduccionBobina());
+                            if(bobina != null) {
+                              bobina.setIdRemito(numeroEntero);
+
+                              ordenDeProduccionBobinaService.save(bobina);                        
+                            }
                         }
                     }
-                }                
-            }
-        } else {
-            if(egresoDepositoForm.getAction().equalsIgnoreCase("remove")) {
-                if(egresoDepositoModel.getId() == null) {
-                    modelAndView.setViewName("error");
-                    modelAndView.addObject("errorMessage", "Error: id de ingresarDeposito inválido.");
-                    return modelAndView;                                    
+                    
+                    if (codigo.startsWith("P")) { 
+                        OrdenDeProduccionPalletModel pallet = ordenDeProduccionPalletService.getByCode(codigo);
+                        if(pallet != null) {
+                           egresoDepositoModel.setIdPallet(pallet.getId());
+                           egresoDepositoService.save(egresoDepositoModel);
+                           
+                           pallet.setIdRemito(numeroEntero);
+                    
+                            ordenDeProduccionPalletService.save(pallet);
+                            List<OrdenDeProduccionPalletBultoModel> palletBultos = ordenDeProduccionPalletBultoService.getAllByOrdenDeProduccionPalletAndNotRemito(pallet.getId());
+                            remitoAmodificar.setCantidadBaja(remitoAmodificar.getCantidadBaja() +  palletBultos.size());
+                            remitoDetalleService.save(remitoAmodificar);
+
+                            remitoAmodificarNoDetalle.setCantidadTotalBaja(remitoAmodificarNoDetalle.getCantidadTotalBaja() +  palletBultos.size());
+                            remitoService.save(remitoAmodificarNoDetalle);
+
+                            if(palletBultos != null && !palletBultos.isEmpty()) {
+                                for(OrdenDeProduccionPalletBultoModel palletBulto :palletBultos) {                            
+                                    OrdenDeProduccionBultoModel bulto = ordenDeProduccionBultoService.getByPk(palletBulto.getIdOrdenDeProduccionBulto());
+                                    if(bulto != null) {
+                                        //bulto.setIdDeposito(Integer.valueOf(egresoDepositoForm.getIdDeposito()));
+                                        bulto.setIdRemito(numeroEntero);
+
+                                        ordenDeProduccionBultoService.save(bulto);
+
+                                       OrdenDeProduccionBobinaModel bobina = ordenDeProduccionBobinaService.getByPk(bulto.getIdOrdenDeProduccionBobina());
+                                       if(bobina != null) {
+                                            //bobina.setIdDeposito(Integer.valueOf(egresoDepositoForm.getIdDeposito()));
+                                            bobina.setIdRemito(numeroEntero);
+
+                                            ordenDeProduccionBobinaService.save(bobina);                        
+                                       }
+                                   }
+
+                                }
+                            }
+                        }
+                    }
+                    
+                } else {
+                    if(egresoDepositoForm.getAction().equalsIgnoreCase("remove")) {
+                        if(egresoDepositoModel.getId() == null) {
+                            modelAndView.setViewName("error");
+                            modelAndView.addObject("errorMessage", "Error: id de ingresarDeposito inválido.");
+                            return modelAndView;                                    
+                        }
+
+                        egresoDepositoService.delete(egresoDepositoModel);
+                    } else {
+                        modelAndView.setViewName("error");
+                        modelAndView.addObject("errorMessage", "Error: operación inválida.");
+                        return modelAndView;                                
+                    }
                 }
-                                            
-                egresoDepositoService.delete(egresoDepositoModel);
-            } else {
-                modelAndView.setViewName("error");
-                modelAndView.addObject("errorMessage", "Error: operación inválida.");
-                return modelAndView;                                
             }
-        }
+            
+         } else {
+                System.out.println("No se recibieron códigos.");
+            }
         
         //RemitoDetalleService remitoDetalleService = new RemitoDetalleServiceImpl();   
         RemitoDetalleModel remito = remitoDetalleService.getByPk(Integer.valueOf(egresoDepositoForm.getIdRemito()));
@@ -1289,13 +1281,14 @@ public class IngresarDepositoController {
     
     
     @ResponseBody
-    @RequestMapping(value = "/egresoDeposito/findBultoOPallet/{codigo}/{orden}", method = RequestMethod.GET)
-    public List<ItemBean> getMateriaPrimaByProveedorE(@PathVariable String codigo,@PathVariable String orden, HttpServletRequest req, ModelMap model) throws Exception {
+    @RequestMapping(value = "/egresoDeposito/findBultoOPallet/{codigo}/{orden}/{depositoRequest}", method = RequestMethod.GET)
+    public List<ItemBean> getMateriaPrimaByProveedorE(@PathVariable String codigo,@PathVariable String orden, @PathVariable String depositoRequest, HttpServletRequest req, ModelMap model) throws Exception {
         
         OrdenDeProduccionBultoService ordenDeProduccionBultoService = new OrdenDeProduccionBultoServiceImpl();
         OrdenDeProduccionPalletService ordenDeProduccionPalletService = new OrdenDeProduccionPalletServiceImpl();
         TipoService tipoService = new TipoServiceImpl();
         List<OrdenDeProduccionBultoDto> ordenDeProduccionBultosDtos = new ArrayList<OrdenDeProduccionBultoDto>();
+        
        
         List<ItemBean> result = new ArrayList<ItemBean>();
         if(codigo != null && !codigo.isEmpty()) {
@@ -1303,6 +1296,12 @@ public class IngresarDepositoController {
             boolean estaEnPallet = false;
             boolean estaEnDeposito = false;
             boolean estaEnRemitoBulto = false;
+            String depositoDelRemito;
+            String depositoDelBultoIngresadoEgreso = "";
+            String depositoDelBobinaIngresadoEgreso = "";
+            String depositoDelPalletIngresadoEgreso = "";
+            TipoModel tipoDeposito = tipoService.getByValor(depositoRequest);
+            depositoDelRemito = tipoDeposito.getId().toString();
             if(tipo.equalsIgnoreCase("R")){
                 ItemBean bean = new ItemBean();        
                 bean.setTipo("bulto");                
@@ -1315,6 +1314,38 @@ public class IngresarDepositoController {
                    bean.setTipo("-2");
                 } else {
                 if(bulto != null) {
+                    //TipoModel tipoDeposito = tipoService.getByValor(depositoRequest);
+                    //depositoDelRemito = tipoDeposito.getId().toString();
+                    
+                    if(bulto.getEstado() != null && !bulto.getEstado().equalsIgnoreCase("-1")) {
+                        if(bulto.getEstado().equals("ok")) {
+                            TipoModel tipo2 = tipoService.getByValor("Principal");
+                            if (tipo2 != null) {
+                                depositoDelBultoIngresadoEgreso = tipo2.getId().toString();
+                            } else { 
+                                bean.setIdDeposito("-1");
+                            }
+                        }
+                        if(bulto.getEstado().equals("observado")) {
+                            TipoModel tipo3 = tipoService.getByValor("Fuera de standard");
+                            if (tipo3 != null) {
+                                depositoDelBultoIngresadoEgreso = tipo3.getId().toString();
+                            }
+                        }
+                        if(bulto.getEstado().equals("rechazado")) {
+                             TipoModel tipo4 = tipoService.getByValor("Scrap");
+                            if (tipo4 != null) {
+                                depositoDelBultoIngresadoEgreso = tipo4.getId().toString();
+                            }
+                        }
+                        if(bulto.getEstado().equals("sinmesurar")) {
+                            TipoModel tipo5 = tipoService.getByValor("Campo");
+                            if (tipo5 != null) {
+                               depositoDelBultoIngresadoEgreso = tipo5.getId().toString();
+                            }
+                        }                
+                    }
+                    
                     OrdenDeProduccionBultoModel bultoCompleto = ordenDeProduccionBultoService.getByPk(bulto.getId());
                     bean.setCodigo(bulto.getCodigo());
                     bean.setId(bulto.getId().toString());
@@ -1371,6 +1402,10 @@ public class IngresarDepositoController {
                         bean.setId("-9");
                         bean.setTipo("-9");
                     }
+                    if (!"-1".equals(depositoDelRemito) && !depositoDelRemito.equals(depositoDelBultoIngresadoEgreso)) {
+                        bean.setId("-25");
+                        bean.setTipo("-25");
+                    }
                 }
                 
                 result.add(bean);
@@ -1387,6 +1422,37 @@ public class IngresarDepositoController {
                 if(pallet != null) {  
                     boolean estaEnDepositoPallet = false;
                     boolean estaEnRemitoPallet = false;
+                    //TipoModel tipoDeposito = tipoService.getByValor(depositoRequest);
+                    //depositoDelRemito = tipoDeposito.getId().toString();
+                    
+                    if(pallet.getEstado() != null && !pallet.getEstado().equalsIgnoreCase("-1")) {
+                        if(pallet.getEstado().equals("ok")) {
+                            TipoModel tipo2 = tipoService.getByValor("Principal");
+                            if (tipo2 != null) {
+                                depositoDelPalletIngresadoEgreso = tipo2.getId().toString();
+                            } else { 
+                                bean.setIdDeposito("-1");
+                            }
+                        }
+                        if(pallet.getEstado().equals("observado")) {
+                            TipoModel tipo3 = tipoService.getByValor("Fuera de standard");
+                            if (tipo3 != null) {
+                                depositoDelPalletIngresadoEgreso = tipo3.getId().toString();
+                            }
+                        }
+                        if(pallet.getEstado().equals("rechazado")) {
+                             TipoModel tipo4 = tipoService.getByValor("Scrap");
+                            if (tipo4 != null) {
+                                depositoDelPalletIngresadoEgreso = tipo4.getId().toString();
+                            }
+                        }
+                        if(pallet.getEstado().equals("sinmesurar")) {
+                            TipoModel tipo5 = tipoService.getByValor("Campo");
+                            if (tipo5 != null) {
+                               depositoDelPalletIngresadoEgreso = tipo5.getId().toString();
+                            }
+                        }                
+                    }
                     List<OrdenDeProduccionPalletBultoModel> palletbultoList = ordenDeProduccionPalletBultoService.getAllByOrdenDeProduccionPalletAndNotRemito(pallet.getId());
                     bean.setCodigo(pallet.getCodigo());
                     bean.setId(pallet.getId().toString());
@@ -1468,6 +1534,10 @@ public class IngresarDepositoController {
                         bean.setId("-14");
                         bean.setTipo("-14");
                     }
+                    if (!"-1".equals(depositoDelRemito) && !depositoDelRemito.equals(depositoDelPalletIngresadoEgreso)) {
+                        bean.setId("-26");
+                        bean.setTipo("-26");
+                    }
                 } else {
                     bean.setId("-1");
                     bean.setTipo("-1");
@@ -1489,6 +1559,37 @@ public class IngresarDepositoController {
                     boolean estaEnBulto = false;
                     boolean estaEnDepositoBobina = false;
                      boolean estaEnRemitoBobina = false;
+                     
+                     if(bobina.getEstado() != null && !bobina.getEstado().equalsIgnoreCase("-1")) {
+                        if(bobina.getEstado().equals("ok")) {
+                            TipoModel tipo2 = tipoService.getByValor("Principal");
+                            if (tipo2 != null) {
+                                depositoDelBobinaIngresadoEgreso = tipo2.getId().toString();
+                            } else { 
+                                bean.setIdDeposito("-1");
+                            }
+                        }
+                        if(bobina.getEstado().equals("observado")) {
+                            TipoModel tipo3 = tipoService.getByValor("Fuera de standard");
+                            if (tipo3 != null) {
+                                depositoDelBobinaIngresadoEgreso = tipo3.getId().toString();
+                            }
+                        }
+                        if(bobina.getEstado().equals("rechazado")) {
+                             TipoModel tipo4 = tipoService.getByValor("Scrap");
+                            if (tipo4 != null) {
+                                depositoDelBobinaIngresadoEgreso = tipo4.getId().toString();
+                            }
+                        }
+                        if(bobina.getEstado().equals("sinmesurar")) {
+                            TipoModel tipo5 = tipoService.getByValor("Campo");
+                            if (tipo5 != null) {
+                               depositoDelBobinaIngresadoEgreso = tipo5.getId().toString();
+                            }
+                        }                
+                    }
+                     
+                     
                     bean.setCodigo(bobina.getCodigo());
                     bean.setId(bobina.getId().toString());
                     bean.setTipo("bobina");
@@ -1528,6 +1629,10 @@ public class IngresarDepositoController {
                      if(estaEnRemitoBobina){
                         bean.setId("-10");
                         bean.setTipo("-10");
+                    }
+                    if (!"-1".equals(depositoDelRemito) && !depositoDelRemito.equals(depositoDelBobinaIngresadoEgreso)) {
+                        bean.setId("-27");
+                        bean.setTipo("-27");
                     }
                 
  
