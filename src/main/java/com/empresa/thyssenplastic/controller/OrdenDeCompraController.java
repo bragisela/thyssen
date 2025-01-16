@@ -125,7 +125,7 @@ public class OrdenDeCompraController {
         for(OrdenDeCompraModel ordenDeCompra: ordenDeCompras) {
             OrdenDeCompraDto ordenDeCompraDto = new OrdenDeCompraDto();
             
-            if ( ordenDeCompra.getEstado().equalsIgnoreCase("Cerrado") ) {
+            if ( !(user.getRol() == Utils.ROL_OFICINA) && ordenDeCompra.getEstado().equalsIgnoreCase("Cerrado")) {
                 continue;
             }
             
