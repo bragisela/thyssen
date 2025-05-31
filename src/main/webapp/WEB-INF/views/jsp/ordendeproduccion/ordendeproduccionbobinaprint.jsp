@@ -69,6 +69,7 @@
                 </div>    
             </div>    
             <p>&nbsp;</p>
+            <p>&nbsp;</p>
             <div class="row">
                 <h2>Fabricado por Thyssen Plastic Solutions - Ruta 205 Km 187.5 - Saladillo - Bs. As. - ${fechaActual}</h2>
             </div>
