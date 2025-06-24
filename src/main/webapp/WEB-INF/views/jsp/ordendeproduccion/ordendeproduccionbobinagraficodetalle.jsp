@@ -226,6 +226,8 @@
 <script>
     $(document).ready(function () {
 
+        $('#valor').focus();
+
         $('#graficosBobinaDetalleTable').DataTable({
             language: {
                 "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
@@ -233,6 +235,12 @@
             order: [[0, 'desc']]
         });
 
+        $("#valor").keyup(function(event) {
+            if (event.keyCode === 13) {
+                callController();
+            }
+        });
+        
         // Checkbox: Seleccionar/Deseleccionar todos
         $("#selectAll").click(function () {
             $(".selectItem").prop('checked', $(this).prop('checked'));
@@ -268,6 +276,28 @@
             }
         });
     });
+    
+    function callController() {
+               
+        var valor = $("#valor").val();
+
+        var action = $( "#action" ).val();
+
+        if(action == 'remove') {
+            if(confirm('Desea eliminarlo')) {
+                var form = document.getElementById("myForm");
+                form.submit();
+            }
+        } else {
+            if($("#myForm")[0].checkValidity()) {
+                var form = document.getElementById("myForm");
+                form.submit();
+            } else {
+                $("#myForm")[0].reportValidity();
+            }        
+        }
+
+    }
 </script>
    
 <%@include file = "/WEB-INF/views/jsp/includes/footer.jsp" %>
