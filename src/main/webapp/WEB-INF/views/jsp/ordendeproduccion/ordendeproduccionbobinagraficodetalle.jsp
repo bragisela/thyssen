@@ -172,6 +172,11 @@
                     <div class="card-body">
 
                         <div class="row col-xs-12 col-sm-12 col-xl-12">
+                        <div class="row mt-3">
+                            <div class="col text-center">
+                                <button id="deleteSelectedBtn" type="button" class="btn btn-danger">Eliminar seleccionados</button>
+                            </div>
+                        </div>
                             <table id="graficosBobinaDetalleTable" class="display table table-striped table-hover cell-border">
                                 <thead>
                                     <tr>
@@ -208,11 +213,6 @@
                                 </tbody>
                             </table>
 
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col text-center">
-                                <button id="deleteSelectedBtn" type="button" class="btn btn-danger">Eliminar seleccionados</button>
-                            </div>
                         </div>
                     </div>
                 </div>
