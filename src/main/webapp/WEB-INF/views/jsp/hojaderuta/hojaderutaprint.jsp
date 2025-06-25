@@ -55,6 +55,11 @@
             vertical-align: top;
             padding-top: 20px; /* Ajusta el espaciado según sea necesario */
         }
+        
+        .multiline-cell {
+        white-space: pre-wrap; /* respeta \n y hace wrap de texto */
+        word-wrap: break-word;
+        }
         </style>
         
         
@@ -116,7 +121,7 @@
                             </div> 
                             <div class="row col-xs-12 col-sm-12 col-xl-12" >
                                     <label for="inputArticulo">Observaciones</label>
-                                    <form:input type="text" path="observaciones" class="form-control" disabled="true"/>
+                                    <form:textarea type="text" path="observaciones" class="form-control" disabled="true"/>
                                 </div>
                             </div>
                             
@@ -202,7 +207,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan='13'>
+                                            <td colspan='13'  class='multiline-cell'>
                                                 <c:out value="${hojaDeRutaDetalle.observacionesRemito}" />
                                             </td>
                                         </tr>
