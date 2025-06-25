@@ -48,6 +48,10 @@ import java.util.Comparator;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  *
@@ -55,7 +59,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  */
 @Controller
 public class GraficoBobinaDetalleController {
-    
+
 
     @RequestMapping(value = "/graficoBobinaDetalle/{idGraficoBobina}/tipoIngreso/{tipoIngreso}", method = RequestMethod.GET)
     public String getHomeGraficoBobinaDetalle(@PathVariable String idGraficoBobina, @PathVariable String tipoIngreso, HttpServletRequest req, ModelMap model) {
@@ -476,7 +480,40 @@ public class GraficoBobinaDetalleController {
                 
     }
     
+    @RequestMapping(value = "/graficoBobinaDetalle/deleteSelected", method = RequestMethod.POST)
+    public void deleteSelected(@RequestBody Map<String, List<Integer>> payload, HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        if (!Utils.isAutenticated(req)) {
+            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            resp.getWriter().write("Sesión no válida");
+            return;
+        }
 
+        List<Integer> ids = payload.get("ids");
+        if (ids == null || ids.isEmpty()) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("No se proporcionaron IDs");
+            return;
+        }
+
+        try {
+            GraficoBobinaDetalleService graficoBobinaDetalleService = new GraficoBobinaDetalleServiceImpl();
+
+            for (Integer id : ids) {
+                GraficoBobinaDetalleModel detalle = new GraficoBobinaDetalleModel();
+                detalle.setId(id);  
+                graficoBobinaDetalleService.delete(detalle);
+            }
+
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.getWriter().write("Registros eliminados correctamente");
+        } catch (Exception e) {
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            resp.getWriter().write("Error al eliminar los registros");
+        }
+    }
+
+    
+    
     @RequestMapping(value = "/graficoBobinaDetalle/remove/{graficoBobinaDetallepk}", method = RequestMethod.GET)
     public String removeGraficoBobinaDetalle(@PathVariable String graficoBobinaDetallepk, HttpServletRequest req, ModelMap model) throws Exception {
 

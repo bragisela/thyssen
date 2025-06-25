@@ -172,29 +172,30 @@
                     <div class="card-body">
 
                         <div class="row col-xs-12 col-sm-12 col-xl-12">
+                        <div class="row mt-3">
+                            <div class="col text-center">
+                                <button id="deleteSelectedBtn" type="button" class="btn btn-danger">Eliminar seleccionados</button>
+                            </div>
+                        </div>
                             <table id="graficosBobinaDetalleTable" class="display table table-striped table-hover cell-border">
                                 <thead>
                                     <tr>
+                                        <th><input type="checkbox" id="selectAll" /></th> 
                                         <th>CODIGO</th>
                                         <th>VALOR</th>
                                         <th>ANGULO</th>
                                         <th style="text-align: center">ACCIONES</th>
                                     </tr>
                                 </thead>
-
                                 <tbody>
-
                                     <c:forEach items="${graficoBobinaDetalles}" var="graficoBobinaDetalle">
                                         <tr>
                                             <td>
-                                                <c:out value="${graficoBobinaDetalle.medicion}" />
-                                            </td>                                            
-                                            <td>
-                                                <c:out value="${graficoBobinaDetalle.valor}" />
-                                            </td>                                            
-                                            <td>
-                                                <c:out value="${graficoBobinaDetalle.angulo}" />
-                                            </td>                                                                                        
+                                                <input type="checkbox" class="selectItem" value="${graficoBobinaDetalle.pk}" />
+                                            </td>
+                                            <td><c:out value="${graficoBobinaDetalle.medicion}" /></td>
+                                            <td><c:out value="${graficoBobinaDetalle.valor}" /></td>
+                                            <td><c:out value="${graficoBobinaDetalle.angulo}" /></td>
                                             <td>
                                                 <c:if test = "${rol == 'oficina' && operacion == 'alta'}">
                                                     <a class="nav-link active fa fa-pencil-square-o fa-lg"
@@ -205,12 +206,13 @@
                                                     <a class="nav-link active fa fa-trash fa-lg"
                                                         href="/thyssenplastic/graficoBobinaDetalle/remove/${graficoBobinaDetalle.pk}"
                                                         data-toggle="tooltip" data-placement="top" title="Eliminar"></a>
-                                                </c:if>                                                                                                        
+                                                </c:if>                                                                                                      
                                             </td>
                                         </tr>
                                     </c:forEach>
                                 </tbody>
                             </table>
+
                         </div>
                     </div>
                 </div>
@@ -223,28 +225,62 @@
 
 <script>
     $(document).ready(function () {
-        
+
         $('#valor').focus();
-        
+
         $('#graficosBobinaDetalleTable').DataTable({
             language: {
                 "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-            },           
-            order: [[0, 'desc']]            
+            },
+            order: [[0, 'desc']]
         });
-        
+
         $("#valor").keyup(function(event) {
             if (event.keyCode === 13) {
                 callController();
             }
-        });   
-                
+        });
+        
+        // Checkbox: Seleccionar/Deseleccionar todos
+        $("#selectAll").click(function () {
+            $(".selectItem").prop('checked', $(this).prop('checked'));
+        });
+
+        // Botón Eliminar Seleccionados
+        $("#deleteSelectedBtn").click(function () {
+            let selected = [];
+            $(".selectItem:checked").each(function () {
+                selected.push($(this).val());
+            });
+
+            if (selected.length === 0) {
+                alert("Debe seleccionar al menos un registro.");
+                return;
+            }
+
+            if (confirm('¿Está seguro de eliminar los registros seleccionados?')) {
+                // Ids a enviar al nuevo metodo del back deletedSelected
+                $.ajax({
+                    url: '/thyssenplastic/graficoBobinaDetalle/deleteSelected',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ ids: selected }),
+                    success: function (response) {
+                        alert(response); 
+                        location.reload();
+                    },
+                    error: function () {
+                        alert('Ocurrió un error al intentar eliminar los registros.');
+                    }
+                });
+            }
+        });
     });
     
     function callController() {
                
         var valor = $("#valor").val();
-        
+
         var action = $( "#action" ).val();
 
         if(action == 'remove') {
@@ -260,11 +296,10 @@
                 $("#myForm")[0].reportValidity();
             }        
         }
-               
+
     }
-    
 </script>
-    
+   
 <%@include file = "/WEB-INF/views/jsp/includes/footer.jsp" %>
 
 
