@@ -1,5 +1,7 @@
 <%@include file = "/WEB-INF/views/jsp/includes/header.jsp" %>
 
+
+
 <!-- Content Wrapper. Contains page content -->
 <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -75,11 +77,11 @@
                                                     <label for="inputArticulo">Cliente</label>
                                                     <form:select path="idCliente" class="form-control rubro" required="required" disabled="${disabledAlta}" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')" onChange="loadDomiclio()">                                                    
                                                         <form:options items="${clienteList}" />
-                                                    </form:select>
+                                                    </form:select> 
                                                 </div>
                                                 <div class="row col-xs-9 col-sm-4 col-xl-4" >
                                                     <label for="inputArticulo">Domicilio</label>
-                                                    <form:select path="idClienteDomicilio" class="form-control rubro" required="required" disabled="${disabledAlta}" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')">                                                    
+                                                    <form:select path="idClienteDomicilio" class="form-control rubro"  style="display: block; width: 100%;" required="required" disabled="${disabledAlta}" oninvalid="this.setCustomValidity('Complete este campo')" oninput="setCustomValidity('')">                                                    
                                                         <form:option value="-1">Seleccionar...</form:option>
                                                     </form:select>
                                                 </div>
@@ -279,9 +281,27 @@
                   
 
 <!-- ./wrapper -->
+<!-- CSS de Select2 -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
+<!-- JS de Select2 -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     $(document).ready(function () {
+        
+          const clienteId = $('#idCliente').val();
+          if (clienteId) {
+            $('#idCliente').trigger('change');
+          }
+        
+          $(document).ready(function() {
+            $('#idClienteDomicilio').select2({
+                placeholder: 'Seleccionar domicilio...',
+                allowClear: true,
+                width: 'resolve' // ajusta el ancho automáticamente
+            });
+          });
         
         $('#remitosTable').DataTable({
             language: {
