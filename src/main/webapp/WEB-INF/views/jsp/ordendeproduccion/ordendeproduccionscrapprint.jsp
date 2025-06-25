@@ -55,8 +55,8 @@
                 </div>
                 <div class="row col-xs-6 col-sm-6 col-xl-6" style="text-align: center;">
                     <h1 style="font-size: 80px"><b>${etiquetaArticulo}</b></h1>
-                    <h1 style="font-size: 50px">Art. ${codigoarticulo} ${articulo}</h1>
-                    <h2 style="font-size: 40px">Lote Nro.: L${ordenDeProduccion}&nbsp; | Scrap: ${codigoScrap}</h2>
+                    <h1 style="font-size: 60px">Art. ${codigoarticulo} ${articulo}</h1>
+                    <h2 style="font-size: 50px">Lote Nro.: L${ordenDeProduccion}&nbsp; | Scrap: ${codigoScrap}</h2>
                 </div>                
             </div>    
             <div class="row">
@@ -67,6 +67,7 @@
                     <svg id="barcode"></svg>                                
                 </div>    
             </div>    
+            <p>&nbsp;</p>
             <p>&nbsp;</p>
             <div class="row">
                 <h2>Fabricado por Thyssen Plastic Solutions - Ruta 205 Km 187.5 - Saladillo - Bs. As. - ${fechaActual}</h2>
