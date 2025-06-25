@@ -38,22 +38,23 @@
                                 
                             </ol>
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" style="height: 100px;">
-           
-                            <label for="filtroDeposito">Filtrar por Denominación:</label>
-                            <select id="filtroDeposito" onchange="filtrarTabla()" class="form-control">
-                                <option value="todos">Todas las denominaciones</option>
-                                <!-- Agrega opciones para cada depósito -->
-                                <c:forEach var="entry" items="${articuloList}">
-                                    <option value="${entry.key}">${entry.value}</option>
-                                </c:forEach>
-                            </select>
-                     
-                        </div>
-             
+<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+    <div class="form-inline">
+        <label for="filtroDeposito" class="mr-2 mb-2">Filtrar por Denominación:</label>
+        <br>
+        <select id="filtroDeposito" onchange="filtrarTabla()" class="form-control mr-3 mb-2" style="width: 70%;">
+            <option value="todos">Todas las denominaciones</option>
+            <c:forEach var="entry" items="${articuloList}">
+                <option value="${entry.key}">${entry.value}</option>
+            </c:forEach>
+        </select>
+        <input type="checkbox" class="form-check-input" id="filtroSinDisponibilidad" onchange="filtrarTabla()"> Filtrar sin disponibilidad
+    </div>
+</div>
+
                     <div class="row col-xs-12 col-sm-12 col-xl-12" style="height: 400px; overflow-y: auto;">
                    
-                    
+                    <div style="margin-top: 2em;"></div>
                     <table id="reportesTable" style="width: 90%">
                         <thead>
                             <tr>
@@ -101,7 +102,8 @@
         $('#reportesTable').DataTable({
             language: {
                 "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-            },     
+            },
+            order: [[1, 'desc']],
             paging: false,
             dom: 'Bfrtip',
             buttons: [
@@ -110,7 +112,7 @@
         });
     });
     
-    function filtrarTabla() {
+ /*   function filtrarTabla() {
         var filtro = document.getElementById("filtroDeposito").value;
         var filas = document.querySelectorAll("#reportesTable tbody tr");
 
@@ -122,7 +124,29 @@
             }
         });
     }
-    
+   */
+  
+ function filtrarTabla() {
+    var filtro = document.getElementById("filtroDeposito").value;
+    var sinDisponibilidad = document.getElementById("filtroSinDisponibilidad").checked;
+    var filas = document.querySelectorAll("#reportesTable tbody tr");
+
+    filas.forEach(function (fila) {
+        var idDeposito = fila.getAttribute("data-deposito-id");
+        var disponibleKG = parseFloat(fila.children[5].textContent); // columna Disponible(KG)
+
+        var coincideFiltro = (filtro === "todos" || idDeposito === filtro);
+        var tieneDisponibilidad = (disponibleKG > 0);
+
+        // Mostrar solo si coincide con filtro y (si el checkbox está activado, además tiene disponibilidad)
+        if (coincideFiltro && (!sinDisponibilidad || tieneDisponibilidad)) {
+            fila.style.display = "";
+        } else {
+            fila.style.display = "none";
+        }
+    });
+}
+ 
 
 </script>
 <style>
