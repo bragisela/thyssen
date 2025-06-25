@@ -179,7 +179,7 @@
                                             <td><c:out value="${domicilio.pais}" /></td>
                                             <td><c:out value="${domicilio.provincia}" /></td>
                                             <td><c:out value="${domicilio.localidad}" /></td>
-                                            <td><c:out value="${domicilio.puntoGps}" /></td>
+                                            <td class="wrap-text"><c:out value="${domicilio.puntoGps}" /></td>
                                             <td><c:out value="${domicilio.nombreContacto}" /></td>
                                             <td><c:out value="${domicilio.telefonoContacto}" /></td>
                                             <td><c:out value="${domicilio.horarioContacto}" /></td>
@@ -199,7 +199,14 @@
             </div>
         </section>
     </div>                   
-        
+    <style>
+        .wrap-text {
+            white-space: normal !important;
+            word-wrap: break-word;
+            
+            max-width: 500px; /* opcional, para que el texto tenga un ancho límite */
+        }
+    </style>
     <script>
         $(document).ready(function () {
 
