@@ -204,7 +204,7 @@
             white-space: normal !important;
             word-wrap: break-word;
             
-            max-width: 500px; /* opcional, para que el texto tenga un ancho límite */
+            max-width: 300px; /* opcional, para que el texto tenga un ancho límite */
         }
     </style>
     <script>
