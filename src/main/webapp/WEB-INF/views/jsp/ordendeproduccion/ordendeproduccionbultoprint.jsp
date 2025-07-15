@@ -56,7 +56,7 @@
                 <div class="row col-xs-6 col-sm-6 col-xl-6" style="text-align: center;">
                     <h1 style="font-size: 80px"><b>${etiquetaArticulo}</b></h1>
                     <h1 style="font-size: 70px">Art. ${codigoarticulo} ${articulo}</h1>                    
-                    <h2 style="font-size: 60px">Lote Nro.: L${ordenDeProduccion}&nbsp; | Bulto: ${codigoBulto}</h2>
+                    <h2 style="font-size: 55px">Lote Nro.: L${ordenDeProduccion}&nbsp; | Bulto: ${codigoBulto}</h2>
                 </div>                
             </div>    
             <div class="row">
