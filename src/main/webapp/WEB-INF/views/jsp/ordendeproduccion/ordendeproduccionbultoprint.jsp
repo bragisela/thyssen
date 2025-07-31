@@ -53,20 +53,20 @@
                 <div class="row col-xs-3 col-sm-3 col-xl-3">
                     <img style="margin-top: 5%;height: 80%;width: 80%;" src="<c:url value="/resources/assets/logoTPS.png"/>">    
                 </div>
-                <div class="row col-xs-6 col-sm-6 col-xl-6" style="text-align: center;">
+                <div class="row col-xs-9 col-sm-9 col-xl-9" style="text-align: center; padding-left: 20px; padding-right: 20px;">
                     <h1 style="font-size: 80px"><b>${etiquetaArticulo}</b></h1>
                     <h1 style="font-size: 70px">Art. ${codigoarticulo} ${articulo}</h1>                    
-                    <h2 style="font-size: 60px">Lote Nro.: L${ordenDeProduccion}&nbsp; | Bulto: ${codigoBulto}</h2>
+                    <h2 style="font-size: 70px">Lote Nro.: L${ordenDeProduccion}&nbsp; | Bulto: ${codigoBulto}</h2>
                 </div>                
             </div>    
-            <div class="row">
-                <div class="row col-xs-6 col-sm-6 col-xl-6">                    
+            <div class="row" style="margin-top: 60px;">
+                <div class="col-xs-6 col-sm-6 col-xl-6" style="text-align: center;">
                     <div id="qrcode"></div>
                 </div>
-                <div class="row col-xs-6 col-sm-6 col-xl-6">                    
-                    <svg id="barcode"></svg>                                
+                <div class="col-xs-6 col-sm-6 col-xl-6" style="text-align: center;">
+                    <svg id="barcode"></svg>
                 </div>    
-            </div>    
+            </div>   
             <p>&nbsp;</p>
             <p>&nbsp;</p>
             <div class="row">
