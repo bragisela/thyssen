@@ -47,32 +47,31 @@
         <script src="<c:url value="/resources/core/js/qrcode.js"/>"></script>
         <script src="<c:url value="/resources/core/js/JsBarcode.all.min.js"/>"></script>
     </head>
-    <body>
-        <div style="text-align: center;">
-            <div class="row">
-                <div class="row col-xs-3 col-sm-3 col-xl-3">
-                    <img style="margin-top: 5%;height: 80%;width: 80%;" src="<c:url value="/resources/assets/logoTPS.png"/>">    
-                </div>
-                <div class="row col-xs-9 col-sm-9 col-xl-9" style="text-align: center; padding-left: 20px; padding-right: 20px;">
-                    <h1 style="font-size: 80px"><b>${etiquetaArticulo}</b></h1>
-                    <h1 style="font-size: 70px">Art. ${codigoarticulo} ${articulo}</h1>                    
-                    <h2 style="font-size: 70px">Lote Nro.: L${ordenDeProduccion}&nbsp; | Bobina: ${codigoBobina}</h2>
-                </div>                
+     <body>
+        <div>
+            <div style="display: flex; align-items: center;">
+                    <div class="row col-xs-3 col-sm-3 col-xl-3">
+                        <img style="margin-top: 5%;height: 80%;width: 80%;" src="<c:url value="/resources/assets/logoTPS.png"/>">    
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <h1 style="font-size: 80px"><b>${etiquetaArticulo}</b></h1>
+                        <h1 style="font-size: 70px; margin:0">Art. ${codigoarticulo} ${articulo}</h1>                    
+                        <h2 style="font-size: 70px">Lote Nro.: L${ordenDeProduccion}&nbsp; | Bobina: ${codigoBobina}</h2>
+                    </div>                
             </div>    
             <div class="row" style="margin-top: 60px;">
-                <div class="col-xs-6 col-sm-6 col-xl-6" style="text-align: center;">
+                <div class="col-xs-12" style="display: flex; justify-content: center; align-items: center; gap: 80px;">
                     <div id="qrcode"></div>
-                </div>
-                <div class="col-xs-6 col-sm-6 col-xl-6" style="text-align: center;">
                     <svg id="barcode"></svg>
-                </div>    
-            </div>      
-            <p>&nbsp;</p>
+                </div>
+              </div>
+  
             <p>&nbsp;</p>
             <div class="row">
-                <h2>Fabricado por Thyssen Plastic Solutions - Ruta 205 Km 187.5 - Saladillo - Bs. As. - ${fechaActual}</h2>
+                <p style="text-align: center; font-size: 28px; font-weight: bold; margin: 5px 0;">
+                    Fabricado por Thyssen Plastic Solutions - Ruta 205 Km 187.5 - Saladillo - Bs. As. - ${fechaActual}
+                </p>
             </div>
-            
         </div>
     </body>
     
@@ -81,8 +80,8 @@
         
         var qrcode = new QRCode("qrcode", {
                 text: "${url}",
-                width: 256,
-                height: 256
+                width: 320,
+                height: 320
             });        
         
         $("#qrcode > img").css({"margin":"auto"});
