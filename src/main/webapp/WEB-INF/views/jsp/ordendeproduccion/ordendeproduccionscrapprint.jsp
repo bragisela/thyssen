@@ -53,7 +53,7 @@
                 <div class="row col-xs-3 col-sm-3 col-xl-3">
                     <img style="margin-top: 5%;height: 80%;width: 80%;" src="<c:url value="/resources/assets/logoTPS.png"/>">    
                 </div>
-                <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+                <div style="display: flex; flex-direction: column; align-items: center;">
                     <h1 style="font-size: 80px"><b>${etiquetaArticulo}</b></h1>
                     <h1 style="font-size: 70px; margin:0">Art. ${codigoarticulo} ${articulo}</h1>                    
                     <h2 style="font-size: 70px">Lote Nro.: L${ordenDeProduccion}&nbsp; | Scrap: ${codigoScrap}</h2>
