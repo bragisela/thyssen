@@ -59,7 +59,7 @@
                         <h2 style="font-size: 70px">Lote Nro.: L${ordenDeProduccion}&nbsp; | Bobina: ${codigoBobina}</h2>
                     </div>                
             </div>    
-            <div class="row" style="margin-top: 60px;">
+            <div class="row" style="margin-top: 55px;">
                 <div class="col-xs-12" style="display: flex; justify-content: center; align-items: center; gap: 80px;">
                     <div id="qrcode"></div>
                     <svg id="barcode"></svg>
@@ -68,7 +68,7 @@
   
             <p>&nbsp;</p>
             <div class="row">
-                <p style="text-align: center; font-size: 28px; font-weight: bold; margin: 5px 0;">
+                <p style="text-align: center; font-size: 35px; font-weight: bold; margin: 5px 0;">
                     Fabricado por Thyssen Plastic Solutions - Ruta 205 Km 187.5 - Saladillo - Bs. As. - ${fechaActual}
                 </p>
             </div>
