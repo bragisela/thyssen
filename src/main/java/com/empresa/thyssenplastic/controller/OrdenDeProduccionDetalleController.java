@@ -3330,11 +3330,14 @@ public class OrdenDeProduccionDetalleController {
         String fechaAltaBobina = "Sin información";
         String fechaAltaLote = "Sin información";
         String fechaActual = "Sin información";
+        String fechaFormateadaBobina = "Sin información";
         String url = "http://localhost:8080/thyssenplastic/ordenDeProduccionDetalle/viewbobina/xxxx";
         
         Calendar c = Calendar.getInstance();        
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
         fechaActual = formato.format(c.getTime());
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         
         if(ordendeproduccionbobinapk != null && !ordendeproduccionbobinapk.isEmpty()) {
             
@@ -3345,6 +3348,10 @@ public class OrdenDeProduccionDetalleController {
                 codigoBobina = ordenDeProduccionBobina.getCodigo();
                 pesoTotal = ordenDeProduccionBobina.getPesoTotal().toString();
                 fechaAltaBobina = ordenDeProduccionBobina.getFechaAlta().toString();
+                Date fechaBobinaAFormatear = ordenDeProduccionBobina.getFechaAlta();
+                if (fechaBobinaAFormatear != null) {
+                    fechaFormateadaBobina = sdf.format(fechaBobinaAFormatear);
+                }
                 url = "https://www.thyssenplastic.com/index";
                 
                 OrdenDeProduccionService ordenDeProduccionService = new OrdenDeProduccionServiceImpl();   
@@ -3401,6 +3408,7 @@ public class OrdenDeProduccionDetalleController {
         model.addAttribute("fechaAltaBobina", fechaAltaBobina);        
         model.addAttribute("fechaAltaLote", fechaAltaLote);        
         model.addAttribute("fechaActual", fechaActual);                
+        model.addAttribute("fechaFormateadaBobina", fechaFormateadaBobina); 
         model.addAttribute("url", url);
         
         return "/ordendeproduccion/ordendeproduccionbobinaprint"; 
@@ -4409,11 +4417,15 @@ public class OrdenDeProduccionDetalleController {
         String fechaAltaLote = "Sin información";
         String fechaActual = "Sin información";
         String fechaAltaBulto = "Sin información";
+        String fechaFormateadaBulto = "Sin información";
         String url = "http://localhost:8080/thyssenplastic/ordenDeProduccionDetalle/viewbulto/xxxx";
         
         Calendar c = Calendar.getInstance();        
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
         fechaActual = formato.format(c.getTime());
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        fechaFormateadaBulto = sdf.format(c.getTime());
         
         if(ordendeproduccionbultopk != null && !ordendeproduccionbultopk.isEmpty()) {
             
@@ -4486,6 +4498,7 @@ public class OrdenDeProduccionDetalleController {
         model.addAttribute("fechaAltaBulto", fechaAltaBulto);        
         model.addAttribute("fechaAltaLote", fechaAltaLote);        
         model.addAttribute("fechaActual", fechaActual);        
+        model.addAttribute("fechaFormateadaBulto", fechaFormateadaBulto);
         model.addAttribute("url", url);
         
         return "/ordendeproduccion/ordendeproduccionbultoprint"; 
@@ -5351,11 +5364,16 @@ public class OrdenDeProduccionDetalleController {
         String fechaAltaPallet = "Sin información";
         String fechaAltaLote = "Sin información";
         String fechaActual = "Sin información";
+        String fechaFormateadaPallet = "Sin información";
         String url = "http://localhost:8080/thyssenplastic/ordenDeProduccionDetalle/viewbobina/xxxx";
         
         Calendar c = Calendar.getInstance();        
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
         fechaActual = formato.format(c.getTime());
+        
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        fechaFormateadaPallet = sdf.format(c.getTime());
         
         if(ordendeproduccionpalletpk != null && !ordendeproduccionpalletpk.isEmpty()) {
             
@@ -5438,6 +5456,7 @@ public class OrdenDeProduccionDetalleController {
         model.addAttribute("fechaAltaLote", fechaAltaLote);        
         model.addAttribute("fechaAltaPallet", fechaAltaPallet);        
         model.addAttribute("fechaActual", fechaActual);        
+        model.addAttribute("fechaFormateadaPallet", fechaFormateadaPallet);
         model.addAttribute("url", url);
         
         return "/ordendeproduccion/ordendeproduccionpalletprint"; 
@@ -5748,11 +5767,14 @@ public class OrdenDeProduccionDetalleController {
         String fechaAltaScrap = "Sin información";
         String fechaAltaLote = "Sin información";
         String fechaActual = "Sin información";
+        String fechaFormateadaScrap = "Sin información";
         String url = "http://localhost:8080/thyssenplastic/ordenDeProduccionDetalle/viewbobina/xxxx";
         
         Calendar c = Calendar.getInstance();        
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
         fechaActual = formato.format(c.getTime());
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         
         if(ordendeproduccionscrappk != null && !ordendeproduccionscrappk.isEmpty()) {
             
@@ -5763,6 +5785,10 @@ public class OrdenDeProduccionDetalleController {
                 codigoScrap = ordenDeProduccionScrap.getCodigo();
                 pesoTotal = ordenDeProduccionScrap.getPesoTotal().toString();
                 fechaAltaScrap = ordenDeProduccionScrap.getFechaAlta().toString();
+                Date fechaScrapAFormatear = ordenDeProduccionScrap.getFechaAlta();
+                if (fechaScrapAFormatear != null) {
+                    fechaFormateadaScrap = sdf.format(fechaScrapAFormatear);
+                }
                 url = "http://localhost:8080/thyssenplastic/ordenDeProduccionDetalle/viewscrap/"+ordenDeProduccionScrap.getId();
                 
                 OrdenDeProduccionService ordenDeProduccionService = new OrdenDeProduccionServiceImpl();   
@@ -5819,6 +5845,7 @@ public class OrdenDeProduccionDetalleController {
         model.addAttribute("fechaAltaScrap", fechaAltaScrap);        
         model.addAttribute("fechaAltaLote", fechaAltaLote);        
         model.addAttribute("fechaActual", fechaActual);                
+        model.addAttribute("fechaFormateadaScrap", fechaFormateadaScrap);
         model.addAttribute("url", url);
         
         return "/ordendeproduccion/ordendeproduccionscrapprint"; 
