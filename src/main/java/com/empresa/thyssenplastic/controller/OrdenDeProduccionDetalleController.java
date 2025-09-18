@@ -4425,7 +4425,6 @@ public class OrdenDeProduccionDetalleController {
         fechaActual = formato.format(c.getTime());
         
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        fechaFormateadaBulto = sdf.format(c.getTime());
         
         if(ordendeproduccionbultopk != null && !ordendeproduccionbultopk.isEmpty()) {
             
@@ -4436,6 +4435,10 @@ public class OrdenDeProduccionDetalleController {
                 codigoBulto = ordenDeProduccionBulto.getCodigo();
                 fechaAltaBulto = formato.format(ordenDeProduccionBulto.getFechaAlta());
                 url = "http://localhost:8080/thyssenplastic/ordenDeProduccionDetalle/viewbulto/"+ordenDeProduccionBulto.getId();
+                Date fechaBultoAFormatear = ordenDeProduccionBulto.getFechaAlta();
+                if (fechaBultoAFormatear != null) {
+                    fechaFormateadaBulto = sdf.format(fechaBultoAFormatear);
+                }
                 
                 OrdenDeProduccionService ordenDeProduccionService = new OrdenDeProduccionServiceImpl();   
                 OrdenDeProduccionModel ordenDeProduccionModel = ordenDeProduccionService.getByPk(Integer.valueOf(ordenDeProduccionBulto.getIdOrdenDeProduccion()));
