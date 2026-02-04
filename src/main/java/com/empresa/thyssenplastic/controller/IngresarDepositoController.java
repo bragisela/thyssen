@@ -349,7 +349,7 @@ public class IngresarDepositoController {
                 ingresarDepositoModel.setFechaAlta(new Date());
                 ingresarDepositoModel.setIdUsuarioAlta(user.getId());
                 if(ingresarDepositoForm.getAction().equalsIgnoreCase("add") || ingresarDepositoForm.getAction().equalsIgnoreCase("edit")) {
-                    if (codigo.startsWith("B")) {
+                    if (codigo.toUpperCase().startsWith("B")) {
                         System.out.println("ENTRO POR BOBINA:");
                         OrdenDeProduccionBobinaModel bobina = ordenDeProduccionBobinaService.getByCode(codigo);
                         if(bobina != null) {
@@ -402,7 +402,7 @@ public class IngresarDepositoController {
                             }
                         }
                     }
-                    if (codigo.startsWith("R")) {
+                    if (codigo.toUpperCase().startsWith("R")) {
                         System.out.println("ENTRO POR BULTO:");
                         OrdenDeProduccionBultoModel bulto = ordenDeProduccionBultoService.getByCode(codigo);
                         if(bulto != null) {
@@ -462,7 +462,7 @@ public class IngresarDepositoController {
                         }
                     }
                     
-                    if (codigo.startsWith("P")) {
+                    if (codigo.toUpperCase().startsWith("P")) {
                         System.out.println("ENTRO POR PALLET:");
                         OrdenDeProduccionPalletModel pallet = ordenDeProduccionPalletService.getByCode(codigo);
                         if(pallet != null) {
@@ -796,7 +796,7 @@ public class IngresarDepositoController {
                 
                 
                 if(egresoDepositoForm.getAction().equalsIgnoreCase("add") || egresoDepositoForm.getAction().equalsIgnoreCase("edit")) {
-                    if (codigo.startsWith("B")) {
+                    if (codigo.toUpperCase().startsWith("B")) {
                         OrdenDeProduccionBobinaModel bobina = ordenDeProduccionBobinaService.getByCode(codigo);
                         if(bobina != null) {
                            egresoDepositoModel.setIdBobina(bobina.getId());
@@ -811,7 +811,7 @@ public class IngresarDepositoController {
                         }
                          
                     }
-                    if (codigo.startsWith("R")) { 
+                    if (codigo.toUpperCase().startsWith("R")) { 
                         OrdenDeProduccionBultoModel bulto = ordenDeProduccionBultoService.getByCode(codigo);
                         if(bulto != null) {
                            egresoDepositoModel.setIdBulto(bulto.getId());
@@ -836,7 +836,7 @@ public class IngresarDepositoController {
                         }
                     }
                     
-                    if (codigo.startsWith("P")) { 
+                    if (codigo.toUpperCase().startsWith("P")) { 
                         OrdenDeProduccionPalletModel pallet = ordenDeProduccionPalletService.getByCode(codigo);
                         if(pallet != null) {
                            egresoDepositoModel.setIdPallet(pallet.getId());
