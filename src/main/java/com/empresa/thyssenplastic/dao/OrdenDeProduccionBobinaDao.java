@@ -5,6 +5,7 @@
 package com.empresa.thyssenplastic.dao;
 
 import com.empresa.thyssenplastic.dto.OrdenDepositoDto;
+import com.empresa.thyssenplastic.dto.EtiquetaDisponibleDto;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionBobinaModel;
 import java.util.List;
 
@@ -29,4 +30,6 @@ public interface OrdenDeProduccionBobinaDao extends GenericDao {
     List<OrdenDeProduccionBobinaModel> getAllNotAvailableForRemitoByOrdenDeProduccion(Integer idOrdenDeProduccion);
     
     List<OrdenDepositoDto> getAllByDeposito();
+    
+    List<EtiquetaDisponibleDto> getDisponiblesByDepositoAndOrden(Integer idDeposito, Integer idOrdenDeProduccion);
 }
