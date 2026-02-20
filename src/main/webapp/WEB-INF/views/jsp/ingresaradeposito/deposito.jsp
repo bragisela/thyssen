@@ -84,7 +84,7 @@
                                         ${deposito.sumapeso - deposito.pesoConsumido}
                                     </span>
 
-                                    <a href="${pageContext.request.contextPath}/depositoStockDisponible/${deposito.nombreDeposito}/${deposito.idOrdenDeProduccion}" 
+                                    <a href="/thyssenplastic/depositoStockDisponible/${deposito.nombreDeposito}/${deposito.idOrdenDeProduccion}" 
                                         class="btn-ver-etiquetas">
                                          Ver etiquetas
                                      </a>
