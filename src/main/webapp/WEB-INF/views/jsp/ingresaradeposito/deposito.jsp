@@ -79,7 +79,16 @@
                                     </td>
                                         
                                    <td>${deposito.sumapeso}</td>
-                                   <td>${deposito.sumapeso - deposito.pesoConsumido}</td>
+                                 <td style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span>
+                                        ${deposito.sumapeso - deposito.pesoConsumido}
+                                    </span>
+
+                                    <a href="${pageContext.request.contextPath}/depositoStockDisponible/${deposito.nombreDeposito}/${deposito.idOrdenDeProduccion}" 
+                                        class="btn-ver-etiquetas">
+                                         Ver etiquetas
+                                     </a>
+                                </td>
                                    <td>${deposito.pesoConsumido}</td>
                                 </tr>
                             </c:forEach>
@@ -170,6 +179,26 @@
   .custom-icon-color:hover::before {
     visibility: visible;
   }
+  
+.btn-ver-etiquetas {
+  display: inline-block;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1B5E20; /* verde oscuro elegante */
+  background-color: #E8F5E9; /* verde muy suave */
+  border: 1px solid #A5D6A7;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-ver-etiquetas:hover {
+  background-color: #C8E6C9;
+  border-color: #66BB6A;
+  color: #0D3B16;
+  transform: translateY(-1px);
+}
   
   
 </style>

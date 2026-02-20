@@ -7,6 +7,7 @@ package com.empresa.thyssenplastic.service.impl;
 import com.empresa.thyssenplastic.dao.OrdenDeProduccionBobinaDao;
 import com.empresa.thyssenplastic.dao.impl.OrdenDeProduccionBobinaDaoImpl;
 import com.empresa.thyssenplastic.dto.OrdenDepositoDto;
+import com.empresa.thyssenplastic.dto.EtiquetaDisponibleDto;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionBobinaModel;
 import com.empresa.thyssenplastic.service.OrdenDeProduccionBobinaService;
 import java.util.ArrayList;
@@ -133,5 +134,18 @@ public class OrdenDeProduccionBobinaServiceImpl implements OrdenDeProduccionBobi
 
         return getAllByDepositoDto;
     }
+
+    public List<EtiquetaDisponibleDto> getDisponiblesByDepositoAndOrden(Integer idDeposito, Integer idOrden) {
+        List<EtiquetaDisponibleDto> etiquetas = new ArrayList<EtiquetaDisponibleDto>();
+        try {
+            OrdenDeProduccionBobinaDao ordenDeProduccionBobinaDao = new OrdenDeProduccionBobinaDaoImpl();
+            etiquetas = ordenDeProduccionBobinaDao.getDisponiblesByDepositoAndOrden(idDeposito, idOrden);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+            return etiquetas;
+    }
+
     
 }

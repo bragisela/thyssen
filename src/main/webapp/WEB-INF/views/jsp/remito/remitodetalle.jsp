@@ -661,10 +661,10 @@
         cantidad = parseFloat(cantidad);
         maximo = parseFloat(maximo);
 
-        if (isNaN(cantidad) || cantidad < 0 || cantidad > maximo) {
-           alert('Ingrese una cantidad válida (mayor o igual a cero y no mayor al disponible).');
-           return;
-        }
+        //if (isNaN(cantidad) || cantidad < 0 || cantidad > maximo) {
+           //alert('Ingrese una cantidad válida (mayor o igual a cero y no mayor al disponible).');
+           //return;
+        //}
    
                 
         var action = "alta";

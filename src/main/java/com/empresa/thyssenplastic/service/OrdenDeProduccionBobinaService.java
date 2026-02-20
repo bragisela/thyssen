@@ -5,6 +5,7 @@
 package com.empresa.thyssenplastic.service;
 
 import com.empresa.thyssenplastic.dto.OrdenDepositoDto;
+import com.empresa.thyssenplastic.dto.EtiquetaDisponibleDto;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionBobinaModel;
 import java.util.List;
 
@@ -33,4 +34,6 @@ public interface OrdenDeProduccionBobinaService {
     List<OrdenDeProduccionBobinaModel> getAllNotAvailableForRemitoByOrdenDeProduccion(Integer idOrdenDeProduccion);
     
     List<OrdenDepositoDto> getAllByDeposito();
+
+    List<EtiquetaDisponibleDto> getDisponiblesByDepositoAndOrden(Integer idDeposito, Integer idOrden);
 }

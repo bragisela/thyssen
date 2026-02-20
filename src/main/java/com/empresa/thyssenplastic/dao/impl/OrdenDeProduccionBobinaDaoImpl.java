@@ -5,9 +5,11 @@
 package com.empresa.thyssenplastic.dao.impl;
 
 import com.empresa.thyssenplastic.dao.OrdenDeProduccionBobinaDao;
+import com.empresa.thyssenplastic.dto.EtiquetaDisponibleDto;
 import com.empresa.thyssenplastic.dto.OrdenDepositoDto;
 import com.empresa.thyssenplastic.hibernate.HibernateUtil;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionBobinaModel;
+import com.empresa.thyssenplastic.model.OrdenDeProduccionPalletModel;
 import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Session;
@@ -188,5 +190,111 @@ public class OrdenDeProduccionBobinaDaoImpl extends GenericDaoImpl implements Or
             return resultList;
         }
 
-    
+       @Override
+        public List<EtiquetaDisponibleDto> getDisponiblesByDepositoAndOrden(
+            Integer idDeposito,
+            Integer idOrden) {
+
+            List<EtiquetaDisponibleDto> resultList = new ArrayList<EtiquetaDisponibleDto>();
+
+            Session session = null;
+
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+
+        // =======================
+        // BOBINAS (solo las que NO estan en bulto)
+        // =======================
+        String hqlBobina = "SELECT opb.codigo, t.valor, opb.pesoNeto " +
+                "FROM OrdenDeProduccionBobinaModel opb " +
+                "JOIN TipoModel t ON opb.idDeposito = t.id " +
+                "WHERE opb.idDeposito = :idDeposito " +
+                "AND opb.idOrdenDeProduccion = :idOrden " +
+                "AND opb.idRemito IS NULL " +
+                "AND (opb.estaEnBulto = false OR opb.estaEnBulto IS NULL)";
+
+            Query queryBobina = session.createQuery(hqlBobina);
+            queryBobina.setParameter("idDeposito", idDeposito);
+            queryBobina.setParameter("idOrden", idOrden);
+
+            List<Object[]> bobinas = queryBobina.list();
+
+            for (Object[] row : bobinas) {
+                resultList.add(
+                    new EtiquetaDisponibleDto(
+                            "BOBINA",
+                            (String) row[0],
+                            (String) row[1],
+                            (Double) row[2]
+                    )
+                );
+            }
+
+
+            // =======================
+            // BULTOS (solo los que NO estan en pallet)
+            // =======================
+           String hqlBulto = 
+            "SELECT opb.codigo, t.valor " +
+            "FROM OrdenDeProduccionBultoModel opb " +
+            "JOIN TipoModel t ON opb.idDeposito = t.id " +
+            "WHERE opb.idDeposito = :idDeposito " +
+            "AND opb.idOrdenDeProduccion = :idOrden " +
+            "AND opb.idRemito IS NULL " +
+            "AND (opb.estaEnPallet = false OR opb.estaEnPallet IS NULL)";
+
+            Query queryBulto = session.createQuery(hqlBulto);
+            queryBulto.setParameter("idDeposito", idDeposito);
+            queryBulto.setParameter("idOrden", idOrden);
+
+            List<Object[]> bultos = queryBulto.list();
+
+            for (Object[] row : bultos) {
+                resultList.add(
+                    new EtiquetaDisponibleDto(
+                            "BULTO",
+                            (String) row[0],
+                            (String) row[1],
+                            10.3
+                    )
+                );
+            }
+            
+            // =======================
+            // PALLETS (todos los disponibles)
+            // =======================
+            String hqlPallet = "SELECT opp.codigo, t.valor " +
+                    "FROM OrdenDeProduccionPalletModel opp " +
+                    "JOIN TipoModel t ON opp.idDeposito = t.id " +
+                    "WHERE opp.idDeposito = :idDeposito " +
+                    "AND opp.idOrdenDeProduccion = :idOrden " +
+                    "AND opp.idRemito IS NULL";
+
+            Query queryPallet = session.createQuery(hqlPallet);
+            queryPallet.setParameter("idDeposito", idDeposito);
+            queryPallet.setParameter("idOrden", idOrden);
+
+            List<Object[]> pallets = queryPallet.list();
+
+            for (Object[] row : pallets) {
+                resultList.add(
+                    new EtiquetaDisponibleDto(
+                            "PALLET",
+                            (String) row[0],
+                            (String) row[1],
+                            10.2
+                    )
+                );
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+
+        return resultList;
+    }
 }

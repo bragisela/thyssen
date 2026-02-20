@@ -11,6 +11,7 @@ import com.empresa.thyssenplastic.controller.form.OrdenDeProduccionForm;
 import com.empresa.thyssenplastic.controller.form.UserForm;
 import com.empresa.thyssenplastic.dto.OrdenDeProduccionDto;
 import com.empresa.thyssenplastic.dto.OrdenDepositoDto;
+import com.empresa.thyssenplastic.dto.EtiquetaDisponibleDto;
 import com.empresa.thyssenplastic.model.ArticuloFichaTecnicaModel;
 import com.empresa.thyssenplastic.model.ArticuloModel;
 import com.empresa.thyssenplastic.model.ClienteModel;
@@ -108,7 +109,7 @@ public class OrdenDeProduccionController {
         ordenDeProduccionForm.setOperacion(operacion);
         
         model.addAttribute("ordenDeProduccionForm", ordenDeProduccionForm);  
-        model.addAttribute("titleOrdenDeProduccion", "Nueva Order De Producción");  
+        model.addAttribute("titleOrdenDeProduccion", "Nueva Order De Produccion");  
         model.addAttribute("buttonLabel", "Guardar");
         
         OrdenDeProduccionService ordenDeProduccionService = new OrdenDeProduccionServiceImpl();   
@@ -304,7 +305,7 @@ public class OrdenDeProduccionController {
             ordenDeProduccionModel = ordenDeProduccionService.getByPk(Integer.valueOf(id));
             if(ordenDeProduccionModel == null) {
                 modelAndView.setViewName("error");
-                modelAndView.addObject("errorMessage", "Error: id de ordenDeProduccion inválido.");
+                modelAndView.addObject("errorMessage", "Error: id de ordenDeProduccion invï¿½lido.");
                 return modelAndView;                
             } 
             if(user.getRol() != Utils.ROL_OFICINA && user.getRol() != Utils.ROL_PLANTA) {
@@ -376,14 +377,14 @@ public class OrdenDeProduccionController {
             if(ordenDeProduccionForm.getAction().equalsIgnoreCase("remove")) {
                 if(ordenDeProduccionModel.getId() == null) {
                     modelAndView.setViewName("error");
-                    modelAndView.addObject("errorMessage", "Error: id de ordenDeProduccion inválido.");
+                    modelAndView.addObject("errorMessage", "Error: id de ordenDeProduccion invï¿½lido.");
                     return modelAndView;                                    
                 }
                 
                 ordenDeProduccionService.delete(ordenDeProduccionModel);
             } else {
                 modelAndView.setViewName("error");
-                modelAndView.addObject("errorMessage", "Error: operación inválida.");
+                modelAndView.addObject("errorMessage", "Error: operaciï¿½n invï¿½lida.");
                 return modelAndView;                                
             }
         }
@@ -402,7 +403,7 @@ public class OrdenDeProduccionController {
         }
 
         if(ordenDeProduccionpk == null) {
-            model.addAttribute("errorMessage", "Error: OrdenDeProduccion inválido");         
+            model.addAttribute("errorMessage", "Error: OrdenDeProduccion invï¿½lido");         
             return "/error";                
         }
         
@@ -412,7 +413,7 @@ public class OrdenDeProduccionController {
         OrdenDeProduccionService ordenDeProduccionService = new OrdenDeProduccionServiceImpl();   
         OrdenDeProduccionModel ordenDeProduccion = ordenDeProduccionService.getByPk(Integer.valueOf(ordenDeProduccionpk));
         if(ordenDeProduccion == null) {
-            model.addAttribute("errorMessage", "Error: OrdenDeProduccion inválido. No ha sido encontrado.");         
+            model.addAttribute("errorMessage", "Error: OrdenDeProduccion invï¿½lido. No ha sido encontrado.");         
             return "/error";    
         }
                  
@@ -426,7 +427,7 @@ public class OrdenDeProduccionController {
         UserModel user = userService.getUserById(userId);
 
         if(user.getRol() != Utils.ROL_OFICINA) {
-            model.addAttribute("errorMessage", "Error: usuario no permite esta operación.");         
+            model.addAttribute("errorMessage", "Error: usuario no permite esta operaciï¿½n.");         
             return "/error";                                                                
         }
         
@@ -485,7 +486,7 @@ public class OrdenDeProduccionController {
         
         ordenDeProduccionForm.setAction("edit");
         model.addAttribute("ordenDeProduccionForm", ordenDeProduccionForm);  
-        model.addAttribute("titleOrdenDeProduccion", "Editar Orden de Producción");
+        model.addAttribute("titleOrdenDeProduccion", "Editar Orden de Producciï¿½n");
         model.addAttribute("buttonLabel", "Guardar");
         model.addAttribute("ordenDeProduccionName", ordenDeProduccion.getId() + " - " + ordenDeProduccion.getIdCliente() + " - " + ordenDeProduccion.getIdArticulo());        
         
@@ -583,7 +584,7 @@ public class OrdenDeProduccionController {
         }
 
         if(ordenDeProduccionpk == null) {
-            model.addAttribute("errorMessage", "Error: OrdenDeProduccion inválido");         
+            model.addAttribute("errorMessage", "Error: OrdenDeProduccion invï¿½lido");         
             return "/error";                
         }
         
@@ -593,7 +594,7 @@ public class OrdenDeProduccionController {
         OrdenDeProduccionService ordenDeProduccionService = new OrdenDeProduccionServiceImpl();   
         OrdenDeProduccionModel ordenDeProduccion = ordenDeProduccionService.getByPk(Integer.valueOf(ordenDeProduccionpk));
         if(ordenDeProduccion == null) {
-            model.addAttribute("errorMessage", "Error: OrdenDeProduccion inválido. No ha sido encontrado.");         
+            model.addAttribute("errorMessage", "Error: OrdenDeProduccion invï¿½lido. No ha sido encontrado.");         
             return "/error";    
         }
                  
@@ -607,7 +608,7 @@ public class OrdenDeProduccionController {
         UserModel user = userService.getUserById(userId);
 
         if(user.getRol() != Utils.ROL_OFICINA) {
-            model.addAttribute("errorMessage", "Error: usuario no permite esta operación.");         
+            model.addAttribute("errorMessage", "Error: usuario no permite esta operaciï¿½n.");         
             return "/error";                                                                
         }
         
@@ -685,7 +686,7 @@ public class OrdenDeProduccionController {
         }
 
         if(ordenDeProduccionpk == null) {
-            model.addAttribute("errorMessage", "Error: OrdenDeProduccion inválido");         
+            model.addAttribute("errorMessage", "Error: OrdenDeProduccion invï¿½lido");         
             return "/error";                
         }
         
@@ -695,7 +696,7 @@ public class OrdenDeProduccionController {
         OrdenDeProduccionService ordenDeProduccionService = new OrdenDeProduccionServiceImpl();   
         OrdenDeProduccionModel ordenDeProduccion = ordenDeProduccionService.getByPk(Integer.valueOf(ordenDeProduccionpk));
         if(ordenDeProduccion == null) {
-            model.addAttribute("errorMessage", "Error: OrdenDeProduccion inválido. No ha sido encontrado.");         
+            model.addAttribute("errorMessage", "Error: OrdenDeProduccion invï¿½lido. No ha sido encontrado.");         
             return "/error";    
         }
                  
@@ -709,7 +710,7 @@ public class OrdenDeProduccionController {
         UserModel user = userService.getUserById(userId);
 
         if(user.getRol() != Utils.ROL_OFICINA) {
-            model.addAttribute("errorMessage", "Error: usuario no permite esta operación.");         
+            model.addAttribute("errorMessage", "Error: usuario no permite esta operaciï¿½n.");         
             return "/error";                                                                
         }
         
@@ -768,7 +769,7 @@ public class OrdenDeProduccionController {
         
         ordenDeProduccionForm.setAction("remove");
         model.addAttribute("ordenDeProduccionForm", ordenDeProduccionForm);  
-        model.addAttribute("titleOrdenDeProduccion", "Eliminar Orden de Producción");
+        model.addAttribute("titleOrdenDeProduccion", "Eliminar Orden de Producciï¿½n");
         model.addAttribute("buttonLabel", "Eliminar");
         model.addAttribute("ordenDeProduccionName", ordenDeProduccion.getId() + " - " + ordenDeProduccion.getIdCliente() + " - " + ordenDeProduccion.getIdArticulo());        
         
@@ -865,7 +866,7 @@ public class OrdenDeProduccionController {
         }
 
         if(ordenDeProduccionpk == null) {
-            model.addAttribute("errorMessage", "Error: OrdenDeProduccion inválido");         
+            model.addAttribute("errorMessage", "Error: OrdenDeProduccion invï¿½lido");         
             return "/error";                
         }
         
@@ -875,7 +876,7 @@ public class OrdenDeProduccionController {
         OrdenDeProduccionService ordenDeProduccionService = new OrdenDeProduccionServiceImpl();   
         OrdenDeProduccionModel ordenDeProduccion = ordenDeProduccionService.getByPk(Integer.valueOf(ordenDeProduccionpk));
         if(ordenDeProduccion == null) {
-            model.addAttribute("errorMessage", "Error: OrdenDeProduccion inválido. No ha sido encontrado.");         
+            model.addAttribute("errorMessage", "Error: OrdenDeProduccion invï¿½lido. No ha sido encontrado.");         
             return "/error";    
         }
                          
@@ -884,7 +885,7 @@ public class OrdenDeProduccionController {
         UserModel user = userService.getUserById(userId);
 
         if(user.getRol() != Utils.ROL_OFICINA && user.getRol() != Utils.ROL_PLANTA && user.getRol() != Utils.ROL_DEPOSITO) {
-            model.addAttribute("errorMessage", "Error: usuario no permite esta operación.");         
+            model.addAttribute("errorMessage", "Error: usuario no permite esta operaciï¿½n.");         
             return "/error";                                                                
         }
         
@@ -946,7 +947,7 @@ public class OrdenDeProduccionController {
         
         ordenDeProduccionForm.setAction("view");
         model.addAttribute("ordenDeProduccionForm", ordenDeProduccionForm);  
-        model.addAttribute("titleOrdenDeProduccion", "Ver Orden de Producción");
+        model.addAttribute("titleOrdenDeProduccion", "Ver Orden de Producciï¿½n");
         model.addAttribute("buttonLabel", "Ver");
         model.addAttribute("ordenDeProduccionName", ordenDeProduccion.getId() + " - " + ordenDeProduccion.getIdCliente() + " - " + ordenDeProduccion.getIdArticulo());        
         
@@ -1046,7 +1047,7 @@ public class OrdenDeProduccionController {
         }
 
         if(ordenDeProduccionPk == null || ordenDeProduccionPk.isEmpty()) {
-            model.addAttribute("errorMessage", "Error: OrdenDeProduccion inválido");         
+            model.addAttribute("errorMessage", "Error: OrdenDeProduccion invï¿½lido");         
             return "/error";                
         }
         
@@ -1097,7 +1098,7 @@ public class OrdenDeProduccionController {
         }
 
         if(ordenDeProduccionPk == null || ordenDeProduccionPk.isEmpty()) {
-            model.addAttribute("errorMessage", "Error: OrdenDeProduccion inválido");         
+            model.addAttribute("errorMessage", "Error: OrdenDeProduccion invï¿½lido");         
             return "/error";                
         }
         
@@ -1152,7 +1153,7 @@ public class OrdenDeProduccionController {
         }
 
         if(ordenDeProduccionpk == null) {
-            model.addAttribute("errorMessage", "Error: OrdenDeProduccion inválido");         
+            model.addAttribute("errorMessage", "Error: OrdenDeProduccion invï¿½lido");         
             return "/error";                
         }
         
@@ -1162,7 +1163,7 @@ public class OrdenDeProduccionController {
         OrdenDeProduccionService ordenDeProduccionService = new OrdenDeProduccionServiceImpl();   
         OrdenDeProduccionModel ordenDeProduccion = ordenDeProduccionService.getByPk(Integer.valueOf(ordenDeProduccionpk));
         if(ordenDeProduccion == null) {
-            model.addAttribute("errorMessage", "Error: OrdenDeProduccion inválido. No ha sido encontrado.");         
+            model.addAttribute("errorMessage", "Error: OrdenDeProduccion invï¿½lido. No ha sido encontrado.");         
             return "/error";    
         }
                  
@@ -1176,7 +1177,7 @@ public class OrdenDeProduccionController {
         UserModel user = userService.getUserById(userId);
 
         if(user.getRol() != Utils.ROL_OFICINA) {
-            model.addAttribute("errorMessage", "Error: usuario no permite esta operación.");         
+            model.addAttribute("errorMessage", "Error: usuario no permite esta operaciï¿½n.");         
             return "/error";                                                                
         }
         
@@ -1317,4 +1318,39 @@ public class OrdenDeProduccionController {
    
         return "/ingresaradeposito/deposito";
     }
+
+    @RequestMapping(value = "/depositoStockDisponible/{nombreDeposito}/{idOrden}", method = RequestMethod.GET)
+        public String getHomedepositoStockDisponible(
+                @PathVariable String nombreDeposito,
+                @PathVariable Integer idOrden,
+                HttpServletRequest req,
+                ModelMap model) {
+
+            if(!Utils.isAutenticated(req)) {
+                model.addAttribute("userForm", new UserForm());         
+                return "/login/login";            
+            }
+            
+            TipoService tipoService = new TipoServiceImpl();
+            TipoModel deposito = tipoService.getByValor(nombreDeposito);
+
+            if (deposito == null) {
+                model.addAttribute("error", "Deposito no encontrado");
+                return "/error";
+            }
+
+            Integer idDeposito = deposito.getId();
+
+            OrdenDeProduccionBobinaService ordenDeProduccionBobinaService = new OrdenDeProduccionBobinaServiceImpl();
+
+            List<EtiquetaDisponibleDto> etiquetas =
+                    ordenDeProduccionBobinaService.getDisponiblesByDepositoAndOrden(idDeposito, idOrden);
+
+            model.addAttribute("etiquetas", etiquetas);
+            model.addAttribute("nombreDeposito", nombreDeposito);
+            model.addAttribute("idOrdenDeProduccion", idOrden);
+
+            return "/ingresaradeposito/depositoStockDisponible";
+        }
+
 }
