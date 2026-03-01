@@ -109,5 +109,17 @@ public class EgresoDepositoDaoImpl extends GenericDaoImpl implements EgresoDepos
 
         return egresoDeposito;
     }
+    
+    public List<EgresoDepositoModel> getByIdsRemitoDetalle(List<Integer> ids) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            return session.createQuery(
+                "FROM EgresoDepositoModel WHERE idRemito IN :ids", EgresoDepositoModel.class)
+                .setParameter("ids", ids)
+                .list();
+        } finally {
+            session.close();
+            }
+        }
 
 }

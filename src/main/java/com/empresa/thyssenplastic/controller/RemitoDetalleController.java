@@ -23,6 +23,8 @@ import com.empresa.thyssenplastic.model.ContactoModel;
 import com.empresa.thyssenplastic.model.DomicilioModel;
 import com.empresa.thyssenplastic.model.LocalidadModel;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionBobinaModel;
+import com.empresa.thyssenplastic.service.impl.EgresoDepositoServiceImpl;
+import com.empresa.thyssenplastic.model.EgresoDepositoModel;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionBultoModel;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionModel;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionPalletModel;
@@ -43,6 +45,7 @@ import com.empresa.thyssenplastic.service.OrdenDeProduccionPalletService;
 import com.empresa.thyssenplastic.service.OrdenDeProduccionService;
 import com.empresa.thyssenplastic.service.ProveedorService;
 import com.empresa.thyssenplastic.service.RemitoDetalleService;
+import com.empresa.thyssenplastic.service.EgresoDepositoService;
 import com.empresa.thyssenplastic.service.RemitoService;
 import com.empresa.thyssenplastic.service.TipoService;
 import com.empresa.thyssenplastic.service.UserService;
@@ -2403,5 +2406,95 @@ public class RemitoDetalleController {
 
         return modelAndView; 
     }    
- 
+    
+    @RequestMapping(value = "/remitoDetalle/verMovimientosRemito", method = RequestMethod.GET)
+        public String getHomeRemitoDetalleItemsSinId(HttpServletRequest req, ModelMap model) {
+            return procesarVista("", req, model);
+        }
+
+        @RequestMapping(value = "/remitoDetalle/verMovimientosRemito/{idRemito}", method = RequestMethod.GET)
+        public String getHomeRemitoDetalleItems(@PathVariable String idRemito, HttpServletRequest req, ModelMap model) {
+            return procesarVista(idRemito, req, model);
+        }
+
+        private String procesarVista(String idRemito, HttpServletRequest req, ModelMap model) {
+            if (idRemito == null || idRemito.trim().isEmpty()) {
+                model.addAttribute("remitoDetalles", new ArrayList<RemitoDetalleModel>());
+                model.addAttribute("egresosPorDetalle", new HashMap<Integer, List<EgresoDepositoModel>>());
+                model.addAttribute("idRemito", "");
+                return "/remito/movimientosremito";
+            }
+
+            if (!Utils.isAutenticated(req)) {
+                model.addAttribute("userForm", new UserForm());
+                return "/login/login";
+            }
+
+            // 1. Traer todos los detalles del remito
+            RemitoDetalleService remitoDetalleService = new RemitoDetalleServiceImpl();
+            List<RemitoDetalleModel> remitoDetalles = remitoDetalleService.getAllByRemito(Integer.valueOf(idRemito));
+
+            // 2. Extraer ids de detalles
+            List<Integer> idsDetalles = new ArrayList<Integer>();
+            for (RemitoDetalleModel detalle : remitoDetalles) {
+                idsDetalles.add(detalle.getId());
+            }
+
+            // 3. Traer todos los egresos
+            EgresoDepositoService egresoDepositoService = new EgresoDepositoServiceImpl();
+            List<EgresoDepositoModel> todosLosEgresos = egresoDepositoService.getByIdsRemitoDetalle(idsDetalles);
+
+            // 4. Agrupar egresos por idRemitoDetalle
+            Map<Integer, List<EgresoDepositoModel>> egresosPorDetalle = new HashMap<Integer, List<EgresoDepositoModel>>();
+            for (EgresoDepositoModel egreso : todosLosEgresos) {
+                Integer key = egreso.getIdRemito();
+                if (!egresosPorDetalle.containsKey(key)) {
+                    egresosPorDetalle.put(key, new ArrayList<EgresoDepositoModel>());
+                }
+                egresosPorDetalle.get(key).add(egreso);
+            }
+
+            // 5. Armar mapa de nombre de depósito por idDeposito
+            TipoService tipoService = new TipoServiceImpl();
+            Map<Integer, String> nombreDepositoPorId = new HashMap<Integer, String>();
+            for (RemitoDetalleModel detalle : remitoDetalles) {
+                Integer idDep = detalle.getIdDeposito();
+                if (idDep != null && !nombreDepositoPorId.containsKey(idDep)) {
+                    TipoModel deposito = tipoService.getByPk(idDep); // o getByPk, según tu service
+                    if (deposito != null) {
+                        nombreDepositoPorId.put(idDep, deposito.getValor()); // o getNombre(), según el campo
+                    } else {
+                        nombreDepositoPorId.put(idDep, "Depósito " + idDep);
+                    }
+                }
+            }
+
+            // 6. Armar mapa de info de artículo por idOrdenDeProduccion del detalle
+            OrdenDeProduccionService ordenService = new OrdenDeProduccionServiceImpl();
+            ArticuloService articuloService = new ArticuloServiceImpl();
+            Map<Integer, String> denominacionPorDetalle = new HashMap<Integer, String>();
+            Map<Integer, Integer> ordenPorDetalle = new HashMap<Integer, Integer>();
+
+            for (RemitoDetalleModel detalle : remitoDetalles) {
+                Integer idOrden = detalle.getIdOrdenDeProduccion();
+                if (idOrden != null) {
+                    OrdenDeProduccionModel orden = ordenService.getByPk(idOrden);
+                    if (orden != null) {
+                        ordenPorDetalle.put(detalle.getId(), idOrden);
+                        ArticuloModel articulo = articuloService.getByPk(orden.getIdArticulo());
+                        if (articulo != null) {
+                            denominacionPorDetalle.put(detalle.getId(), articulo.getDenominacion()); // ajustá el getter
+                        }
+                    }
+                }
+            }
+
+            model.addAttribute("remitoDetalles", remitoDetalles);
+            model.addAttribute("egresosPorDetalle", egresosPorDetalle);
+            model.addAttribute("nombreDepositoPorId", nombreDepositoPorId);
+            model.addAttribute("denominacionPorDetalle", denominacionPorDetalle);
+            model.addAttribute("ordenPorDetalle", ordenPorDetalle);
+            model.addAttribute("idRemito", idRemito);
+            return "/remito/movimientosremito";
+        }
 }
