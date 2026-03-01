@@ -328,6 +328,39 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row col-xs-12 col-sm-12 col-xl-12">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+    <h5 style="margin: 0;">Detalle del Remito</h5>
+    
+    <c:set var="tieneBajas" value="false" />
+    <c:forEach items="${remitoDetalles}" var="rd">
+        <c:if test="${rd.cantidadBaja > 0}">
+            <c:set var="tieneBajas" value="true" />
+        </c:if>
+    </c:forEach>
+    
+    <c:choose>
+        <c:when test="${tieneBajas}">
+            <c:set var="totalBajas" value="0" />
+            <c:forEach items="${remitoDetalles}" var="rd">
+                <c:set var="totalBajas" value="${totalBajas + rd.cantidadBaja}" />
+            </c:forEach>
+            <a href="/thyssenplastic/remitoDetalle/verMovimientosRemito/${remito.codigoRemito}"
+               class="btn btn-info" style="position: relative;">
+                <i class="fa fa-history"></i> Ver Movimientos de Baja
+                <span style="position: absolute; top: -8px; right: -8px; background: #e74c3c; color: white;
+                             border-radius: 50%; width: 22px; height: 22px; font-size: 11px;
+                             display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                    ${totalBajas}
+                </span>
+            </a>
+        </c:when>
+        <c:otherwise>
+            <button class="btn btn-secondary" disabled title="Aún no hay bajas registradas">
+                <i class="fa fa-history"></i> Ver Movimientos de Baja
+            </button>
+        </c:otherwise>
+    </c:choose>
+</div>
                             <table id="remitodDetallesTable" class="display table table-striped table-hover cell-border" style="width: 90%">
                                 <thead>
                                     <tr>

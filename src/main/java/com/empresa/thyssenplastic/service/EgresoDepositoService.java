@@ -26,4 +26,6 @@ public interface EgresoDepositoService {
     EgresoDepositoModel getByIdBulto(Integer idBulto);
     
     EgresoDepositoModel getByIdPallet(Integer idPallet);
+    
+    List<EgresoDepositoModel> getByIdsRemitoDetalle(List<Integer> ids);
 }

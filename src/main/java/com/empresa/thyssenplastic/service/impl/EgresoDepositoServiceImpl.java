@@ -98,4 +98,15 @@ public class EgresoDepositoServiceImpl implements EgresoDepositoService {
         return egresoDeposito;
     }
     
+    public List<EgresoDepositoModel> getByIdsRemitoDetalle(List<Integer> ids) {
+        List<EgresoDepositoModel> egresos = new ArrayList<EgresoDepositoModel>();
+        try {
+            EgresoDepositoDao egresoDepositoDao = new EgresoDepositoDaoImpl();
+            egresos = egresoDepositoDao.getByIdsRemitoDetalle(ids);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return egresos;
+    }
+    
 }

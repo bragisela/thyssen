@@ -150,6 +150,10 @@
                                         <c:if test="${sessionInformation.rolUser == '1'}">
                                             <li style="font-size: 5px"><a href="/thyssenplastic/hojaDeRuta/"><i class="fa fa-truck ml-3"></i> Hoja De Ruta</a></li>
                                         </c:if>                                                                                                                        
+                                        <c:if test="${sessionInformation.rolUser == '1' || sessionInformation.rolUser == '2'}">
+                                            <li style="font-size: 5px"><a href="/thyssenplastic/remitoDetalle/verMovimientosRemito"><i class="fa fa-address-card ml-3"></i>Bajas Remito</a></li>
+                                        </c:if> 
+                                        
                                     </ul>                                    
                                 </a>
                         </c:if>
