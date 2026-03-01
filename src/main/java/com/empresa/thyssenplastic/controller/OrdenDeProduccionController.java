@@ -1352,5 +1352,58 @@ public class OrdenDeProduccionController {
 
             return "/ingresaradeposito/depositoStockDisponible";
         }
+        
+    @RequestMapping(value = "/ingresarDeposito/mantas", method = RequestMethod.GET)
+        public String getIngresarDepositoMantas(HttpServletRequest req, ModelMap model) {
+
+            if (!Utils.isAutenticated(req)) {
+                model.addAttribute("userForm", new UserForm());
+                return "/login/login";
+            }
+            
+              UserService userService = new UserServiceImpl();   
+        Integer userId = Integer.valueOf(Utils.getUserLoggedId(req));
+        UserModel user = userService.getUserById(userId);
+            
+        if(user.getRol() != Utils.ROL_OFICINA) {
+            model.addAttribute("errorMessage", "Error: usuario no permite esta operación.");         
+            return "/error";                                                                
+        }
+
+            OrdenDeProduccionService ordenDeProduccionService = new OrdenDeProduccionServiceImpl();
+            List<OrdenDeProduccionModel> ordenes = ordenDeProduccionService.getByIdArticulo(11);
+
+            List<Map<String, String>> ordenesDto = new ArrayList<Map<String, String>>();
+            for (OrdenDeProduccionModel orden : ordenes) {
+                Map<String, String> dto = new LinkedHashMap<String, String>();
+                dto.put("id", orden.getId().toString());
+                dto.put("estado", orden.getEstado());
+                dto.put("fecha", orden.getFechaAlta().toString().replace(" 00:00:00.0", ""));
+                ordenesDto.add(dto);
+            }
+
+           
+            TipoService tipoService = new TipoServiceImpl();
+            TipoModel depositoPrincipal = tipoService.getByValor("Principal");
+            TipoModel depositoObservado = tipoService.getByValor("Fuera de standard");
+            TipoModel depositoCampo      = tipoService.getByValor("Campo");
+
+            Map<String, String> depositoPorEstado = new LinkedHashMap<String, String>();
+            depositoPorEstado.put("ok",         depositoPrincipal.getId().toString());
+            depositoPorEstado.put("observado",  depositoObservado.getId().toString());
+            depositoPorEstado.put("sinmesurar", depositoCampo.getId().toString());
+
+            Map<String, String> nombreDepositoPorEstado = new LinkedHashMap<String, String>();
+            nombreDepositoPorEstado.put("ok",         depositoPrincipal.getValor());
+            nombreDepositoPorEstado.put("observado",  depositoObservado.getValor());
+            nombreDepositoPorEstado.put("sinmesurar", depositoCampo.getValor());
+
+            model.addAttribute("ordenes", ordenesDto);
+            model.addAttribute("depositoPorEstado", depositoPorEstado);
+            model.addAttribute("nombreDepositoPorEstado", nombreDepositoPorEstado);
+
+            return "/ingresaradeposito/mantasDeposito";
+        }
+        
 
 }

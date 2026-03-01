@@ -108,4 +108,15 @@ public class OrdenDeProduccionServiceImpl implements OrdenDeProduccionService {
 
         return ordenDeProducciones;
     }    
+    
+    public List<OrdenDeProduccionModel> getByIdArticulo(Integer idArticulo) {
+            List<OrdenDeProduccionModel> ordenDeProducciones = new ArrayList<OrdenDeProduccionModel>();
+            try {
+                OrdenDeProduccionDao ordenDeProduccionDao = new OrdenDeProduccionDaoImpl();
+                ordenDeProducciones = ordenDeProduccionDao.getByIdArticulo(idArticulo);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            return ordenDeProducciones;
+        }
 }

@@ -24,4 +24,6 @@ public interface OrdenDeProduccionDao extends GenericDao {
     List<OrdenDeProduccionModel> getAllCompleted();
     
     List<OrdenDeProduccionModel> getNotCompleted();
+    
+    List<OrdenDeProduccionModel> getByIdArticulo(Integer idArticulo);
 }

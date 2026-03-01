@@ -9,6 +9,7 @@ import com.empresa.thyssenplastic.controller.beans.ArticuloBean;
 import com.empresa.thyssenplastic.controller.beans.ArticuloFichaTecnicaBean;
 import com.empresa.thyssenplastic.controller.form.OrdenDeProduccionDetalleForm;
 import com.empresa.thyssenplastic.controller.form.OrdenDeProduccionForm;
+import com.empresa.thyssenplastic.controller.form.IngresarDepositoMantasForm;
 import com.empresa.thyssenplastic.controller.form.UserForm;
 import com.empresa.thyssenplastic.model.GraficoBobinaDetalleModel;
 import com.empresa.thyssenplastic.model.GraficoBobinaModel;
@@ -37,6 +38,9 @@ import com.empresa.thyssenplastic.dto.GraficoBobinaDto;
 import com.empresa.thyssenplastic.model.RemitoDetalleScrapModel;
 import com.empresa.thyssenplastic.model.UserModel;
 import com.empresa.thyssenplastic.service.OrdenDeProduccionBobinaService;
+import com.empresa.thyssenplastic.service.impl.IngresarDepositoServiceImpl;
+import com.empresa.thyssenplastic.service.IngresarDepositoService;
+import com.empresa.thyssenplastic.model.IngresarDepositoModel;
 import com.empresa.thyssenplastic.service.GraficoBobinaService;
 import com.empresa.thyssenplastic.service.ArticuloEtiquetaService;
 import com.empresa.thyssenplastic.service.ArticuloFichaTecnicaService;
@@ -6137,4 +6141,73 @@ public class OrdenDeProduccionDetalleController {
         return "/ordendeproduccion/ordendeproducciondetalle";
         
     }    
+    
+    @ResponseBody
+    @RequestMapping(value = "/ingresarDeposito/mantas/bobinas/{idOrden}", method = RequestMethod.GET)
+        
+        public List<Map<String, String>> getBobinasByOrden(
+                @PathVariable Integer idOrden,
+                HttpServletRequest req) {
+
+            List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+
+            if (!Utils.isAutenticated(req)) {
+                return result;
+            }
+
+            OrdenDeProduccionBobinaService bobinaService = new OrdenDeProduccionBobinaServiceImpl();
+            List<OrdenDeProduccionBobinaModel> bobinas = bobinaService.getAllByOrdenDeProduccion(idOrden);
+
+            for (OrdenDeProduccionBobinaModel bobina : bobinas) {
+                Map<String, String> dto = new LinkedHashMap<String, String>();
+                dto.put("id", bobina.getId().toString());
+                dto.put("codigo", bobina.getCodigo());
+                dto.put("estado", bobina.getEstado() != null ? bobina.getEstado() : "");
+                dto.put("tieneDeposito", bobina.getIdDeposito() != null ? "true" : "false");
+                result.add(dto);
+            }
+
+            return result;
+        }
+        
+        @RequestMapping(value = "/ingresarDeposito/mantas/procesar", method = RequestMethod.POST)
+            public ModelAndView procesarIngresarDepositoMantas(
+                    @ModelAttribute("ingresarDepositoMantasForm") IngresarDepositoMantasForm form,
+                    BindingResult result, HttpServletRequest req, ModelMap model) {
+
+                ModelAndView modelAndView = new ModelAndView();
+
+                if (!Utils.isAutenticated(req)) {
+                    model.addAttribute("userForm", new UserForm());
+                    modelAndView.setViewName("/login/login");
+                    return modelAndView;
+                }
+
+                UserService userService = new UserServiceImpl();
+                Integer userId = Integer.valueOf(Utils.getUserLoggedId(req));
+                UserModel user = userService.getUserById(userId);
+
+                OrdenDeProduccionBobinaService ordenDeProduccionBobinaService = new OrdenDeProduccionBobinaServiceImpl();
+                IngresarDepositoService ingresarDepositoService = new IngresarDepositoServiceImpl();
+
+                if (form.getIdsBobinas() != null && !form.getIdsBobinas().isEmpty()) {
+                    for (Integer idBobina : form.getIdsBobinas()) {
+                        OrdenDeProduccionBobinaModel bobina = ordenDeProduccionBobinaService.getByPk(idBobina);
+                        if (bobina != null) {
+                            bobina.setIdDeposito(form.getIdDeposito());
+                            ordenDeProduccionBobinaService.save(bobina);
+
+                            IngresarDepositoModel ingreso = new IngresarDepositoModel();
+                            ingreso.setIdBobina(bobina.getId());
+                            ingreso.setIdDeposito(form.getIdDeposito());
+                            ingreso.setFechaAlta(new Date());
+                            ingreso.setIdUsuarioAlta(user.getId());
+                            ingresarDepositoService.save(ingreso);
+                        }
+                    }
+                }
+
+                modelAndView.setViewName("redirect:/ingresarDeposito/mantas?exito=true");
+                return modelAndView;
+            }
 }
