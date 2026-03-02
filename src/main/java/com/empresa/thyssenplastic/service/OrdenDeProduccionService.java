@@ -28,4 +28,6 @@ public interface OrdenDeProduccionService {
     List<OrdenDeProduccionModel> getAllCompleted();
     
     List<OrdenDeProduccionModel> getNotCompleted();
+    
+    List<OrdenDeProduccionModel> getByIdArticulo(Integer idArticulo);
 }

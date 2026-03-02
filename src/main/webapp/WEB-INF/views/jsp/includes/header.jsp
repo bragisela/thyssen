@@ -195,6 +195,9 @@
                                     <c:if test="${sessionInformation.rolUser == '1' || sessionInformation.rolUser == '2'}">
                                         <li style="font-size: 5px"><a href="/thyssenplastic/ingresarDepositoScrap/"><i class="fa fa-address-card ml-3"></i>Depósito Scrap</a></li>
                                     </c:if>
+                                    <c:if test="${sessionInformation.rolUser == '1'}">
+                                        <li style="font-size: 5px"><a href="/thyssenplastic/ingresarDeposito/mantas"><i class="fa fa-address-card ml-3"></i> Ingresar a Depósito - Mantas</a></li>
+                                    </c:if> 
                                 </ul>                                
                             </li>
                         </c:if>                 

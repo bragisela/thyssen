@@ -98,4 +98,17 @@ public class OrdenDeProduccionDaoImpl extends GenericDaoImpl implements OrdenDeP
         return ordenDeProducciones;
     }
     
+    public List<OrdenDeProduccionModel> getByIdArticulo(Integer idArticulo) {
+        List<OrdenDeProduccionModel> ordenDeProducciones = new ArrayList<OrdenDeProduccionModel>();
+        try {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            ordenDeProducciones = session.createQuery("FROM OrdenDeProduccionModel WHERE idArticulo = :idArticulo", OrdenDeProduccionModel.class)
+                    .setParameter("idArticulo", idArticulo)
+                    .list();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return ordenDeProducciones;
+    }
+    
 }
