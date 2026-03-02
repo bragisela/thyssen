@@ -6193,7 +6193,7 @@ public class OrdenDeProduccionDetalleController {
                 if (form.getIdsBobinas() != null && !form.getIdsBobinas().isEmpty()) {
                     for (Integer idBobina : form.getIdsBobinas()) {
                         OrdenDeProduccionBobinaModel bobina = ordenDeProduccionBobinaService.getByPk(idBobina);
-                        if (bobina != null) {
+                        if (bobina != null && bobina.getIdDeposito() == null) {
                             bobina.setIdDeposito(form.getIdDeposito());
                             ordenDeProduccionBobinaService.save(bobina);
 

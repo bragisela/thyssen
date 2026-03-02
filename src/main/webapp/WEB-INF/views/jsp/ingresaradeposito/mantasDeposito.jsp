@@ -6,9 +6,7 @@
         <div class="container">
 
            <div class="mv-topbar">
-                <a href="javascript:history.back()" class="mv-back">
-                    Volver
-                </a>
+                
                 <h2 class="mv-title">Ingreso a deposito - Mantas</h2>
             </div>
 
@@ -459,6 +457,14 @@
         });
         document.getElementById('formIngreso').submit();
     }
+    
+    // Reset del boton si el browser restaura la pagina desde el historial
+    window.addEventListener('pageshow', function() {
+        var btn = document.getElementById('btnIngresar');
+        btn.innerHTML = 'Ingresar al deposito';
+        // actualizarContador re-evalua si debe estar habilitado o no
+        actualizarContador();
+    });
 </script>
 
 <%@include file = "/WEB-INF/views/jsp/includes/footer.jsp" %>
