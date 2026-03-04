@@ -158,5 +158,26 @@ public class OrdenDeProduccionBultoServiceImpl implements OrdenDeProduccionBulto
 
         return ordenDeProduccionPallets;
     }
+     
+     public List<OrdenDeProduccionBultoModel> getAllByIds(List<Integer> ids) {
+
+            List<OrdenDeProduccionBultoModel> lista = new ArrayList<OrdenDeProduccionBultoModel>();
+
+            try {
+
+                if (ids == null || ids.isEmpty()) {
+                    return lista;
+                }
+
+                OrdenDeProduccionBultoDao dao = new OrdenDeProduccionBultoDaoImpl();
+
+                lista = dao.getAllByIds(ids);
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            return lista;
+        }
     
 }

@@ -122,4 +122,27 @@ public class OrdenDeProduccionPalletBultoServiceImpl implements OrdenDeProduccio
         return ordenDeProduccionPallets;
     }
     
+    public List<OrdenDeProduccionPalletBultoModel> getAllByIdsPallet(List<Integer> idsPallet) {
+
+            List<OrdenDeProduccionPalletBultoModel> ordenDeProduccionPallets = new ArrayList<OrdenDeProduccionPalletBultoModel>();
+
+            try {
+
+                if (idsPallet == null || idsPallet.isEmpty()) {
+                    return ordenDeProduccionPallets;
+                }
+
+                OrdenDeProduccionPalletBultoDao ordenDeProduccionPalletBultoDao =
+                        new OrdenDeProduccionPalletBultoDaoImpl();
+
+                ordenDeProduccionPallets =
+                        ordenDeProduccionPalletBultoDao.getAllByIdsPallet(idsPallet);
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            return ordenDeProduccionPallets;
+        }
+    
 }

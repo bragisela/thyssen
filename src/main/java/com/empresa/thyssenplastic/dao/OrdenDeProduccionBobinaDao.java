@@ -31,5 +31,5 @@ public interface OrdenDeProduccionBobinaDao extends GenericDao {
     
     List<OrdenDepositoDto> getAllByDeposito();
     
-    List<EtiquetaDisponibleDto> getDisponiblesByDepositoAndOrden(Integer idDeposito, Integer idOrdenDeProduccion);
+    List<EtiquetaDisponibleDto> getDisponiblesByDepositoAndOrden(Integer idDeposito, Integer idOrden, Integer cantBultosPorPallet);
 }

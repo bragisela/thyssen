@@ -12,6 +12,8 @@ import com.empresa.thyssenplastic.model.OrdenDeProduccionBobinaModel;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionPalletModel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
@@ -193,7 +195,8 @@ public class OrdenDeProduccionBobinaDaoImpl extends GenericDaoImpl implements Or
        @Override
         public List<EtiquetaDisponibleDto> getDisponiblesByDepositoAndOrden(
             Integer idDeposito,
-            Integer idOrden) {
+            Integer idOrden,
+            Integer cantBultosPorPallet) {
 
             List<EtiquetaDisponibleDto> resultList = new ArrayList<EtiquetaDisponibleDto>();
 
@@ -202,16 +205,16 @@ public class OrdenDeProduccionBobinaDaoImpl extends GenericDaoImpl implements Or
         try {
             session = HibernateUtil.getSessionFactory().openSession();
 
-        // =======================
-        // BOBINAS (solo las que NO estan en bulto)
-        // =======================
-        String hqlBobina = "SELECT opb.codigo, t.valor, opb.pesoNeto " +
-                "FROM OrdenDeProduccionBobinaModel opb " +
-                "JOIN TipoModel t ON opb.idDeposito = t.id " +
-                "WHERE opb.idDeposito = :idDeposito " +
-                "AND opb.idOrdenDeProduccion = :idOrden " +
-                "AND opb.idRemito IS NULL " +
-                "AND (opb.estaEnBulto = false OR opb.estaEnBulto IS NULL)";
+            // =======================
+            // BOBINAS (solo las que NO estan en bulto)
+            // =======================
+            String hqlBobina = "SELECT opb.codigo, t.valor, opb.pesoNeto " +
+                    "FROM OrdenDeProduccionBobinaModel opb " +
+                    "JOIN TipoModel t ON opb.idDeposito = t.id " +
+                    "WHERE opb.idDeposito = :idDeposito " +
+                    "AND opb.idOrdenDeProduccion = :idOrden " +
+                    "AND opb.idRemito IS NULL " +
+                    "AND (opb.estaEnBulto = false OR opb.estaEnBulto IS NULL)";
 
             Query queryBobina = session.createQuery(hqlBobina);
             queryBobina.setParameter("idDeposito", idDeposito);
@@ -230,18 +233,17 @@ public class OrdenDeProduccionBobinaDaoImpl extends GenericDaoImpl implements Or
                 );
             }
 
-
             // =======================
             // BULTOS (solo los que NO estan en pallet)
             // =======================
-           String hqlBulto = 
-            "SELECT opb.codigo, t.valor " +
-            "FROM OrdenDeProduccionBultoModel opb " +
-            "JOIN TipoModel t ON opb.idDeposito = t.id " +
-            "WHERE opb.idDeposito = :idDeposito " +
-            "AND opb.idOrdenDeProduccion = :idOrden " +
-            "AND opb.idRemito IS NULL " +
-            "AND (opb.estaEnPallet = false OR opb.estaEnPallet IS NULL)";
+            String hqlBulto = 
+                "SELECT opb.codigo, t.valor " +
+                "FROM OrdenDeProduccionBultoModel opb " +
+                "JOIN TipoModel t ON opb.idDeposito = t.id " +
+                "WHERE opb.idDeposito = :idDeposito " +
+                "AND opb.idOrdenDeProduccion = :idOrden " +
+                "AND opb.idRemito IS NULL " +
+                "AND (opb.estaEnPallet = false OR opb.estaEnPallet IS NULL)";
 
             Query queryBulto = session.createQuery(hqlBulto);
             queryBulto.setParameter("idDeposito", idDeposito);
@@ -259,11 +261,11 @@ public class OrdenDeProduccionBobinaDaoImpl extends GenericDaoImpl implements Or
                     )
                 );
             }
-            
+
             // =======================
-            // PALLETS (todos los disponibles)
+            // PALLETS con sus bultos
             // =======================
-            String hqlPallet = "SELECT opp.codigo, t.valor " +
+            String hqlPallet = "SELECT opp.id, opp.codigo, t.valor " +
                     "FROM OrdenDeProduccionPalletModel opp " +
                     "JOIN TipoModel t ON opp.idDeposito = t.id " +
                     "WHERE opp.idDeposito = :idDeposito " +
@@ -276,15 +278,71 @@ public class OrdenDeProduccionBobinaDaoImpl extends GenericDaoImpl implements Or
 
             List<Object[]> pallets = queryPallet.list();
 
+            // Mapa para acceder al dto de cada pallet por su id
+            List<Integer> idsPallets = new ArrayList<Integer>();
+            Map<Integer, EtiquetaDisponibleDto> palletDtoPorId = new HashMap<Integer, EtiquetaDisponibleDto>();
+
             for (Object[] row : pallets) {
-                resultList.add(
-                    new EtiquetaDisponibleDto(
-                            "PALLET",
-                            (String) row[0],
-                            (String) row[1],
-                            10.2
-                    )
+                Integer idPallet = (Integer) row[0];
+                EtiquetaDisponibleDto dto = new EtiquetaDisponibleDto(
+                        "PALLET",
+                        (String) row[1],
+                        (String) row[2],
+                        10.2
                 );
+                resultList.add(dto);
+                idsPallets.add(idPallet);
+                palletDtoPorId.put(idPallet, dto);
+            }
+
+            // Buscar bultos de cada pallet
+            if (!idsPallets.isEmpty()) {
+                String hqlRelaciones =
+                    "SELECT rel.idOrdenDeProduccionPallet, b.codigo, b.idRemito " +
+                    "FROM OrdenDeProduccionPalletBultoModel rel " +
+                    "JOIN OrdenDeProduccionBultoModel b ON rel.idOrdenDeProduccionBulto = b.id " +
+                    "WHERE rel.idOrdenDeProduccionPallet IN (:idsPallets)" +
+                    "AND b.idRemito IS NULL";
+
+                Query queryRel = session.createQuery(hqlRelaciones);
+                queryRel.setParameterList("idsPallets", idsPallets);
+
+                List<Object[]> relaciones = queryRel.list();
+
+                // Agrupar bultos por pallet
+                Map<Integer, List<Object[]>> bultosPorPallet = new HashMap<Integer, List<Object[]>>();
+                for (Object[] rel : relaciones) {
+                    Integer idPallet = (Integer) rel[0];
+                    if (!bultosPorPallet.containsKey(idPallet)) {
+                        bultosPorPallet.put(idPallet, new ArrayList<Object[]>());
+                    }
+                    bultosPorPallet.get(idPallet).add(rel);
+                }
+
+                // Asignar bultos y calcular completitud en cada dto
+                for (Map.Entry<Integer, List<Object[]>> entry : bultosPorPallet.entrySet()) {
+                    Integer idPallet = entry.getKey();
+                    List<Object[]> bultosDelPallet = entry.getValue();
+                    EtiquetaDisponibleDto palletDto = palletDtoPorId.get(idPallet);
+                    if (palletDto == null) continue;
+
+                    List<String> codigos = new ArrayList<String>();
+                    for (Object[] b : bultosDelPallet) {
+                        codigos.add((String) b[1]);
+                    }
+                    palletDto.setBultosEnPallet(codigos);
+
+                    // Completo = tiene la cantidad exacta requerida y todos sus bultos tienen idRemito null
+                    boolean tieneCanitidadExacta = (codigos.size() == cantBultosPorPallet);
+                    boolean todosDisponibles = true;
+                    for (Object[] b : bultosDelPallet) {
+                        if (b[2] != null) {
+                            todosDisponibles = false;
+                            break;
+                        }
+                    }
+                    palletDto.setCompleto(tieneCanitidadExacta && todosDisponibles);
+                }
             }
 
         } catch (Exception ex) {

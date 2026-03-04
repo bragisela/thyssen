@@ -37,4 +37,6 @@ public interface OrdenDeProduccionBultoService {
     List<OrdenDeProduccionBultoModel> getByOrdenDeProduccionAndFechaAlta(Integer idOrdenDeProduccion, Date fechaDesde);
     
     List<OrdenDeProduccionBultoModel> getByFechaAlta(Date fechaDesde);
+    
+    List<OrdenDeProduccionBultoModel> getAllByIds(List<Integer> ids);
 }

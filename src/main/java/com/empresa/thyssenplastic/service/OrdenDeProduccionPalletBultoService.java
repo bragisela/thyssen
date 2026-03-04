@@ -31,5 +31,7 @@ public interface OrdenDeProduccionPalletBultoService {
     List<OrdenDeProduccionPalletBultoModel> getByOrdenDeProduccionBulto(Integer idOrdenDeProduccionBulto);
     
      List<OrdenDeProduccionPalletBultoModel> getAllByOrdenDeProduccionPalletAndFecha(Integer idOrdenDeProduccionPallet, Date fechaInicio, Date fechaFin);
+     
+     List<OrdenDeProduccionPalletBultoModel> getAllByIdsPallet(List<Integer> idsPallet);
       
 }

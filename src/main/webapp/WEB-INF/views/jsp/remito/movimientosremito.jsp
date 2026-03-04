@@ -189,6 +189,30 @@
     }
 
     #resultadoBusqueda { display: none; }
+    
+    .bultos-container {
+    margin-top: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.bulto-chip {
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #374151;
+    transition: all 0.2s ease;
+}
+
+.bulto-chip:hover {
+    background: #e0f2f1;
+    border-color: #3FBFBF;
+    color: #0f766e;
+}
 </style>
 
 <div class="content-wrapper">
@@ -253,6 +277,7 @@
 
             <c:set var="egresos" value="${egresosPorDetalle[detalle.id]}"/>
             <c:forEach var="egreso" items="${egresos}">
+                <c:set var="listaBultos" value="${bultosPorPallet[egreso.idPallet]}" />
                 movimientos++;
                 var tipo = '';
                 var codigo = '';
@@ -282,6 +307,13 @@
                 sectionHtml += '    <div class="movimiento-codigo">' + codigo + '</div>';
                 sectionHtml += '    <div class="movimiento-fecha">${fechaFormateada}</div>';
                 sectionHtml += '  </div>';
+                <c:if test="${egreso.idPallet != null && not empty listaBultos}">
+                    sectionHtml += '<div class="bultos-container">';
+                    <c:forEach var="bulto" items="${listaBultos}">
+                        sectionHtml += '<span class="bulto-chip">${bulto.codigo}</span>';
+                    </c:forEach>
+                    sectionHtml += '</div>';
+                </c:if>
                 sectionHtml += '</div>';
             </c:forEach>
 
