@@ -28,4 +28,6 @@ public interface OrdenDeProduccionPalletBultoDao extends GenericDao {
     
     List<OrdenDeProduccionPalletBultoModel> getAllByOrdenDeProduccionPalletAndFecha(Integer idOrdenDeProduccionPallet, Date fechaInicio, Date fechaFin);
     
+    List<OrdenDeProduccionPalletBultoModel> getAllByIdsPallet(List<Integer> idsPallet);
+    
 }

@@ -33,4 +33,6 @@ public interface OrdenDeProduccionBultoDao extends GenericDao {
     List<OrdenDeProduccionBultoModel> getByOrdenDeProduccionAndFechaAlta(Integer idOrdenDeProduccion, Date fechaDesde);
     
     List<OrdenDeProduccionBultoModel> getByFechaAlta(Date fechaDesde);
+    
+    List<OrdenDeProduccionBultoModel> getAllByIds(List<Integer> ids);
 }

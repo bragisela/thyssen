@@ -196,4 +196,30 @@ public class OrdenDeProduccionBultoDaoImpl extends GenericDaoImpl implements Ord
       return ordenDeProduccionPallets;
     }
     
+    public List<OrdenDeProduccionBultoModel> getAllByIds(List<Integer> ids) {
+
+            List<OrdenDeProduccionBultoModel> lista = new ArrayList<OrdenDeProduccionBultoModel>();
+
+            try {
+
+                if (ids != null && !ids.isEmpty()) {
+
+                    Session session = HibernateUtil.getSessionFactory().openSession();
+
+                    Query query = session.createQuery(
+                        "FROM OrdenDeProduccionBultoModel WHERE id IN (:ids)"
+                    );
+
+                    query.setParameterList("ids", ids);
+
+                    lista = query.list();
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            return lista;
+        }
+    
 }

@@ -15,6 +15,8 @@ import com.empresa.thyssenplastic.dto.OrdenDepositoDto;
 import com.empresa.thyssenplastic.dto.RemitoDetalleDto;
 import com.empresa.thyssenplastic.model.ArticuloModel;
 import com.empresa.thyssenplastic.model.ClienteDomicilioModel;
+import com.empresa.thyssenplastic.service.OrdenDeProduccionPalletBultoService;
+import com.empresa.thyssenplastic.model.OrdenDeProduccionPalletBultoModel;
 import com.empresa.thyssenplastic.service.impl.ActivacionManualServiceImpl;
 import com.empresa.thyssenplastic.model.ActivacionManualModel;
 import com.empresa.thyssenplastic.service.ActivacionManualService;
@@ -24,6 +26,7 @@ import com.empresa.thyssenplastic.model.DomicilioModel;
 import com.empresa.thyssenplastic.model.LocalidadModel;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionBobinaModel;
 import com.empresa.thyssenplastic.service.impl.EgresoDepositoServiceImpl;
+import com.empresa.thyssenplastic.service.impl.OrdenDeProduccionPalletBultoServiceImpl;
 import com.empresa.thyssenplastic.model.EgresoDepositoModel;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionBultoModel;
 import com.empresa.thyssenplastic.model.OrdenDeProduccionModel;
@@ -2489,12 +2492,68 @@ public class RemitoDetalleController {
                 }
             }
 
+            OrdenDeProduccionPalletBultoService palletBultoService = new OrdenDeProduccionPalletBultoServiceImpl();
+            OrdenDeProduccionBultoService bultoService = new OrdenDeProduccionBultoServiceImpl();
+
+            
+            Set<Integer> idsPallets = new HashSet<Integer>();
+            for (EgresoDepositoModel egreso : todosLosEgresos) {
+                if (egreso.getIdPallet() != null) {
+                    idsPallets.add(egreso.getIdPallet());
+                }
+            }
+
+            
+            List<OrdenDeProduccionPalletBultoModel> todasRelaciones =
+                    palletBultoService.getAllByIdsPallet(new ArrayList<Integer>(idsPallets));
+
+            
+            Set<Integer> idsBultos = new HashSet<Integer>();
+            for (OrdenDeProduccionPalletBultoModel relacion : todasRelaciones) {
+                idsBultos.add(relacion.getIdOrdenDeProduccionBulto());
+            }
+
+            
+            List<OrdenDeProduccionBultoModel> todosLosBultos =
+                    bultoService.getAllByIds(new ArrayList<Integer>(idsBultos));
+
+            
+            Map<Integer, OrdenDeProduccionBultoModel> mapaBultosPorId =
+                    new HashMap<Integer, OrdenDeProduccionBultoModel>();
+
+            for (OrdenDeProduccionBultoModel b : todosLosBultos) {
+                mapaBultosPorId.put(b.getId(), b);
+            }
+
+            
+            Map<Integer, List<OrdenDeProduccionBultoModel>> bultosPorPallet =
+                    new HashMap<Integer, List<OrdenDeProduccionBultoModel>>();
+
+            for (OrdenDeProduccionPalletBultoModel relacion : todasRelaciones) {
+
+                Integer idPallet = relacion.getIdOrdenDeProduccionPallet();
+
+                OrdenDeProduccionBultoModel bulto =
+                        mapaBultosPorId.get(relacion.getIdOrdenDeProduccionBulto());
+
+                if (bulto != null) {
+
+                    if (!bultosPorPallet.containsKey(idPallet)) {
+                        bultosPorPallet.put(idPallet, new ArrayList<OrdenDeProduccionBultoModel>());
+                    }
+
+                    bultosPorPallet.get(idPallet).add(bulto);
+                }
+            }
+
+
             model.addAttribute("remitoDetalles", remitoDetalles);
             model.addAttribute("egresosPorDetalle", egresosPorDetalle);
             model.addAttribute("nombreDepositoPorId", nombreDepositoPorId);
             model.addAttribute("denominacionPorDetalle", denominacionPorDetalle);
             model.addAttribute("ordenPorDetalle", ordenPorDetalle);
             model.addAttribute("idRemito", idRemito);
+            model.addAttribute("bultosPorPallet", bultosPorPallet);
             return "/remito/movimientosremito";
         }
 }

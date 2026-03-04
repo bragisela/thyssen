@@ -158,6 +158,32 @@ public class OrdenDeProduccionPalletBultoDaoImpl extends GenericDaoImpl implemen
 
         return ordenDeProduccionPallets;
     }
+    
+    public List<OrdenDeProduccionPalletBultoModel> getAllByIdsPallet(List<Integer> idsPallet) {
+
+        List<OrdenDeProduccionPalletBultoModel> ordenDeProduccionPallets = null;
+
+            try {
+                if (idsPallet != null && !idsPallet.isEmpty()) {
+
+                    Session session = HibernateUtil.getSessionFactory().openSession();
+
+                    Query query = session.createQuery(
+                        "FROM OrdenDeProduccionPalletBultoModel " +
+                        "WHERE idOrdenDeProduccionPallet IN (:ids)"
+                    );
+
+                    query.setParameterList("ids", idsPallet);
+
+                    ordenDeProduccionPallets = query.list();
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            return ordenDeProduccionPallets;
+        }
 
     
 }

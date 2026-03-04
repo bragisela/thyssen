@@ -135,11 +135,11 @@ public class OrdenDeProduccionBobinaServiceImpl implements OrdenDeProduccionBobi
         return getAllByDepositoDto;
     }
 
-    public List<EtiquetaDisponibleDto> getDisponiblesByDepositoAndOrden(Integer idDeposito, Integer idOrden) {
+    public List<EtiquetaDisponibleDto> getDisponiblesByDepositoAndOrden(Integer idDeposito, Integer idOrden, Integer cantBultosPorPallet) {
         List<EtiquetaDisponibleDto> etiquetas = new ArrayList<EtiquetaDisponibleDto>();
         try {
             OrdenDeProduccionBobinaDao ordenDeProduccionBobinaDao = new OrdenDeProduccionBobinaDaoImpl();
-            etiquetas = ordenDeProduccionBobinaDao.getDisponiblesByDepositoAndOrden(idDeposito, idOrden);
+            etiquetas = ordenDeProduccionBobinaDao.getDisponiblesByDepositoAndOrden(idDeposito, idOrden, cantBultosPorPallet);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

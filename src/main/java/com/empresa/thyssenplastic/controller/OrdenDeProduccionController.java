@@ -1342,9 +1342,16 @@ public class OrdenDeProduccionController {
             Integer idDeposito = deposito.getId();
 
             OrdenDeProduccionBobinaService ordenDeProduccionBobinaService = new OrdenDeProduccionBobinaServiceImpl();
+            
+            // Buscar la orden para obtener el artículo
+            OrdenDeProduccionService ordenDeProduccionService = new OrdenDeProduccionServiceImpl();
+            OrdenDeProduccionModel orden = ordenDeProduccionService.getByPk(idOrden);
+            
+            Integer idArticulo = orden != null ? orden.getIdArticulo() : null;
+            Integer cantBultosPorPallet = (idArticulo != null && (idArticulo == 10 || idArticulo == 9 || idArticulo == 12 || idArticulo == 11)) ? 8 : 10;
 
             List<EtiquetaDisponibleDto> etiquetas =
-                    ordenDeProduccionBobinaService.getDisponiblesByDepositoAndOrden(idDeposito, idOrden);
+                    ordenDeProduccionBobinaService.getDisponiblesByDepositoAndOrden(idDeposito, idOrden, cantBultosPorPallet);
 
             model.addAttribute("etiquetas", etiquetas);
             model.addAttribute("nombreDeposito", nombreDeposito);

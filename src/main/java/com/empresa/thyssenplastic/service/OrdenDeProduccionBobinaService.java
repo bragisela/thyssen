@@ -35,5 +35,5 @@ public interface OrdenDeProduccionBobinaService {
     
     List<OrdenDepositoDto> getAllByDeposito();
 
-    List<EtiquetaDisponibleDto> getDisponiblesByDepositoAndOrden(Integer idDeposito, Integer idOrden);
+    List<EtiquetaDisponibleDto> getDisponiblesByDepositoAndOrden(Integer idDeposito, Integer idOrden, Integer cantBultosPorPallet);
 }

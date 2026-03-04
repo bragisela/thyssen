@@ -32,12 +32,33 @@
 
         <c:when test="${not empty etiquetas}">
             <c:forEach var="etiqueta" items="${etiquetas}">
-                <div class="stock-card ${etiqueta.tipo.toLowerCase()} etiqueta-card">
-                    <div class="stock-header">
+                <c:if test="${etiqueta.tipo != 'PALLET' || not empty etiqueta.bultosEnPallet}">
+                <div class="stock-card ${etiqueta.tipo.toLowerCase()} etiqueta-card ${etiqueta.tipo == 'PALLET' && !etiqueta.completo ? 'incompleto-card' : ''}">
+                    
+                        
+                     <div class="stock-header">
                         <h3 class="codigo-etiqueta">${etiqueta.codigo}</h3>
-                        <span class="badge">${etiqueta.tipo}</span>
+                        <c:choose>
+                            <c:when test="${etiqueta.tipo == 'PALLET'}">
+                                <span class="badge ${etiqueta.completo ? 'completo' : 'incompleto'}">
+                                    ${etiqueta.completo ? 'COMPLETO' : 'INCOMPLETO'}
+                                </span>
+                            </c:when>
+                            <c:otherwise>
+                                <span class="badge">${etiqueta.tipo}</span>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
+
+                    <c:if test="${etiqueta.tipo == 'PALLET' && not empty etiqueta.bultosEnPallet}">
+                        <div class="bultos-list">
+                            <c:forEach var="codigoBulto" items="${etiqueta.bultosEnPallet}">
+                                <span class="bulto-chip">${codigoBulto}</span>
+                            </c:forEach>
+                        </div>
+                    </c:if>
                 </div>
+               </c:if>
             </c:forEach>
         </c:when>
 
@@ -56,9 +77,6 @@
 
 
 <style>
-    /* =========================
-   Variables de color
-========================= */
 :root {
   --primary: #1e3a8a;
   --success: #16a34a;   
@@ -69,11 +87,21 @@
   --bg-card: #ffffff;
 }
 
-/* =========================
-   Layout
-========================= */
+.badge.incompleto {
+  color: #dc2626;
+}
+
+.stock-card.pallet.incompleto-card {
+  border-top-color: #dc2626;
+}
+
+.stock-card.pallet.incompleto-card .badge.incompleto {
+  color: #dc2626;
+  border-color: #dc2626;
+}
+
 .empty-state {
-  grid-column: 1 / -1; /* ocupa todo el ancho del grid */
+  grid-column: 1 / -1;
   text-align: center;
   padding: 60px 20px;
   border: 1px dashed #d1d5db;
@@ -99,16 +127,17 @@
   font-size: 14px;
   color: #6b7280;
 }
+
 .stock-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 12px;
   margin-top: 16px;
-  
-  max-height: 500px;      /* altura visible */
-  overflow-y: auto;       /* scroll vertical */
-  padding-right: 6px;     /* espacio para que no choque el scrollbar */
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 6px;
 }
+
 .header-container {
   margin-bottom: 25px;
 }
@@ -132,19 +161,16 @@
   outline: none;
 }
 
-/* Placeholder más sutil */
 .search-input::placeholder {
   color: #9ca3af;
   font-weight: 400;
 }
 
-/* Focus minimalista */
 .search-input:focus {
   border-color: #94a3b8;
   box-shadow: 0 0 0 2px rgba(148, 163, 184, 0.15);
 }
 
-/* Hover suave */
 .search-input:hover {
   border-color: #cbd5e1;
 }
@@ -163,9 +189,7 @@
 .lote-info {
   font-weight: 400;
 }
-/* =========================
-   Card base
-========================= */
+
 .stock-card {
   background: var(--bg-card);
   border-radius: 12px;
@@ -181,19 +205,12 @@
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
 }
 
-/* =========================
-   Header
-========================= */
 .stock-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-
-/* =========================
-   Badge (outline)
-========================= */
 .badge {
   font-size: 11px;
   font-weight: 600;
@@ -205,9 +222,14 @@
   text-transform: uppercase;
 }
 
-/* =========================
-   Body
-========================= */
+.badge.completo {
+  color: var(--success);
+}
+
+.badge.incompleto {
+  color: var(--warning);
+}
+
 .stock-header h3 {
   margin: 0;
   font-size: 17px;
@@ -234,11 +256,6 @@
   color: var(--text-muted);
 }
 
-/* =========================
-   Variantes por tipo
-========================= */
-
-/* Pallet */
 .stock-card.pallet {
   border-top-color: var(--primary);
 }
@@ -247,7 +264,6 @@
   color: var(--primary);
 }
 
-/* Bulto */
 .stock-card.bulto {
   border-top-color: var(--success);
 }
@@ -256,7 +272,6 @@
   color: var(--success);
 }
 
-/* Bobina */
 .stock-card.bobina {
   border-top-color: var(--warning);
 }
@@ -265,9 +280,24 @@
   color: var(--warning);
 }
 
-  
-  
+.bultos-list {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.bulto-chip {
+  font-size: 13px;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 3px 8px;
+  color: #475569;
+  font-weight: 500;
+}
 </style>
+
 <script>
 document.getElementById("searchEtiqueta").addEventListener("keyup", function() {
     let filtro = this.value.toLowerCase();
