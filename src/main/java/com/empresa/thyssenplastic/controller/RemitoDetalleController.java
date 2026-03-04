@@ -2420,57 +2420,57 @@ public class RemitoDetalleController {
             return procesarVista(idRemito, req, model);
         }
 
-        private String procesarVista(String idRemito, HttpServletRequest req, ModelMap model) {
-            if (idRemito == null || idRemito.trim().isEmpty()) {
-                model.addAttribute("remitoDetalles", new ArrayList<RemitoDetalleModel>());
-                model.addAttribute("egresosPorDetalle", new HashMap<Integer, List<EgresoDepositoModel>>());
-                model.addAttribute("idRemito", "");
-                return "/remito/movimientosremito";
+    private String procesarVista(String idRemito, HttpServletRequest req, ModelMap model) {
+        if (idRemito == null || idRemito.trim().isEmpty()) {
+            model.addAttribute("remitoDetalles", new ArrayList<RemitoDetalleModel>());
+            model.addAttribute("egresosPorDetalle", new HashMap<Integer, List<EgresoDepositoModel>>());
+            model.addAttribute("idRemito", "");
+            return "/remito/movimientosremito";
+        }
+
+        if (!Utils.isAutenticated(req)) {
+            model.addAttribute("userForm", new UserForm());
+            return "/login/login";
+        }
+
+        // 1. Traer todos los detalles del remito
+        RemitoDetalleService remitoDetalleService = new RemitoDetalleServiceImpl();
+        List<RemitoDetalleModel> remitoDetalles = remitoDetalleService.getAllByRemito(Integer.valueOf(idRemito));
+
+        // 2. Extraer ids de detalles
+        List<Integer> idsDetalles = new ArrayList<Integer>();
+        for (RemitoDetalleModel detalle : remitoDetalles) {
+            idsDetalles.add(detalle.getId());
+        }
+
+        // 3. Traer todos los egresos
+        EgresoDepositoService egresoDepositoService = new EgresoDepositoServiceImpl();
+        List<EgresoDepositoModel> todosLosEgresos = egresoDepositoService.getByIdsRemitoDetalle(idsDetalles);
+
+        // 4. Agrupar egresos por idRemitoDetalle
+        Map<Integer, List<EgresoDepositoModel>> egresosPorDetalle = new HashMap<Integer, List<EgresoDepositoModel>>();
+        for (EgresoDepositoModel egreso : todosLosEgresos) {
+            Integer key = egreso.getIdRemito();
+            if (!egresosPorDetalle.containsKey(key)) {
+                egresosPorDetalle.put(key, new ArrayList<EgresoDepositoModel>());
             }
+            egresosPorDetalle.get(key).add(egreso);
+        }
 
-            if (!Utils.isAutenticated(req)) {
-                model.addAttribute("userForm", new UserForm());
-                return "/login/login";
-            }
-
-            // 1. Traer todos los detalles del remito
-            RemitoDetalleService remitoDetalleService = new RemitoDetalleServiceImpl();
-            List<RemitoDetalleModel> remitoDetalles = remitoDetalleService.getAllByRemito(Integer.valueOf(idRemito));
-
-            // 2. Extraer ids de detalles
-            List<Integer> idsDetalles = new ArrayList<Integer>();
-            for (RemitoDetalleModel detalle : remitoDetalles) {
-                idsDetalles.add(detalle.getId());
-            }
-
-            // 3. Traer todos los egresos
-            EgresoDepositoService egresoDepositoService = new EgresoDepositoServiceImpl();
-            List<EgresoDepositoModel> todosLosEgresos = egresoDepositoService.getByIdsRemitoDetalle(idsDetalles);
-
-            // 4. Agrupar egresos por idRemitoDetalle
-            Map<Integer, List<EgresoDepositoModel>> egresosPorDetalle = new HashMap<Integer, List<EgresoDepositoModel>>();
-            for (EgresoDepositoModel egreso : todosLosEgresos) {
-                Integer key = egreso.getIdRemito();
-                if (!egresosPorDetalle.containsKey(key)) {
-                    egresosPorDetalle.put(key, new ArrayList<EgresoDepositoModel>());
+        // 5. Armar mapa de nombre de depósito por idDeposito
+        TipoService tipoService = new TipoServiceImpl();
+        Map<Integer, String> nombreDepositoPorId = new HashMap<Integer, String>();
+        for (RemitoDetalleModel detalle : remitoDetalles) {
+            Integer idDep = detalle.getIdDeposito();
+            if (idDep != null && !nombreDepositoPorId.containsKey(idDep)) {
+                TipoModel deposito = tipoService.getByPk(idDep);
+                if (deposito != null) {
+                    nombreDepositoPorId.put(idDep, deposito.getValor());
+                } else {
+                    nombreDepositoPorId.put(idDep, "Depósito " + idDep);
                 }
-                egresosPorDetalle.get(key).add(egreso);
             }
-
-            // 5. Armar mapa de nombre de depósito por idDeposito
-            TipoService tipoService = new TipoServiceImpl();
-            Map<Integer, String> nombreDepositoPorId = new HashMap<Integer, String>();
-            for (RemitoDetalleModel detalle : remitoDetalles) {
-                Integer idDep = detalle.getIdDeposito();
-                if (idDep != null && !nombreDepositoPorId.containsKey(idDep)) {
-                    TipoModel deposito = tipoService.getByPk(idDep); // o getByPk, según tu service
-                    if (deposito != null) {
-                        nombreDepositoPorId.put(idDep, deposito.getValor()); // o getNombre(), según el campo
-                    } else {
-                        nombreDepositoPorId.put(idDep, "Depósito " + idDep);
-                    }
-                }
-            }
+        }
 
             // 6. Armar mapa de info de artículo por idOrdenDeProduccion del detalle
             OrdenDeProduccionService ordenService = new OrdenDeProduccionServiceImpl();
@@ -2486,7 +2486,7 @@ public class RemitoDetalleController {
                         ordenPorDetalle.put(detalle.getId(), idOrden);
                         ArticuloModel articulo = articuloService.getByPk(orden.getIdArticulo());
                         if (articulo != null) {
-                            denominacionPorDetalle.put(detalle.getId(), articulo.getDenominacion()); // ajustá el getter
+                            denominacionPorDetalle.put(detalle.getId(), articulo.getDenominacion());
                         }
                     }
                 }
@@ -2495,7 +2495,7 @@ public class RemitoDetalleController {
             OrdenDeProduccionPalletBultoService palletBultoService = new OrdenDeProduccionPalletBultoServiceImpl();
             OrdenDeProduccionBultoService bultoService = new OrdenDeProduccionBultoServiceImpl();
 
-            
+            // 7. Recolectar ids de pallets
             Set<Integer> idsPallets = new HashSet<Integer>();
             for (EgresoDepositoModel egreso : todosLosEgresos) {
                 if (egreso.getIdPallet() != null) {
@@ -2503,49 +2503,60 @@ public class RemitoDetalleController {
                 }
             }
 
-            
+            // 8. Recolectar ids de bultos directos (ANTES de armar bultosPorPallet)
+            Set<Integer> idsBultosDirectos = new HashSet<Integer>();
+            for (EgresoDepositoModel egreso : todosLosEgresos) {
+                if (egreso.getIdBulto() != null) {
+                    idsBultosDirectos.add(egreso.getIdBulto());
+                }
+            }
+
+            // 9. Traer relaciones pallet-bulto
             List<OrdenDeProduccionPalletBultoModel> todasRelaciones =
                     palletBultoService.getAllByIdsPallet(new ArrayList<Integer>(idsPallets));
 
-            
+            // 10. Extraer ids de bultos de pallets
             Set<Integer> idsBultos = new HashSet<Integer>();
             for (OrdenDeProduccionPalletBultoModel relacion : todasRelaciones) {
                 idsBultos.add(relacion.getIdOrdenDeProduccionBulto());
             }
 
-            
+            // 11. Traer bultos de pallets
             List<OrdenDeProduccionBultoModel> todosLosBultos =
                     bultoService.getAllByIds(new ArrayList<Integer>(idsBultos));
 
-            
+            // 12. Armar mapa id -> bulto
             Map<Integer, OrdenDeProduccionBultoModel> mapaBultosPorId =
                     new HashMap<Integer, OrdenDeProduccionBultoModel>();
-
             for (OrdenDeProduccionBultoModel b : todosLosBultos) {
                 mapaBultosPorId.put(b.getId(), b);
             }
 
-            
+            // 13. Armar bultosPorPallet excluyendo los que fueron dados de baja como bultos sueltos
             Map<Integer, List<OrdenDeProduccionBultoModel>> bultosPorPallet =
                     new HashMap<Integer, List<OrdenDeProduccionBultoModel>>();
 
             for (OrdenDeProduccionPalletBultoModel relacion : todasRelaciones) {
-
                 Integer idPallet = relacion.getIdOrdenDeProduccionPallet();
-
                 OrdenDeProduccionBultoModel bulto =
                         mapaBultosPorId.get(relacion.getIdOrdenDeProduccionBulto());
 
-                if (bulto != null) {
-
+                if (bulto != null && !idsBultosDirectos.contains(bulto.getId())) {
                     if (!bultosPorPallet.containsKey(idPallet)) {
                         bultosPorPallet.put(idPallet, new ArrayList<OrdenDeProduccionBultoModel>());
                     }
-
                     bultosPorPallet.get(idPallet).add(bulto);
                 }
             }
 
+            // 14. Traer códigos de bultos directos
+            List<OrdenDeProduccionBultoModel> bultosDirectos =
+                    bultoService.getAllByIds(new ArrayList<Integer>(idsBultosDirectos));
+
+            Map<Integer, String> codigoBultoPorId = new HashMap<Integer, String>();
+            for (OrdenDeProduccionBultoModel b : bultosDirectos) {
+                codigoBultoPorId.put(b.getId(), b.getCodigo());
+            }
 
             model.addAttribute("remitoDetalles", remitoDetalles);
             model.addAttribute("egresosPorDetalle", egresosPorDetalle);
@@ -2554,6 +2565,7 @@ public class RemitoDetalleController {
             model.addAttribute("ordenPorDetalle", ordenPorDetalle);
             model.addAttribute("idRemito", idRemito);
             model.addAttribute("bultosPorPallet", bultosPorPallet);
+            model.addAttribute("codigoBultoPorId", codigoBultoPorId);
             return "/remito/movimientosremito";
         }
 }

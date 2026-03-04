@@ -289,7 +289,7 @@
                     </c:when>
                     <c:when test="${egreso.idBulto != null}">
                         tipo = 'bulto';
-                        codigo = 'R${egreso.idBulto}';
+                        codigo = '${codigoBultoPorId[egreso.idBulto]}';
                     </c:when>
                     <c:when test="${egreso.idPallet != null}">
                         tipo = 'pallet';
