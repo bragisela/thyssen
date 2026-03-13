@@ -73,7 +73,7 @@ public class OrdenDeCompraItemRecepcionController {
         }
 
         if(ordenDeCompraItemPk == null && ordenDeCompraItemPk.isEmpty()) {
-            model.addAttribute("errorMessage", "Error: orden de compra inválida");         
+            model.addAttribute("errorMessage", "Error: orden de compra inválida");          
             return "/error";                
         }
 
@@ -175,9 +175,14 @@ public class OrdenDeCompraItemRecepcionController {
             rol = "deposito";
         }
         if(user.getRol() == Utils.ROL_OFICINA) {
-            operacion = "alta";
-            displayActionButton = "none";            
             rol = "oficina";
+            if(ordenDeCompra.getEstado().equalsIgnoreCase("Completado") || ordenDeCompra.getEstado().equalsIgnoreCase("Cerrado")) {
+                operacion = "recepcion";
+                displayActionButton = "block";
+            } else {
+                operacion = "alta";
+                displayActionButton = "none";
+            }
         }
 
         ordenDeCompraItemRecepcionForm.setOperacion(operacion);
@@ -350,16 +355,22 @@ public class OrdenDeCompraItemRecepcionController {
             return modelAndView;                
         }
         
-        if(!ordenDeCompra.getEstado().equalsIgnoreCase("Abierto")) {
-            modelAndView.setViewName("error");
-            modelAndView.addObject("errorMessage", "Error: no es posible editar un item de una orden de compra en estado "+ordenDeCompra.getEstado());
-            return modelAndView;                        
-        }            
-        
-        if(user.getRol() != Utils.ROL_DEPOSITO) {
+        boolean esDeposito = user.getRol() == Utils.ROL_DEPOSITO;
+        boolean esOficina = user.getRol() == Utils.ROL_OFICINA;
+
+        if(!esDeposito && !esOficina) {
             modelAndView.setViewName("error");
             modelAndView.addObject("errorMessage", "Error: usuario no tiene rol para este funcionalidad");
-            return modelAndView;                
+            return modelAndView;
+        }
+
+        boolean estadoValido = ordenDeCompra.getEstado().equalsIgnoreCase("Abierto")
+            || (esOficina && (ordenDeCompra.getEstado().equalsIgnoreCase("Completado") || ordenDeCompra.getEstado().equalsIgnoreCase("Cerrado")));
+
+        if(!estadoValido) {
+            modelAndView.setViewName("error");
+            modelAndView.addObject("errorMessage", "Error: no es posible editar un item de una orden de compra en estado "+ordenDeCompra.getEstado());
+            return modelAndView;
         }
         
         OrdenDeCompraItemRecepcionService ordenDeCompraItemRecepcionService = new OrdenDeCompraItemRecepcionServiceImpl();        
@@ -396,6 +407,11 @@ public class OrdenDeCompraItemRecepcionController {
             */
         }        
         
+        Integer oldCantidad = null;
+        if(!id.equalsIgnoreCase("-1") && ordenDeCompraItemRecepcionModel.getCantidadRecepcionada() != null) {
+            oldCantidad = ordenDeCompraItemRecepcionModel.getCantidadRecepcionada();
+        }
+
         if(ordenDeCompraItemRecepcionForm.getFechaRecepcion() != null && !ordenDeCompraItemRecepcionForm.getFechaRecepcion().trim().equals("")) {
             SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"); 
             Date fecha = formato.parse(ordenDeCompraItemRecepcionForm.getFechaRecepcion());
@@ -424,12 +440,19 @@ public class OrdenDeCompraItemRecepcionController {
         if(ordenDeCompraItemRecepcionForm.getAction().equalsIgnoreCase("add") || ordenDeCompraItemRecepcionForm.getAction().equalsIgnoreCase("edit")) {            
             ordenDeCompraItemRecepcionService.save(ordenDeCompraItemRecepcionModel);
             
+            Integer nuevaCantidad = Integer.valueOf(ordenDeCompraItemRecepcionForm.getCantidadRecepcionada());
+            boolean esEdit = ordenDeCompraItemRecepcionForm.getAction().equalsIgnoreCase("edit");
+
             if(ordenDeCompraItem.getTipo().equalsIgnoreCase("materiaPrima")) {
                 Integer stockMateriaPrima = materiaPrima.getStock();
                 if(stockMateriaPrima == null) {
                     stockMateriaPrima = 0;
                 }
-                materiaPrima.setStock(stockMateriaPrima + Integer.valueOf(ordenDeCompraItemRecepcionForm.getCantidadRecepcionada()));
+                if(esEdit && oldCantidad != null) {
+                    materiaPrima.setStock(stockMateriaPrima - oldCantidad + nuevaCantidad);
+                } else {
+                    materiaPrima.setStock(stockMateriaPrima + nuevaCantidad);
+                }
                 materiaPrimaService.save(materiaPrima);
             }                    
             if(ordenDeCompraItem.getTipo().equalsIgnoreCase("insumo")) {
@@ -437,7 +460,11 @@ public class OrdenDeCompraItemRecepcionController {
                 if(stockInsumo == null) {
                     stockInsumo = 0;
                 }
-                insumo.setStock(stockInsumo + Integer.valueOf(ordenDeCompraItemRecepcionForm.getCantidadRecepcionada()));
+                if(esEdit && oldCantidad != null) {
+                    insumo.setStock(stockInsumo - oldCantidad + nuevaCantidad);
+                } else {
+                    insumo.setStock(stockInsumo + nuevaCantidad);
+                }
                 insumoService.save(insumo);
             }                                
             Integer cantidadRecepcionadaTotal = 0;
@@ -497,7 +524,7 @@ public class OrdenDeCompraItemRecepcionController {
             return "/error";                
         }
         
-        if(user.getRol() != Utils.ROL_DEPOSITO) {
+        if(user.getRol() != Utils.ROL_DEPOSITO && user.getRol() != Utils.ROL_OFICINA) {
             model.addAttribute("errorMessage", "Error: usuario no tiene rol para este funcionalidad");         
             return "/error";                
         }
@@ -526,7 +553,11 @@ public class OrdenDeCompraItemRecepcionController {
             return "/error";                
         }
         
-        if(!ordenDeCompra.getEstado().equalsIgnoreCase("Abierto")) {
+        boolean esOficinaEdit = user.getRol() == Utils.ROL_OFICINA;
+        boolean estadoValidoEdit = ordenDeCompra.getEstado().equalsIgnoreCase("Abierto")
+            || (esOficinaEdit && (ordenDeCompra.getEstado().equalsIgnoreCase("Completado") || ordenDeCompra.getEstado().equalsIgnoreCase("Cerrado")));
+
+        if(!estadoValidoEdit) {
             model.addAttribute("errorMessage", "Error: estado de orden incorrecto.");         
             return "/error";                            
         }
@@ -539,8 +570,8 @@ public class OrdenDeCompraItemRecepcionController {
             return "/error";                
         }
         
-        String rol = "deposito";
-        String operacion = "alta";        
+        String rol = esOficinaEdit ? "oficina" : "deposito";
+        String operacion = "recepcion";        
         String displayActionButton = "block";
 
         MateriaPrimaService materiaPrimaService = new MateriaPrimaServiceImpl();   
@@ -566,7 +597,7 @@ public class OrdenDeCompraItemRecepcionController {
         
         OrdenDeCompraItemRecepcionForm ordenDeCompraItemRecepcionForm = new OrdenDeCompraItemRecepcionForm();
         
-        ordenDeCompraItemRecepcionForm.setPk(ordenDeCompraItem.getId().toString());
+        ordenDeCompraItemRecepcionForm.setPk(ordenDeCompraItemRecepcion.getId().toString());
         ordenDeCompraItemRecepcionForm.setIdOrdenDeCompra(ordenDeCompraItem.getIdOrdenDeCompra().toString());
         if(ordenDeCompraItem.getIdMateriaPrima() != null) {
             ordenDeCompraItemRecepcionForm.setIdMateriaPrima(ordenDeCompraItem.getIdMateriaPrima().toString());
@@ -604,7 +635,22 @@ public class OrdenDeCompraItemRecepcionController {
             ordenDeCompraItemRecepcionForm.setStock(insumo.getStock().toString());
         }        
         ordenDeCompraItemRecepcionForm.setCantidad(ordenDeCompraItem.getCantidad().toString());     
-        
+
+        // Cargar campos propios de la recepcion
+        SimpleDateFormat formatoEdit = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if(ordenDeCompraItemRecepcion.getFechaRecepcion() != null) {
+            ordenDeCompraItemRecepcionForm.setFechaRecepcion(formatoEdit.format(ordenDeCompraItemRecepcion.getFechaRecepcion()));
+        }
+        if(ordenDeCompraItemRecepcion.getCantidadRecepcionada() != null) {
+            ordenDeCompraItemRecepcionForm.setCantidadRecepcionada(ordenDeCompraItemRecepcion.getCantidadRecepcionada().toString());
+        }
+        if(ordenDeCompraItemRecepcion.getLote() != null) {
+            ordenDeCompraItemRecepcionForm.setLote(ordenDeCompraItemRecepcion.getLote());
+        }
+        if(ordenDeCompraItemRecepcion.getRefenciaAdministrativa() != null) {
+            ordenDeCompraItemRecepcionForm.setReferenciaAdministrativa(ordenDeCompraItemRecepcion.getRefenciaAdministrativa());
+        }
+
         ordenDeCompraItemRecepcionForm.setOperacion(operacion);
         
         ordenDeCompraItemRecepcionForm.setAction("edit");
@@ -641,6 +687,7 @@ public class OrdenDeCompraItemRecepcionController {
         model.addAttribute("action", "edit");
         model.addAttribute("displayActionButton", displayActionButton);
         model.addAttribute("operacion", operacion);        
+        model.addAttribute("ordenDeCompraStatus", ordenDeCompra.getEstado());
         model.addAttribute("materiaPrimaList", materiasPrima);        
         model.addAttribute("ordenDeCompraItemsRecepcion", ordenDeCompraItemsRecepcionDtos);        
         

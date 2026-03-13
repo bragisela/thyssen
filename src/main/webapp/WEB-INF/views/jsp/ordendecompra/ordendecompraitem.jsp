@@ -277,7 +277,7 @@
                                                         href="/thyssenplastic/ordenDeCompraItemRecepcion/${ordendecompraitem.pk}"
                                                         data-toggle="tooltip" data-placement="top" title="Recepción Item"></a>
                                                 </c:if>                                                                                                                                                            
-                                                <c:if test = "${rol == 'oficina' && operacion == 'alta' && (ordenDeCompraStatus == 'Completado' || ordenDeCompraStatus == 'Cerrado')}">
+                                                <c:if test = "${rol == 'oficina' && operacion == 'alta'}">
                                                     <a class="nav-link active fa fa-truck fa-lg"
                                                         href="/thyssenplastic/ordenDeCompraItemRecepcion/${ordendecompraitem.pk}"
                                                         data-toggle="tooltip" data-placement="top" title="Ver Recepción Item"></a>
