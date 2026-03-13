@@ -37,6 +37,9 @@
                                                 <c:set var = "disabledRecepcion" value = "true"/>                                            
                                             </c:if>
                                         </c:if>
+                                        <c:if test="${(ordenDeCompraStatus == 'Abierto' || ordenDeCompraStatus == 'Completado' || ordenDeCompraStatus == 'Cerrado') && rol == 'oficina' && operacion == 'recepcion'}">
+                                            <c:set var="disabledAlta" value="false"/>
+                                        </c:if>
                                         
                                         ${action}
                                         
@@ -291,6 +294,9 @@
                                                         href="/thyssenplastic/ordenDeCompraItemRecepcion/view/${ordendecompraitemrecepcion.pk}"
                                                         data-toggle="tooltip" data-placement="top" title="Ver"></a>                                                        
                                                 </c:if>                                                
+                                                <c:if test="${rol == 'oficina' && (ordenDeCompraStatus == 'Abierto' || ordenDeCompraStatus == 'Completado' || ordenDeCompraStatus == 'Cerrado')}">
+                                                    <a href="/thyssenplastic/ordenDeCompraItemRecepcion/edit/${ordendecompraitemrecepcion.pk}">Editar</a>
+                                                </c:if>
                                                 <a class="nav-link active fa fa-print fa-lg"
                                                    href="javascript:void(0);" onclick="printQR(${ordendecompraitemrecepcion.pk})"
                                                     data-toggle="tooltip" data-placement="top" title="Imprimir"></a>
