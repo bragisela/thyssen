@@ -90,6 +90,15 @@ public class RemitoModel {
     
     @Column(name = "isScrap")
     private Boolean isScrap;
+    
+    @Column(name = "motivoCancelacion")
+    private String motivoCancelacion;
+
+    @Column(name = "fechaCancelacion")
+    private Date fechaCancelacion;
+
+    @Column(name = "idUsuarioCancelacion")
+    private Integer idUsuarioCancelacion;
 
     public Boolean getIsScrap() {
         return isScrap;
@@ -276,8 +285,32 @@ public class RemitoModel {
         this.idChofer = idChofer;
     }
     
+        // Getters y Setters
+    public String getMotivoCancelacion() {
+        return motivoCancelacion;
+    }
 
-      
+    public void setMotivoCancelacion(String motivoCancelacion) {
+        this.motivoCancelacion = motivoCancelacion;
+    }
+
+    public Date getFechaCancelacion() {
+        return fechaCancelacion;
+    }
+
+    public void setFechaCancelacion(Date fechaCancelacion) {
+        this.fechaCancelacion = fechaCancelacion;
+    }
+
+    public Integer getIdUsuarioCancelacion() {
+        return idUsuarioCancelacion;
+    }
+
+    public void setIdUsuarioCancelacion(Integer idUsuarioCancelacion) {
+        this.idUsuarioCancelacion = idUsuarioCancelacion;
+    }
+    
+
     @Override
     public String toString() {
         return "User [id=" + id + ", fechaAlta=" + fechaAlta + ", idCliente=" + idCliente + "]";

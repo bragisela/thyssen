@@ -94,7 +94,22 @@
                                     <label for="inputFecha">Estado</label>
                                     <form:input type="text" path="estadoHojaDeRuta" class="form-control" disabled="true"/>                                                    
                                 </div>                                
+                                
                             </div>
+                            <div class="form-row row">
+                                <c:if test="${hojaDeRutaDetalleForm.estadoHojaDeRuta == 'Cancelado'}">
+                                    <div class="form-row row">
+                                        <div class="row col-xs-6 col-sm-3 col-xl-3">
+                                            <label>Fecha de Cancelación</label>
+                                            <form:input type="text" path="fechaCancelacion" class="form-control" disabled="true" style="color: #a32d2d;"/>
+                                        </div>
+                                         <div class="row col-xs-12 col-sm-6 col-xl-6">
+                                            <label>Motivo de Cancelación</label>
+                                            <form:textarea path="motivoCancelacion" class="form-control" disabled="true" style="color: #a32d2d;"/>
+                                        </div>
+                                    </div>
+                                </c:if>
+                             </div>
                             
 
                             <div class="form-row row">

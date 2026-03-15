@@ -117,6 +117,14 @@ public class HojaDeRutaDetalleController {
 
         hojaDeRutaDetalleForm.setFechaHojaDeRuta(hojaDeRuta.getFecha().toString().replace(" 00:00:00.0", ""));
         hojaDeRutaDetalleForm.setEstadoHojaDeRuta(hojaDeRuta.getEstado().replace(" 00:00:00.0", ""));
+        // ACÁ:
+        if (hojaDeRuta.getMotivoCancelacion() != null) {
+            hojaDeRutaDetalleForm.setMotivoCancelacion(hojaDeRuta.getMotivoCancelacion());
+        }
+        if (hojaDeRuta.getFechaCancelacion() != null) {
+            SimpleDateFormat formatoSalida = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            hojaDeRutaDetalleForm.setFechaCancelacion(formatoSalida.format(hojaDeRuta.getFechaCancelacion()));
+        }
         hojaDeRutaDetalleForm.setFechaCargaHojaDeRuta(hojaDeRuta.getFechaCarga().toString().replace(" 00:00:00.0", ""));
         hojaDeRutaDetalleForm.setFechaSalidaHojaDeRuta(hojaDeRuta.getFechaSalida().toString().replace(" 00:00:00.0", ""));
         

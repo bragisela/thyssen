@@ -204,6 +204,13 @@ public class RemitoDetalleScrapController {
             ContactoModel c = contactoService.getByPk(remito.getIdChofer());
            remitoDetalleForm.setIdChofer(c.getNombre());
         }
+        if (remito.getMotivoCancelacion() != null) {
+            remitoDetalleForm.setMotivoCancelacion(remito.getMotivoCancelacion());
+        }
+        if (remito.getFechaCancelacion() != null) {
+            SimpleDateFormat formatoSalida = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            remitoDetalleForm.setFechaCancelacion(formatoSalida.format(remito.getFechaCancelacion()));
+        }
         Calendar c = Calendar.getInstance();        
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd"); 
         String fecha = formato.format(c.getTime());

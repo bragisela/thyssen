@@ -1569,6 +1569,14 @@ public class RemitoController {
         remitoDetalleForm.setFechaRemito(remito.getFechaRemito().toString().replace("00:00:00.0", ""));
         remitoDetalleForm.setTipoRemito(remito.getTipoRemito());
         remitoDetalleForm.setEstadoRemito(remito.getEstado()); 
+        // ACÁ:
+        if (remito.getMotivoCancelacion() != null) {
+            remitoDetalleForm.setMotivoCancelacion(remito.getMotivoCancelacion());
+        }
+        if (remito.getFechaCancelacion() != null) {
+            SimpleDateFormat formatoSalida = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            remitoDetalleForm.setFechaCancelacion(formatoSalida.format(remito.getFechaCancelacion()));
+        }
         remitoDetalleForm.setObservaciones(remito.getObservaciones());
         if(remito.getReferenciaAdministrativa() != null) {
             remitoDetalleForm.setReferenciaAdministrativa(remito.getReferenciaAdministrativa());
@@ -1764,6 +1772,14 @@ public class RemitoController {
         remitoDetalleForm.setFechaRemito(remito.getFechaRemito().toString().replace("00:00:00.0", ""));
         remitoDetalleForm.setTipoRemito(remito.getTipoRemito());
         remitoDetalleForm.setEstadoRemito(remito.getEstado()); 
+        // ACÁ:
+        if (remito.getMotivoCancelacion() != null) {
+            remitoDetalleForm.setMotivoCancelacion(remito.getMotivoCancelacion());
+        }
+        if (remito.getFechaCancelacion() != null) {
+            SimpleDateFormat formatoSalida = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            remitoDetalleForm.setFechaCancelacion(formatoSalida.format(remito.getFechaCancelacion()));
+        }
         remitoDetalleForm.setObservaciones(remito.getObservaciones());
         if(remito.getReferenciaAdministrativa() != null) {
             remitoDetalleForm.setReferenciaAdministrativa(remito.getReferenciaAdministrativa());
@@ -1864,4 +1880,83 @@ public class RemitoController {
         
         return "/remito/remitoscrapprint"; 
     }        
+    
+    @RequestMapping(value = "/remito/cancelarRemito/{remitoPk}", method = RequestMethod.POST)
+    public ModelAndView cancelarRemito(@PathVariable String remitoPk,
+                                        @ModelAttribute("remitoForm") RemitoForm remitoForm,
+                                        BindingResult result, HttpServletRequest req, ModelMap model) throws Exception {
+
+        ModelAndView modelAndView = new ModelAndView();
+
+        UserService userService = new UserServiceImpl();
+        Integer userId = Integer.valueOf(Utils.getUserLoggedId(req));
+        UserModel user = userService.getUserById(userId);
+
+        if (!Utils.isAutenticated(req)) {
+            modelAndView.setViewName("/login/login");
+            model.addAttribute("userForm", new UserForm());
+            return modelAndView;
+        }
+
+        if (user.getRol() != Utils.ROL_OFICINA) {
+            modelAndView.setViewName("error");
+            modelAndView.addObject("errorMessage", "Error: usuario no tiene rol para esta funcionalidad.");
+            return modelAndView;
+        }
+
+        if (remitoPk == null || remitoPk.isEmpty()) {
+            modelAndView.setViewName("error");
+            modelAndView.addObject("errorMessage", "Error: Remito inválido.");
+            return modelAndView;
+        }
+
+        RemitoService remitoService = new RemitoServiceImpl();
+        RemitoModel remito = remitoService.getByPk(Integer.valueOf(remitoPk));
+
+        if (remito == null) {
+            modelAndView.setViewName("error");
+            modelAndView.addObject("errorMessage", "Error: remito no encontrado.");
+            return modelAndView;
+        }
+
+        if (!remito.getEstado().equalsIgnoreCase("Abierto")) {
+            modelAndView.setViewName("error");
+            modelAndView.addObject("errorMessage", "Error: solo se pueden cancelar remitos en estado Abierto.");
+            return modelAndView;
+        }
+
+        // Verificar que no tenga items dados de baja
+        RemitoDetalleService remitoDetalleService = new RemitoDetalleServiceImpl();
+        List<RemitoDetalleModel> detalles = remitoDetalleService.getAllByRemito(remito.getId());
+        for (RemitoDetalleModel detalle : detalles) {
+            if (detalle.getCantidadBaja() != null && detalle.getCantidadBaja() > 0) {
+                modelAndView.setViewName("error");
+                modelAndView.addObject("errorMessage", "Error: no se puede cancelar un remito que tiene items dados de baja.");
+                return modelAndView;
+            }
+        }
+
+        // Verificar scrap no tenga items cargados
+        RemitoDetalleScrapService remitoDetalleScrapService = new RemitoDetalleScrapServiceImpl();
+        List<RemitoDetalleScrapModel> detallesScrap = remitoDetalleScrapService.getAllByRemito(remito.getId());
+        if (detallesScrap != null && !detallesScrap.isEmpty()) {
+            modelAndView.setViewName("error");
+            modelAndView.addObject("errorMessage", "Error: no se puede cancelar un remito scrap que tiene items cargados.");
+            return modelAndView;
+        }
+
+        remito.setEstado("Cancelado");
+        remito.setMotivoCancelacion(remitoForm.getMotivoCancelacion());
+        remito.setFechaCancelacion(new Date());
+        remito.setIdUsuarioCancelacion(user.getId());
+
+        remitoService.save(remito);
+
+        if (remito.getIsScrap() != null && remito.getIsScrap()) {
+            modelAndView.setViewName("redirect:/remitoDetalleScrap/" + remito.getId().toString());
+        } else {
+            modelAndView.setViewName("redirect:/remitoDetalle/" + remito.getId().toString());
+        }
+        return modelAndView;
+    }
 }

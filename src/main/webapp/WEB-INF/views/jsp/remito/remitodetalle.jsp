@@ -2,9 +2,10 @@
 
 <!-- Content Wrapper. Contains page content -->
 <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
+        <div class="content-wrapper">
+       
         <section class="content">
-            <div id="cuerpo" class="container">
+            <div id="cuerpo" class="container ${remito.estadoRemito == 'Cancelado' ? 'remito-cancelado' : ''}">
                 <div class="container">
                     <ol>
                         <div class="card">
@@ -22,37 +23,61 @@
                         </div>
                     </ol>
                 </div>
-                                
+               <c:if test="${remito.estadoRemito == 'Cancelado'}">
+                    <div style="display: flex; justify-content: center; margin-bottom: 8px;">
+                    <div style="
+                        background: white;
+                        border: 1.5px dashed #f7c1c1;
+                        border-radius: 8px;
+                        padding: 8px 14px;
+                        min-width: 160px;
+                        max-width: 280px;
+                    ">
+                        <div style="font-size: 16px; font-weight: 700; color: #a32d2d; letter-spacing: 0.5px; margin-bottom: 3px;">
+                            <i class="fa fa-ban" style="font-size: 12px; margin-right: 4px;"></i>
+                            Motivo de cancelación
+                        </div>
+                        <div style="font-size: 13px; color: #333; line-height: 1.4; margin-bottom: 6px;">
+                            ${remito.motivoCancelacion}
+                        </div>
+                        <div style="font-size: 11px; color: #aaa; border-top: 1px solid #fde8e8; padding-top: 5px; margin-top: 2px;">
+                            <i class="fa fa-clock-o" style="margin-right: 4px;"></i>
+                            ${remito.fechaCancelacion}
+                        </div>
+                    </div>
+                </div>
+                </c:if>
+   
                 <div class="col-md-12">
-                    <div class="containerr">
+                    <div class="containerr" style="border-left: 8px solid ${remito.estadoRemito == 'Cancelado' ? '#c0392b' : 'green'};">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="col-md-6">
                                     <div class="data">
-                                        <label class="labelClass" >Remito:</label><span class="spanClass">${remito.codigoRemito}</span>
+                                        <label class="labelClass" style="${remito.estadoRemito == 'Cancelado' ? 'color: #a32d2d;' : ''}" >Remito:</label><span class="spanClass">${remito.codigoRemito}</span>
                                     </div>
                                     <div class="data">
-                                        <label class="labelClass">Tipo: </label><span class="spanClass">${remito.tipoRemito}</span>
+                                        <label class="labelClass" style="${remito.estadoRemito == 'Cancelado' ? 'color: #a32d2d;' : ''}">Tipo: </label><span class="spanClass">${remito.tipoRemito}</span>
                                     </div>
                                     <div class="data">
-                                        <label class="labelClass">Fecha Remito:</label><span class="spanClass">${remito.fechaRemito}</span>
+                                        <label class="labelClass" style="${remito.estadoRemito == 'Cancelado' ? 'color: #a32d2d;' : ''}">Fecha Remito:</label><span class="spanClass">${remito.fechaRemito}</span>
                                     </div>
                                     <div class="data">
-                                        <label class="labelClass">Estado:</label><span class="spanClass">${remito.estadoRemito}</span>
+                                        <label class="labelClass" style="${remito.estadoRemito == 'Cancelado' ? 'color: #a32d2d;' : ''}">Estado:</label><span class="spanClass">${remito.estadoRemito}</span>
                                     </div>
                                 </div>
                             <div class="col-md-6">
                                 <div class="data">
-                                    <label class="labelClass">Cliente: </label><span class="spanClass">${remito.cliente}</span>
+                                    <label class="labelClass" style="${remito.estadoRemito == 'Cancelado' ? 'color: #a32d2d;' : ''}">Cliente: </label><span class="spanClass">${remito.cliente}</span>
                                 </div>
                                 <div class="data">
-                                    <label class="labelClass">Domicilio: </label><span class="spanClass">${remito.domicilio}</span>
+                                    <label class="labelClass" style="${remito.estadoRemito == 'Cancelado' ? 'color: #a32d2d;' : ''}">Domicilio: </label><span class="spanClass">${remito.domicilio}</span>
                                 </div>
                                 <div class="data">
-                                    <label class="labelClass">Transporte: </label><span class="spanClass">${remito.transporte}</span>
+                                    <label class="labelClass" style="${remito.estadoRemito == 'Cancelado' ? 'color: #a32d2d;' : ''}">Transporte: </label><span class="spanClass">${remito.transporte}</span>
                                 </div>
                                  <div class="data">
-                                    <label class="labelClass">Chofer: </label><span class="spanClass">${remito.idChofer}</span>
+                                    <label class="labelClass" style="${remito.estadoRemito == 'Cancelado' ? 'color: #a32d2d;' : ''}">Chofer: </label><span class="spanClass">${remito.idChofer}</span>
                                 </div>
                             </div>
                         </div>
@@ -414,7 +439,7 @@
                                                 </td>
                                              </c:if>
 
-                                               <c:if test="${(rol == 'oficina' || rol == 'deposito') && (Integer.valueOf(remitoDetalle.cantidadBaja) < Integer.valueOf(remitoDetalle.cantidad)) && !(estadoRemito == 'nuevo')}">
+                                               <c:if test="${(rol == 'oficina' || rol == 'deposito') && (Integer.valueOf(remitoDetalle.cantidadBaja) < Integer.valueOf(remitoDetalle.cantidad)) && !(estadoRemito == 'nuevo') && !(estadoRemito == 'cancelado')}">
                                                      <td style="text-align: center">
                                                  
                                                     <button type="button" style=" background-color: transparent; border: none; text-decoration: none; color: #007bff; font-size: 18px; padding:0" 
@@ -1192,6 +1217,15 @@
 /* Ajuste del porcentaje al lado */
 #progressPercentage {
     color: #555; /* Texto gris oscuro */
+}
+
+.remito-cancelado table th {
+    background-color: #fcebeb;
+}
+
+.remito-cancelado table th,
+.remito-cancelado table td {
+    border: 1px solid #f7c1c1;
 }
 
     

@@ -138,6 +138,45 @@
                         </div>
                 </div>
                 </ol>
+                                
+                                <!-- Modal Cancelar Hoja de Ruta -->
+                <div class="modal fade" id="modalCancelarHojaDeRuta" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 400px;">
+                        <div class="modal-content" style="border: none; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); overflow: hidden;">
+                            <div style="background: #fcebeb; border-bottom: 0.5px solid #f7c1c1; padding: 16px 20px; display: flex; align-items: center; gap: 10px;">
+                                <i class="fa fa-ban" style="color: #a32d2d; font-size: 15px;"></i>
+                                <span style="font-size: 14px; font-weight: 600; color: #a32d2d;">Cancelar Hoja de Ruta</span>
+                            </div>
+                            <div style="padding: 20px; background: white;">
+                                <p style="font-size: 13px; color: #555; margin: 0 0 14px; line-height: 1.5;">
+                                    La Hoja de Ruta pasará a estado <strong>Cancelada</strong>. Los remitos vinculados serán liberados automáticamente.
+                                </p>
+                                <div style="border-left: 3px solid #ef9f27; border-radius: 0; background: #faeeda; padding: 9px 12px; margin-bottom: 18px; font-size: 12px; color: #633806; line-height: 1.5;">
+                                    <i class="fa fa-exclamation-triangle" style="margin-right: 6px; font-size: 12px;"></i>
+                                    Los remitos vinculados quedarán disponibles para ser asignados a otra Hoja de Ruta.
+                                </div>
+                                <label style="font-size: 12px; font-weight: 600; color: #444; display: block; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.4px;">
+                                    Motivo <span style="color: #a32d2d;">*</span>
+                                </label>
+                                <textarea id="motivoCancelacionHdr" rows="3" maxlength="500" placeholder="Ingresá el motivo..."
+                                    style="width: 100%; border: 0.5px solid #ccc; border-radius: 8px; padding: 9px 11px; font-size: 13px; color: #333; resize: none; outline: none; box-sizing: border-box; font-family: inherit; background: #fafafa;"
+                                    onfocus="this.style.borderColor='#a32d2d'; this.style.background='#fff';"
+                                    onblur="this.style.borderColor='#ccc'; this.style.background='#fafafa';"></textarea>
+                            </div>
+                            <div style="padding: 0 20px 18px; background: white; display: flex; gap: 8px; justify-content: flex-end;">
+                                <button type="button" data-dismiss="modal" style="padding: 8px 16px; border-radius: 6px; border: 0.5px solid #ccc; background: white; color: #555; font-size: 13px; font-weight: 500; cursor: pointer;">Cerrar</button>
+                                
+                               <button type="button" id="btnConfirmarCancelacionHdr" 
+                            onclick="this.disabled=true; this.style.opacity='0.6'; this.style.cursor='not-allowed'; this.innerHTML='<span class=\'spinner-border spinner-border-sm\' style=\'margin-right:6px;\'></span>Cancelando...'; confirmarCancelacionHdr();" 
+                            style="padding: 8px 16px; border-radius: 6px; border: 0.5px solid #a32d2d; background: #a32d2d; color: white; font-size: 13px; font-weight: 600;">Confirmar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="formCancelarHojaDeRuta" method="post">
+                    <input type="hidden" id="motivoCancelacionHdrHdn" name="motivoCancelacion" />
+                </form>
 
                 <hr>
 
@@ -172,6 +211,11 @@
                                             </td>  
                 
                                             <td>
+                                                <c:if test="${rol == 'oficina' && operacion == 'alta' && hojaDeRuta.estado == 'Abierto'}">
+                                                    <a class="nav-link active fa fa-ban fa-lg" href="javascript:void(0);"
+                                                       onclick="abrirModalCancelacionHdr(${hojaDeRuta.pk})"
+                                                       data-toggle="tooltip" data-placement="top" title="Cancelar Hoja de Ruta"></a>
+                                                </c:if>
                                                 <c:if test = "${operacion == 'alta' && hojaDeRuta.estado == 'Nuevo'}">
                                                     <a class="nav-link active fa fa-pencil-square-o fa-lg"
                                                         href="/thyssenplastic/hojaDeRuta/edit/${hojaDeRuta.pk}"
@@ -193,6 +237,7 @@
                                                         href="/thyssenplastic/hojaDeRuta/setStatusOpenHojaDeRuta/${hojaDeRuta.pk}"
                                                         data-toggle="tooltip" data-placement="top" title="Cambiar a estado Abierto"></a>
                                                 </c:if>               
+                                              
                                                 <c:if test = "${rol == 'oficina' && operacion == 'alta' && (hojaDeRuta.puedeDarBaja == true) && hojaDeRuta.estado == 'Abierto'}">
                                                     <a class="nav-link active fa fa-clock-o fa-lg"
                                                         href="/thyssenplastic/hojaDeRuta/setStatusCloseHojaDeRuta/${hojaDeRuta.pk}"
@@ -306,6 +351,23 @@
     
     function printHojaDeRuta(hojaDeRutapk) {
         window.open("/thyssenplastic/hojaDeRuta/print/"+hojaDeRutapk, "Imprimir Hoja De Ruta", "popup,width=1280,height=800");
+    }
+    
+        function abrirModalCancelacionHdr(hojaDeRutaPk) {
+        $('#motivoCancelacionHdr').val('');
+        $('#formCancelarHojaDeRuta').attr('action', '/thyssenplastic/hojaDeRuta/cancelarHojaDeRuta/' + hojaDeRutaPk);
+        $('#modalCancelarHojaDeRuta').modal('show');
+    }
+
+    function confirmarCancelacionHdr() {
+        var motivo = $('#motivoCancelacionHdr').val().trim();
+        if (motivo === '') {
+            alert('Debe ingresar un motivo de cancelación.');
+            return;
+        };
+
+        $('#motivoCancelacionHdrHdn').val(motivo);
+        $('#formCancelarHojaDeRuta').submit();
     }
     
 </script>

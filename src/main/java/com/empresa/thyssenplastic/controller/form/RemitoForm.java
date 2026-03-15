@@ -36,6 +36,7 @@ public class RemitoForm {
     private String provincia;
     private String observaciones;
     private String isScrap;
+    private String motivoCancelacion;
      
     public String getPk() {
         return pk;
@@ -244,6 +245,14 @@ public class RemitoForm {
 
     public void setIsScrap(String isScrap) {
         this.isScrap = isScrap;
+    }
+    
+    public String getMotivoCancelacion() {
+    return motivoCancelacion;
+}
+
+    public void setMotivoCancelacion(String motivoCancelacion) {
+        this.motivoCancelacion = motivoCancelacion;
     }
 
     

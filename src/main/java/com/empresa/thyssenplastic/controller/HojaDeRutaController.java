@@ -939,6 +939,13 @@ public class HojaDeRutaController {
         hojaDeRutaDetalleForm.setFechaCargaHojaDeRuta(hojaDeRuta.getFechaCarga().toString().replace("00:00:00.0", ""));
         hojaDeRutaDetalleForm.setFechaSalidaHojaDeRuta(hojaDeRuta.getFechaSalida().toString().replace("00:00:00.0", ""));
         hojaDeRutaDetalleForm.setEstadoHojaDeRuta(hojaDeRuta.getEstado());
+        if (hojaDeRuta.getMotivoCancelacion() != null) {
+            hojaDeRutaDetalleForm.setMotivoCancelacion(hojaDeRuta.getMotivoCancelacion());
+        }
+        if (hojaDeRuta.getFechaCancelacion() != null) {
+            SimpleDateFormat formatoSalida = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            hojaDeRutaDetalleForm.setFechaCancelacion(formatoSalida.format(hojaDeRuta.getFechaCancelacion()));
+        }
          hojaDeRutaDetalleForm.setObservaciones(hojaDeRuta.getObservaciones());
         
         if(hojaDeRuta.getIdChofer() != null) {
@@ -1069,4 +1076,72 @@ public class HojaDeRutaController {
         
         return "/hojaderuta/hojaderutaprint"; 
     }            
+    
+    @RequestMapping(value = "/hojaDeRuta/cancelarHojaDeRuta/{hojaDeRutaPk}", method = RequestMethod.POST)
+        public ModelAndView cancelarHojaDeRuta(@PathVariable String hojaDeRutaPk,
+                                                @ModelAttribute("hojaDeRutaForm") HojaDeRutaForm hojaDeRutaForm,
+                                                BindingResult result, HttpServletRequest req, ModelMap model) throws Exception {
+
+            ModelAndView modelAndView = new ModelAndView();
+
+            UserService userService = new UserServiceImpl();
+            Integer userId = Integer.valueOf(Utils.getUserLoggedId(req));
+            UserModel user = userService.getUserById(userId);
+
+            if (!Utils.isAutenticated(req)) {
+                modelAndView.setViewName("/login/login");
+                model.addAttribute("userForm", new UserForm());
+                return modelAndView;
+            }
+
+            if (user.getRol() != Utils.ROL_OFICINA) {
+                modelAndView.setViewName("error");
+                modelAndView.addObject("errorMessage", "Error: usuario no tiene rol para esta funcionalidad.");
+                return modelAndView;
+            }
+
+            if (hojaDeRutaPk == null || hojaDeRutaPk.isEmpty()) {
+                modelAndView.setViewName("error");
+                modelAndView.addObject("errorMessage", "Error: Hoja de Ruta inválida.");
+                return modelAndView;
+            }
+
+            HojaDeRutaService hojaDeRutaService = new HojaDeRutaServiceImpl();
+            HojaDeRutaModel hojaDeRuta = hojaDeRutaService.getByPk(Integer.valueOf(hojaDeRutaPk));
+
+            if (hojaDeRuta == null) {
+                modelAndView.setViewName("error");
+                modelAndView.addObject("errorMessage", "Error: Hoja de Ruta no encontrada.");
+                return modelAndView;
+            }
+
+            if (!hojaDeRuta.getEstado().equalsIgnoreCase("Abierto")) {
+                modelAndView.setViewName("error");
+                modelAndView.addObject("errorMessage", "Error: solo se pueden cancelar Hojas de Ruta en estado Abierto.");
+                return modelAndView;
+            }
+
+            // Liberar todos los remitos vinculados
+            HojaDeRutaDetalleService hojaDeRutaDetalleService = new HojaDeRutaDetalleServiceImpl();
+            List<HojaDeRutaDetalleModel> detalles = hojaDeRutaDetalleService.getAllByHojaDeRuta(hojaDeRuta.getId());
+
+            RemitoService remitoService = new RemitoServiceImpl();
+            for (HojaDeRutaDetalleModel detalle : detalles) {
+                RemitoModel remito = remitoService.getByPk(detalle.getIdRemito());
+                if (remito != null) {
+                    remito.setEstaEnHojaDeRuta(Boolean.FALSE);
+                    remitoService.save(remito);
+                }
+            }
+
+            hojaDeRuta.setEstado("Cancelado");
+            hojaDeRuta.setMotivoCancelacion(hojaDeRutaForm.getMotivoCancelacion());
+            hojaDeRuta.setFechaCancelacion(new Date());
+            hojaDeRuta.setIdUsuarioCancelacion(user.getId());
+
+            hojaDeRutaService.save(hojaDeRuta);
+
+            modelAndView.setViewName("redirect:/hojaDeRutaDetalle/" + hojaDeRuta.getId().toString());
+            return modelAndView;
+        }
 }
