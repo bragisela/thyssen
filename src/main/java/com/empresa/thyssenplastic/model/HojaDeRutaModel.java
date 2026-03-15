@@ -66,6 +66,15 @@ public class HojaDeRutaModel {
 
     @Column(name = "idUsuarioEstadoCerrado")
     private Integer idUsuarioEstadoCerrado;
+    
+    @Column(name = "motivoCancelacion")
+    private String motivoCancelacion;
+
+    @Column(name = "fechaCancelacion")
+    private Date fechaCancelacion;
+
+    @Column(name = "idUsuarioCancelacion")
+    private Integer idUsuarioCancelacion;
 
     public Integer getId() {
         return id;
@@ -185,6 +194,31 @@ public class HojaDeRutaModel {
 
     public void setIdUsuarioEstadoCerrado(Integer idUsuarioEstadoCerrado) {
         this.idUsuarioEstadoCerrado = idUsuarioEstadoCerrado;
+    }
+    
+    
+    public String getMotivoCancelacion() {
+        return motivoCancelacion;
+    }
+
+    public void setMotivoCancelacion(String motivoCancelacion) {
+        this.motivoCancelacion = motivoCancelacion;
+    }
+
+    public Date getFechaCancelacion() {
+        return fechaCancelacion;
+    }
+
+    public void setFechaCancelacion(Date fechaCancelacion) {
+        this.fechaCancelacion = fechaCancelacion;
+    }
+
+    public Integer getIdUsuarioCancelacion() {
+        return idUsuarioCancelacion;
+    }
+
+    public void setIdUsuarioCancelacion(Integer idUsuarioCancelacion) {
+        this.idUsuarioCancelacion = idUsuarioCancelacion;
     }
 
    

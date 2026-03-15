@@ -46,6 +46,8 @@ public class RemitoDetalleForm {
     private String idDeposito;
     private String cantidad;
     private String lote;
+    private String motivoCancelacion;
+    private String fechaCancelacion;
 
     public String getLote() {
         return lote;
@@ -528,6 +530,22 @@ public class RemitoDetalleForm {
 
     public void setIdOrdenDeProduccionRemove(String idOrdenDeProduccionRemove) {
         this.idOrdenDeProduccionRemove = idOrdenDeProduccionRemove;
+    }
+    
+    public String getMotivoCancelacion() {
+        return motivoCancelacion;
+    }
+
+    public void setMotivoCancelacion(String motivoCancelacion) {
+        this.motivoCancelacion = motivoCancelacion;
+    }
+
+    public String getFechaCancelacion() {
+        return fechaCancelacion;
+    }
+
+    public void setFechaCancelacion(String fechaCancelacion) {
+        this.fechaCancelacion = fechaCancelacion;
     }
 
 

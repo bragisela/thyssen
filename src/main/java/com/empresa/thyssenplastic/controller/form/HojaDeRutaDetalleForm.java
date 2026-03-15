@@ -32,6 +32,10 @@ public class HojaDeRutaDetalleForm {
     private String transporteHojaDeRuta;
     private String idChofer;
     private String observaciones;  
+    
+    private String motivoCancelacion;
+    private String fechaCancelacion;
+
  
     public String getPk() {
         return pk;
@@ -183,6 +187,22 @@ public class HojaDeRutaDetalleForm {
 
     public void setOrden(String orden) {
         this.orden = orden;
+    }
+    
+    public String getMotivoCancelacion() {
+    return motivoCancelacion;
+}
+
+    public void setMotivoCancelacion(String motivoCancelacion) {
+        this.motivoCancelacion = motivoCancelacion;
+    }
+
+    public String getFechaCancelacion() {
+        return fechaCancelacion;
+    }
+
+    public void setFechaCancelacion(String fechaCancelacion) {
+        this.fechaCancelacion = fechaCancelacion;
     }
                             
     

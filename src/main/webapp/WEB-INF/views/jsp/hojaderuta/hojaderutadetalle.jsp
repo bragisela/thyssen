@@ -105,6 +105,31 @@
                                                                 id="holderDateOfBirth" required="required" disabled="true"/>
                                                 </div>                                                    
                                             </div>
+                                                
+                                                 <c:if test="${estadoHojaDeRuta == 'Cancelado'}">
+                    <div style="display: flex; justify-content: center; margin-bottom: 8px; padding-right: 15px;">
+                        <div style="
+                            background: white;
+                            border: 1.5px dashed #f7c1c1;
+                            border-radius: 8px;
+                            padding: 8px 14px;
+                            min-width: 160px;
+                            max-width: 280px;
+                        ">
+                            <div style="font-size: 16px; font-weight: 700; color: #a32d2d; letter-spacing: 0.5px; margin-bottom: 3px;">
+                                <i class="fa fa-ban" style="font-size: 12px; margin-right: 4px;"></i>
+                                Motivo de cancelación
+                            </div>
+                            <div style="font-size: 13px; color: #333; line-height: 1.4; margin-bottom: 6px;">
+                                ${hojaDeRutaDetalleForm.motivoCancelacion}
+                            </div>
+                            <div style="font-size: 11px; color: #aaa; border-top: 1px solid #fde8e8; padding-top: 5px; margin-top: 2px;">
+                                <i class="fa fa-clock-o" style="margin-right: 4px;"></i>
+                                ${hojaDeRutaDetalleForm.fechaCancelacion}
+                            </div>
+                        </div>
+                    </div>
+                </c:if>
                                             
                                             <p></p>    
                                             <hr>
@@ -149,8 +174,23 @@
                         </div>
                 </div>
                 </ol>
+               
 
                 <hr>
+                <c:if test="${estadoHojaDeRuta == 'Cancelado'}">
+                    <div style="
+                        background: #fffbeb;
+                        border-left: 3px solid #f59e0b;
+                        border-radius: 6px;
+                        padding: 10px 14px;
+                        margin-bottom: 12px;
+                        font-size: 13px;
+                        color: #92400e;
+                    ">
+                        <i class="fa fa-info-circle" style="margin-right: 6px;"></i>
+                        Los remitos que figuran a continuación fueron <strong>liberados automáticamente</strong> al cancelarse la Hoja de Ruta. Este listado se conserva como historial.
+                    </div>
+                </c:if>
 
                 <div class="card">
 

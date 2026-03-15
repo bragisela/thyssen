@@ -88,6 +88,16 @@
                                                 <label class="labelClass">Estado:</label>
                                                 <span class="spanClass">${remitoDetalleForm.estadoRemito}</span>
                                             </div>
+                                            <c:if test="${remitoDetalleForm.estadoRemito == 'Cancelado'}">
+                                                <div class="data">
+                                                    <label class="labelClass">Motivo Cancelación:</label>
+                                                    <span class="spanClass">${remitoDetalleForm.motivoCancelacion}</span>
+                                                </div>
+                                                <div class="data">
+                                                    <label class="labelClass">Fecha Cancelación:</label>
+                                                    <span class="spanClass">${remitoDetalleForm.fechaCancelacion}</span>
+                                                </div>
+                                            </c:if>
                                             <div class="data">
                                                 <label class="labelClass">Localidad:</label>
                                                 <span class="spanClass">${remitoDetalleForm.localidad}</span>
