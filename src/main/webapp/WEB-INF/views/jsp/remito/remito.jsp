@@ -155,105 +155,138 @@
                     </ol>
                 </div>
                 <!-- Modal Cancelar Remito -->
-<div class="modal fade" id="modalCancelarRemito" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 400px;">
-        <div class="modal-content" style="
-            border: 0.5px solid var(--color-border-tertiary, #e0e0e0);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-        ">
-            <!-- Header -->
-            <div style="
-                background: #fcebeb;
-                border-bottom: 0.5px solid #f7c1c1;
-                padding: 16px 20px;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-            ">
-                <i class="fa fa-ban" style="color: #a32d2d; font-size: 15px;"></i>
-                <span style="font-size: 14px; font-weight: 600; color: #a32d2d;">Cancelar Remito</span>
-            </div>
+                <div class="modal fade" id="modalCancelarRemito" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 400px;">
+                        <div class="modal-content" style="
+                            border: 0.5px solid var(--color-border-tertiary, #e0e0e0);
+                            border-radius: 12px;
+                            overflow: hidden;
+                            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+                        ">
+                            <!-- Header -->
+                            <div style="
+                                background: #fcebeb;
+                                border-bottom: 0.5px solid #f7c1c1;
+                                padding: 16px 20px;
+                                display: flex;
+                                align-items: center;
+                                gap: 10px;
+                            ">
+                                <i class="fa fa-ban" style="color: #a32d2d; font-size: 15px;"></i>
+                                <span style="font-size: 14px; font-weight: 600; color: #a32d2d;">Cancelar Remito</span>
+                            </div>
 
-            <!-- Body -->
-            <div style="padding: 20px; background: white;">
+                            <!-- Body -->
+                            <div style="padding: 20px; background: white;">
 
-                <p style="font-size: 13px; color: #555; margin: 0 0 14px; line-height: 1.5;">
-                    El remito pasará a estado <strong>Cancelado</strong> y no podrá modificarse.
-                </p>
+                                <p style="font-size: 13px; color: #555; margin: 0 0 14px; line-height: 1.5;">
+                                    El remito pasará a estado <strong>Cancelado</strong> y no podrá modificarse.
+                                </p>
 
 
-                <label style="
-                    font-size: 12px;
-                    font-weight: 600;
-                    color: #444;
-                    display: block;
-                    margin-bottom: 6px;
-                    text-transform: uppercase;
-                    letter-spacing: 0.4px;
-                ">Motivo <span style="color: #a32d2d;">*</span></label>
+                                <label style="
+                                    font-size: 12px;
+                                    font-weight: 600;
+                                    color: #444;
+                                    display: block;
+                                    margin-bottom: 6px;
+                                    text-transform: uppercase;
+                                    letter-spacing: 0.4px;
+                                ">Motivo <span style="color: #a32d2d;">*</span></label>
 
-                <textarea
-                    id="motivoCancelacion"
-                    name="motivoCancelacion"
-                    rows="3"
-                    maxlength="500"
-                    placeholder="Ingresá el motivo..."
-                    style="
-                        width: 100%;
-                        border: 0.5px solid #ccc;
-                        border-radius: 8px;
-                        padding: 9px 11px;
-                        font-size: 13px;
-                        color: #333;
-                        resize: none;
-                        outline: none;
-                        box-sizing: border-box;
-                        font-family: inherit;
-                        background: #fafafa;
-                        transition: border-color 0.15s;
-                    "
-                    onfocus="this.style.borderColor='#a32d2d'; this.style.background='#fff';"
-                    onblur="this.style.borderColor='#ccc'; this.style.background='#fafafa';"
-                ></textarea>
-            </div>
+                                <textarea
+                                    id="motivoCancelacion"
+                                    name="motivoCancelacion"
+                                    rows="3"
+                                    maxlength="500"
+                                    placeholder="Ingresá el motivo..."
+                                    style="
+                                        width: 100%;
+                                        border: 0.5px solid #ccc;
+                                        border-radius: 8px;
+                                        padding: 9px 11px;
+                                        font-size: 13px;
+                                        color: #333;
+                                        resize: none;
+                                        outline: none;
+                                        box-sizing: border-box;
+                                        font-family: inherit;
+                                        background: #fafafa;
+                                        transition: border-color 0.15s;
+                                    "
+                                    onfocus="this.style.borderColor='#a32d2d'; this.style.background='#fff';"
+                                    onblur="this.style.borderColor='#ccc'; this.style.background='#fafafa';"
+                                ></textarea>
+                            </div>
 
-            <!-- Footer -->
-            <div style="
-                padding: 0 20px 18px;
-                background: white;
-                display: flex;
-                gap: 8px;
-                justify-content: flex-end;
-            ">
-                <button type="button" data-dismiss="modal" style="
-                    padding: 8px 16px;
-                    border-radius: 6px;
-                    border: 0.5px solid #ccc;
-                    background: white;
-                    color: #555;
-                    font-size: 13px;
-                    font-weight: 500;
-                    cursor: pointer;
-                ">Cerrar</button>
+                            <!-- Footer -->
+                            <div style="
+                                padding: 0 20px 18px;
+                                background: white;
+                                display: flex;
+                                gap: 8px;
+                                justify-content: flex-end;
+                            ">
+                                <button type="button" data-dismiss="modal" style="
+                                    padding: 8px 16px;
+                                    border-radius: 6px;
+                                    border: 0.5px solid #ccc;
+                                    background: white;
+                                    color: #555;
+                                    font-size: 13px;
+                                    font-weight: 500;
+                                    cursor: pointer;
+                                ">Cerrar</button>
 
-                <button type="button" id="btnConfirmarCancelacion" 
-                onclick="this.disabled=true; this.style.opacity='0.6'; this.style.cursor='not-allowed'; this.style.background='#c0392b'; this.style.color='white'; this.innerHTML='<span class=\'spinner-border spinner-border-sm\' style=\'margin-right:6px;\'></span>Cancelando...'; confirmarCancelacion();" 
-                style="padding: 8px 18px; border-radius: 6px; border: 1.5px solid #c0392b; background: white; color: #c0392b; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s;"
-                onmouseover="this.style.background='#c0392b'; this.style.color='white';"
-                onmouseout="this.style.background='white'; this.style.color='#c0392b';">
-                Confirmar
-            </button>
-            </div>
-        </div>
-    </div>
-</div>
+                                <button type="button" id="btnConfirmarCancelacion" 
+                                onclick="this.disabled=true; this.style.opacity='0.6'; this.style.cursor='not-allowed'; this.style.background='#c0392b'; this.style.color='white'; this.innerHTML='<span class=\'spinner-border spinner-border-sm\' style=\'margin-right:6px;\'></span>Cancelando...'; confirmarCancelacion();" 
+                                style="padding: 8px 18px; border-radius: 6px; border: 1.5px solid #c0392b; background: white; color: #c0392b; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s;"
+                                onmouseover="this.style.background='#c0392b'; this.style.color='white';"
+                                onmouseout="this.style.background='white'; this.style.color='#c0392b';">
+                                Confirmar
+                            </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<!-- Form oculto -->
-<form id="formCancelarRemito" method="post">
-    <input type="hidden" id="motivoCancelacionHdn" name="motivoCancelacion" />
-</form>
+                <!-- Form oculto -->
+                <form id="formCancelarRemito" method="post">
+                    <input type="hidden" id="motivoCancelacionHdn" name="motivoCancelacion" />
+                </form>
+
+
+                <!-- Modal Marcar Incompleto -->
+                <div class="modal fade" id="modalIncompleto" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 400px;">
+                        <div class="modal-content" style="border: none; border-radius: 10px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.12);">
+                            <div style="background: #fff7ed; border-bottom: 0.5px solid #fed7aa; padding: 16px 20px; display: flex; align-items: center; gap: 10px;">
+                                <i class="fa fa-exclamation-triangle" style="color: #c2410c; font-size: 15px;"></i>
+                                <span style="font-size: 14px; font-weight: 600; color: #c2410c;">Marcar como Incompleto</span>
+                            </div>
+                            <div style="padding: 20px; background: white;">
+                                <p style="font-size: 13px; color: #555; margin: 0 0 14px; line-height: 1.5;">
+                                    El remito pasará a estado <strong>Incompleto</strong> y no podrá modificarse.
+                                </p>
+                                <label style="font-size: 12px; font-weight: 600; color: #444; display: block; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.4px;">
+                                    Motivo <span style="color: #c2410c;">*</span>
+                                </label>
+                                <textarea id="motivoIncompleto" rows="3" maxlength="500" placeholder="Ingresá el motivo..."
+                                    style="width: 100%; border: 0.5px solid #ccc; border-radius: 8px; padding: 9px 11px; font-size: 13px; color: #333; resize: none; outline: none; box-sizing: border-box; font-family: inherit; background: #fafafa;"
+                                    onfocus="this.style.borderColor='#c2410c'; this.style.background='#fff';"
+                                    onblur="this.style.borderColor='#ccc'; this.style.background='#fafafa';"></textarea>
+                            </div>
+                            <div style="padding: 0 20px 18px; background: white; display: flex; gap: 8px; justify-content: flex-end;">
+                                <button type="button" data-dismiss="modal" style="padding: 8px 16px; border-radius: 6px; border: 0.5px solid #ccc; background: white; color: #555; font-size: 13px; font-weight: 500; cursor: pointer;">Cerrar</button>
+                                <button type="button" id="btnConfirmarIncompleto" onclick="confirmarIncompleto()" style="padding: 8px 16px; border-radius: 6px; border: 0.5px solid #c2410c; background: #c2410c; color: white; font-size: 13px; font-weight: 600; cursor: pointer;">Confirmar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="formIncompleto" method="post">
+                    <input type="hidden" id="motivoIncompletoHdn" name="motivoIncompleto" />
+                </form>
                 <hr style="display: ${displayActionButton == 'block' ? 'block' : 'none'};">
 
                 <div class="card">
@@ -318,6 +351,14 @@
                                                         href="/thyssenplastic/remito/remove/${remito.pk}"
                                                         data-toggle="tooltip" data-placement="top" title="Eliminar"></a>
                                                 </c:if>                                                                                                        
+                                               <%-- Incompleto para remitos normales con bajas parciales --%>
+                                                <c:if test="${rol == 'oficina' && operacion == 'alta' && remito.estado == 'Abierto' && remito.isScrap == false && remito.cantidadTotalBaja > 0 && remito.cantidadTotalBaja < remito.cantidadTotal}">
+                                                    <a class="nav-link active fa fa-exclamation-triangle fa-lg" href="javascript:void(0);"
+                                                       onclick="abrirModalIncompleto(${remito.pk})"
+                                                       data-toggle="tooltip" data-placement="top" title="Marcar como Incompleto"></a>
+                                                </c:if>
+
+                                                
                                                 <c:if test="${rol == 'oficina' && operacion == 'alta' && remito.estado == 'Abierto' && remito.cantidadTotalBaja == 0 && (remito.isScrap == false || remito.canDeleteScrap == 'true')}">
                                                     <a class="nav-link active fa fa-ban fa-lg" href="javascript:void(0);"
                                                        onclick="abrirModalCancelacion(${remito.pk})"
@@ -609,6 +650,26 @@ function confirmarCancelacion() {
 
     $('#motivoCancelacionHdn').val(motivo);
     $('#formCancelarRemito').submit();
+}
+
+function abrirModalIncompleto(remitoPk) {
+    $('#motivoIncompleto').val('');
+    $('#formIncompleto').attr('action', '/thyssenplastic/remito/marcarIncompleto/' + remitoPk);
+    $('#modalIncompleto').modal('show');
+}
+
+function confirmarIncompleto() {
+    var motivo = $('#motivoIncompleto').val().trim();
+    if (motivo === '') {
+        alert('Debe ingresar un motivo.');
+        return;
+    }
+    var btn = $('#btnConfirmarIncompleto');
+    btn.prop('disabled', true);
+    btn.css({'background': '#ccc', 'border-color': '#ccc', 'cursor': 'not-allowed'});
+    btn.html('<span class="spinner-border spinner-border-sm" style="margin-right: 6px;"></span>Guardando...');
+    $('#motivoIncompletoHdn').val(motivo);
+    $('#formIncompleto').submit();
 }
 
 

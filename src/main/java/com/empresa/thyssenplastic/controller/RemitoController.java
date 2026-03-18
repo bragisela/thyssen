@@ -1581,6 +1581,14 @@ public class RemitoController {
         if(remito.getReferenciaAdministrativa() != null) {
             remitoDetalleForm.setReferenciaAdministrativa(remito.getReferenciaAdministrativa());
         }
+        if (remito.getFechaIncompleto() != null) {
+            SimpleDateFormat formatoSalida = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            remitoDetalleForm.setFechaIncompleto(formatoSalida.format(remito.getFechaIncompleto()));
+        }
+        remitoDetalleForm.setObservaciones(remito.getObservaciones());
+        if(remito.getReferenciaAdministrativa() != null) {
+            remitoDetalleForm.setReferenciaAdministrativa(remito.getReferenciaAdministrativa());
+        }
         ClienteModel cliente = null;
         if(remito.getIdCliente() != null) {
             cliente = clienteService.getByPk(remito.getIdCliente());
@@ -1957,6 +1965,58 @@ public class RemitoController {
         } else {
             modelAndView.setViewName("redirect:/remitoDetalle/" + remito.getId().toString());
         }
+        return modelAndView;
+    }
+    
+    @RequestMapping(value = "/remito/marcarIncompleto/{remitoPk}", method = RequestMethod.POST)
+    public ModelAndView marcarIncompleto(@PathVariable String remitoPk,
+                                         @ModelAttribute("remitoForm") RemitoForm remitoForm,
+                                         BindingResult result, HttpServletRequest req, ModelMap model) throws Exception {
+
+        ModelAndView modelAndView = new ModelAndView();
+        UserService userService = new UserServiceImpl();
+        Integer userId = Integer.valueOf(Utils.getUserLoggedId(req));
+        UserModel user = userService.getUserById(userId);
+
+        if (!Utils.isAutenticated(req)) {
+            modelAndView.setViewName("/login/login");
+            model.addAttribute("userForm", new UserForm());
+            return modelAndView;
+        }
+        if (user.getRol() != Utils.ROL_OFICINA) {
+            modelAndView.setViewName("error");
+            modelAndView.addObject("errorMessage", "Error: usuario no tiene rol para esta funcionalidad.");
+            return modelAndView;
+        }
+        if (remitoPk == null || remitoPk.isEmpty()) {
+            modelAndView.setViewName("error");
+            modelAndView.addObject("errorMessage", "Error: Remito inválido.");
+            return modelAndView;
+        }
+
+        RemitoService remitoService = new RemitoServiceImpl();
+        RemitoModel remito = remitoService.getByPk(Integer.valueOf(remitoPk));
+
+        if (remito == null) {
+            modelAndView.setViewName("error");
+            modelAndView.addObject("errorMessage", "Error: remito no encontrado.");
+            return modelAndView;
+        }
+        if (!remito.getEstado().equalsIgnoreCase("Abierto")) {
+            modelAndView.setViewName("error");
+            modelAndView.addObject("errorMessage", "Error: solo se pueden marcar como incompletos remitos en estado Abierto.");
+            return modelAndView;
+        }
+
+        remito.setEstado("Incompleto");
+        remito.setMotivoIncompleto(remitoForm.getMotivoIncompleto());
+        remito.setFechaIncompleto(new Date());
+        remito.setIdUsuarioIncompleto(user.getId());
+        remitoService.save(remito);
+
+        
+        modelAndView.setViewName("redirect:/remitoDetalle/" + remito.getId().toString());
+        
         return modelAndView;
     }
 }

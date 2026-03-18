@@ -47,6 +47,31 @@
                     </div>
                 </div>
                 </c:if>
+                                
+                 <c:if test="${remito.estadoRemito == 'Incompleto'}">
+                        <div style="display: flex; justify-content: center; margin-bottom: 8px;">
+                            <div style="
+                                background: white;
+                                border: 1.5px dashed #fed7aa;
+                                border-radius: 8px;
+                                padding: 8px 14px;
+                                min-width: 160px;
+                                max-width: 280px;
+                            ">
+                                <div style="font-size: 16px; font-weight: 700; color: #c2410c; letter-spacing: 0.5px; margin-bottom: 3px;">
+                                    <i class="fa fa-exclamation-triangle" style="font-size: 12px; margin-right: 4px;"></i>
+                                    Motivo de cierre incompleto
+                                </div>
+                                <div style="font-size: 13px; color: #333; line-height: 1.4; margin-bottom: 6px;">
+                                    ${remito.motivoIncompleto}
+                                </div>
+                                <div style="font-size: 11px; color: #aaa; border-top: 1px solid #fed7aa; padding-top: 5px; margin-top: 2px;">
+                                    <i class="fa fa-clock-o" style="margin-right: 4px;"></i>
+                                    ${remito.fechaIncompleto}
+                                </div>
+                            </div>
+                        </div>
+                    </c:if>
    
                 <div class="col-md-12">
                     <div class="containerr" style="border-left: 8px solid ${remito.estadoRemito == 'Cancelado' ? '#c0392b' : 'green'};">
@@ -439,7 +464,7 @@
                                                 </td>
                                              </c:if>
 
-                                               <c:if test="${(rol == 'oficina' || rol == 'deposito') && (Integer.valueOf(remitoDetalle.cantidadBaja) < Integer.valueOf(remitoDetalle.cantidad)) && !(estadoRemito == 'nuevo') && !(estadoRemito == 'cancelado')}">
+                                               <c:if test="${(rol == 'oficina' || rol == 'deposito') && (Integer.valueOf(remitoDetalle.cantidadBaja) < Integer.valueOf(remitoDetalle.cantidad)) && !(estadoRemito == 'nuevo') && !(estadoRemito == 'cancelado') && !(estadoRemito == 'incompleto')}">
                                                      <td style="text-align: center">
                                                  
                                                     <button type="button" style=" background-color: transparent; border: none; text-decoration: none; color: #007bff; font-size: 18px; padding:0" 

@@ -48,6 +48,8 @@ public class RemitoDetalleForm {
     private String lote;
     private String motivoCancelacion;
     private String fechaCancelacion;
+    private String motivoIncompleto;
+    private String fechaIncompleto;
 
     public String getLote() {
         return lote;
@@ -546,6 +548,22 @@ public class RemitoDetalleForm {
 
     public void setFechaCancelacion(String fechaCancelacion) {
         this.fechaCancelacion = fechaCancelacion;
+    }
+    
+    public String getMotivoIncompleto() {
+        return motivoIncompleto;
+    }
+
+    public void setMotivoIncompleto(String motivoIncompleto) {
+        this.motivoIncompleto = motivoIncompleto;
+    }
+
+    public String getFechaIncompleto() {
+        return fechaIncompleto;
+    }
+
+    public void setFechaIncompleto(String fechaIncompleto) {
+        this.fechaIncompleto = fechaIncompleto;
     }
 
 

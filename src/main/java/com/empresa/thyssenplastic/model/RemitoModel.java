@@ -99,6 +99,15 @@ public class RemitoModel {
 
     @Column(name = "idUsuarioCancelacion")
     private Integer idUsuarioCancelacion;
+    
+    @Column(name = "motivoIncompleto")
+    private String motivoIncompleto;
+
+    @Column(name = "fechaIncompleto")
+    private Date fechaIncompleto;
+
+    @Column(name = "idUsuarioIncompleto")
+    private Integer idUsuarioIncompleto;
 
     public Boolean getIsScrap() {
         return isScrap;
@@ -310,7 +319,30 @@ public class RemitoModel {
         this.idUsuarioCancelacion = idUsuarioCancelacion;
     }
     
+    public String getMotivoIncompleto() {
+        return motivoIncompleto;
+    }
 
+    public void setMotivoIncompleto(String motivoIncompleto) {
+        this.motivoIncompleto = motivoIncompleto;
+    }
+
+    public Date getFechaIncompleto() {
+        return fechaIncompleto;
+    }
+
+    public void setFechaIncompleto(Date fechaIncompleto) {
+        this.fechaIncompleto = fechaIncompleto;
+    }
+
+    public Integer getIdUsuarioIncompleto() {
+        return idUsuarioIncompleto;
+    }
+
+    public void setIdUsuarioIncompleto(Integer idUsuarioIncompleto) {
+        this.idUsuarioIncompleto = idUsuarioIncompleto;
+    }
+    
     @Override
     public String toString() {
         return "User [id=" + id + ", fechaAlta=" + fechaAlta + ", idCliente=" + idCliente + "]";

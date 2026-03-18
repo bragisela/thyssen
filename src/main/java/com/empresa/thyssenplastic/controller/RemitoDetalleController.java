@@ -213,6 +213,14 @@ public class RemitoDetalleController {
             SimpleDateFormat formatoSalida = new SimpleDateFormat("dd/MM/yyyy HH:mm");
             remitoDetalleForm.setFechaCancelacion(formatoSalida.format(remito.getFechaCancelacion()));
         }
+        
+        if (remito.getMotivoIncompleto() != null) {
+            remitoDetalleForm.setMotivoIncompleto(remito.getMotivoIncompleto());
+        }
+        if (remito.getFechaIncompleto() != null) {
+            SimpleDateFormat formatoSalida = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            remitoDetalleForm.setFechaIncompleto(formatoSalida.format(remito.getFechaIncompleto()));
+        }
 
         Calendar c = Calendar.getInstance();        
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd"); 
