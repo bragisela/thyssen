@@ -98,6 +98,16 @@
                                                     <span class="spanClass">${remitoDetalleForm.fechaCancelacion}</span>
                                                 </div>
                                             </c:if>
+                                            <c:if test="${remitoDetalleForm.estadoRemito == 'Incompleto'}">
+                                                <div class="data">
+                                                    <label class="labelClass">Motivo Incompleto:</label>
+                                                    <span class="spanClass">${remitoDetalleForm.motivoIncompleto}</span>
+                                                </div>
+                                                <div class="data">
+                                                    <label class="labelClass">Fecha Incompleto:</label>
+                                                    <span class="spanClass">${remitoDetalleForm.fechaIncompleto}</span>
+                                                </div>
+                                            </c:if>
                                             <div class="data">
                                                 <label class="labelClass">Localidad:</label>
                                                 <span class="spanClass">${remitoDetalleForm.localidad}</span>

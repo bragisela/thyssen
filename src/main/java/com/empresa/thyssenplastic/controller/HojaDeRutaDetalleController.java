@@ -152,6 +152,12 @@ public class HojaDeRutaDetalleController {
         
         if(remitosModel != null && !remitosModel.isEmpty()){
             for(RemitoModel remitoModel :remitosModel) {   
+                // Excluir cancelados e incompletos
+                if(remitoModel.getEstado().equalsIgnoreCase("Cancelado") || 
+                    remitoModel.getEstado().equalsIgnoreCase("Incompleto") ||
+                    remitoModel.getEstado().equalsIgnoreCase("Cerrado")) {
+                     continue;
+                }
                 ProveedorContactoService proveedorContactoService = new ProveedorContactoServiceImpl();
                 ProveedorContactoModel proveedorContacto = proveedorContactoService.getByPkContacto(hojaDeRuta.getIdChofer());
                 String remitoInfo = "";

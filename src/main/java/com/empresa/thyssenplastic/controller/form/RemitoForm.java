@@ -37,6 +37,7 @@ public class RemitoForm {
     private String observaciones;
     private String isScrap;
     private String motivoCancelacion;
+    private String motivoIncompleto;
      
     public String getPk() {
         return pk;
@@ -253,6 +254,14 @@ public class RemitoForm {
 
     public void setMotivoCancelacion(String motivoCancelacion) {
         this.motivoCancelacion = motivoCancelacion;
+    }
+    
+    public String getMotivoIncompleto() {
+    return motivoIncompleto;
+}
+
+    public void setMotivoIncompleto(String motivoIncompleto) {
+        this.motivoIncompleto = motivoIncompleto;
     }
 
     
